@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="260dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="14dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cooking Steps"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@color/text_color"/>
+
+        <TextView
+            android:id="@+id/tvSteps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Cook the rice.\n2. Scramble eggs in a pan.\n3. Add garlic and rice.\n4. Stir with soy sauce.\n5. Garnish with green onion."
+            android:textSize="14sp"
+            android:textColor="@color/text_color"
+            android:layout_marginTop="6dp"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

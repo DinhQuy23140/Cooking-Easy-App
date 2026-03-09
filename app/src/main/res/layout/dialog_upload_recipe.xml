@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chọn và hiển thị Video"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <!-- Button chọn video -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPickVideo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Chọn Video"
+                android:icon="@android:drawable/ic_menu_upload"
+                app:iconGravity="textStart"
+                app:layout_constraintTop_toBottomOf="@id/txtTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp"/>
+
+            <!-- CardView chứa Video Player -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardVideo"
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:layout_constraintTop_toBottomOf="@id/btnPickVideo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!-- Media3 PlayerView -->
+                    <androidx.media3.ui.PlayerView
+                        android:id="@+id/playerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:use_controller="true"
+                        app:resize_mode="fit"
+                        android:visibility="gone"/>
+
+                    <!-- Placeholder khi chưa chọn video -->
+                    <TextView
+                        android:id="@+id/txtPlaceholder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chưa có video được chọn"
+                        android:textColor="@android:color/darker_gray"
+                        android:layout_gravity="center"/>
+
+                    <!-- Loading -->
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone"/>
+
+                </FrameLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Tên video -->
+            <TextView
+                android:id="@+id/txtVideoName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Tên video"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/cardVideo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
