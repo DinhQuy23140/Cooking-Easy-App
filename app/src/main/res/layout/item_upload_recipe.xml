@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <!-- Recipe Image -->
+        <ImageView
+            android:id="@+id/imgRecipe"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample_food"
+            android:background="@drawable/bg_image_round"/>
+
+        <!-- Content -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvRecipeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chicken Curry"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#222"/>
+
+            <!-- Category + Area -->
+            <TextView
+                android:id="@+id/tvRecipeTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Asian • Dinner"
+                android:textSize="13sp"
+                android:textColor="#777"
+                android:layout_marginTop="4dp"/>
+
+            <!-- Cooking time -->
+            <TextView
+                android:id="@+id/tvCookingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⏱ 30 mins"
+                android:textSize="13sp"
+                android:textColor="#777"
+                android:layout_marginTop="4dp"/>
+
+            <!-- Status -->
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Published"
+                android:textSize="12sp"
+                android:textColor="#4CAF50"
+                android:background="@drawable/bg_status"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:layout_marginTop="6dp"/>
+
+        </LinearLayout>
+
+        <!-- Actions -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/btnEdit"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@android:color/transparent"
+                android:scaleType="center"
+                android:src="@drawable/ic_edit" />
+
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_delete" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

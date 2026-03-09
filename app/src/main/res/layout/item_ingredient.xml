@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/tvMeasure"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:text="1 cup"/>
+
+    <TextView
+        android:id="@+id/tvIngredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sugar"/>
+
+</LinearLayout>

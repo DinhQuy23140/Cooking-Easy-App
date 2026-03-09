@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_home"
+        android:title="Home"
+        android:icon="@drawable/ic_home">
+    </item>
+
+    <item
+        android:id="@+id/bottom_explore"
+        android:title="Explore"
+        android:icon="@drawable/ic_explore_filled">
+    </item>
+
+    <item
+        android:id="@+id/bottom_add_recipe"
+        android:title="Add recipe"
+        android:icon="@drawable/ic_reciper">
+    </item>
+
+    <item
+        android:id="@+id/bottom_ai"
+        android:title="Ai"
+        android:icon="@drawable/ic_ai">
+    </item>
+
+    <item
+        android:id="@+id/bottom_person"
+        android:title="Person"
+        android:icon="@drawable/ic_person">
+    </item>
+</menu>
