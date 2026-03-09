@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,9 +28,11 @@ import com.example.cookingeasy.domain.model.Area
 import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.HomeViewModel
+import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.Constants
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,6 +48,7 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private val homeViewModel: HomeViewModel by viewModels()
+    private val recipeShareViewmodel: RecipeShareViewmodel by activityViewModels()
     private var categoryAdapter: CategoryAdapter? = null
     private var areaAdapter: AreaAdapter? = null
     private var recipeAdapter: RecipeAdapter? = null
@@ -69,6 +74,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setup()
+        event()
         loadData()
         observeData()
     }
@@ -87,6 +93,20 @@ class HomeFragment : Fragment() {
         binding.rvRecipes.addItemDecoration(
             GridSpacingItemDecoration(2, 3)
         )
+    }
+
+    fun event() {
+        binding.edtSearch.setOnClickListener {
+            val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+                fragmentTransaction.setCustomAnimations(
+                    R.anim.slide_in_right,
+                    R.anim.slide_out_left,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+            fragmentTransaction.replace(R.id.container, SearchFragment()).addToBackStack(null)
+            fragmentTransaction.commit()
+        }
     }
 
     fun loadData() {
@@ -134,6 +154,7 @@ class HomeFragment : Fragment() {
                 if (!data.isEmpty()) {
                     recipeAdapter = RecipeAdapter(data, object : RecipeListener {
                         override fun OnClickItem(recipe: Recipe) {
+                            recipeShareViewmodel.selectedRecipe(recipe)
                             val fragmentTransaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
                             fragmentTransaction.replace(R.id.container, RecipeDetailFragment())
                             fragmentTransaction.addToBackStack(null).commit()
