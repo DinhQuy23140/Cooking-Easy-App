@@ -1,5 +1,6 @@
 package com.example.cookingeasy.ui.main.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -31,6 +32,7 @@ import com.example.cookingeasy.ui.viewmodel.HomeViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.Constants
 import com.example.cookingeasy.util.GridSpacingItemDecoration
+import com.google.android.material.transition.MaterialFadeThrough
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -95,16 +97,19 @@ class HomeFragment : Fragment() {
         )
     }
 
+    @SuppressLint("SuspiciousIndentation")
     fun event() {
         binding.edtSearch.setOnClickListener {
-            val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+            val fragmentTransaction = parentFragmentManager.beginTransaction()
                 fragmentTransaction.setCustomAnimations(
                     R.anim.slide_in_right,
                     R.anim.slide_out_left,
                     R.anim.slide_in_left,
                     R.anim.slide_out_right
                 )
-            fragmentTransaction.replace(R.id.container, SearchFragment()).addToBackStack(null)
+            val fragment = SearchFragment()
+
+            fragmentTransaction.replace(R.id.container, fragment).addToBackStack(null)
             fragmentTransaction.commit()
         }
     }
