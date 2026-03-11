@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="20dp"
-                android:paddingTop="22dp"
+                android:paddingTop="52dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="28dp">
 
@@ -35,22 +35,30 @@
                     android:padding="10dp"
                     android:src="@drawable/ic_back"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <!-- Label -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:fontFamily="sans-serif-medium"
                     android:letterSpacing="0.15"
                     android:text="SCAN RESULT"
                     android:textColor="#6600C897"
-                    android:textSize="20sp"
+                    android:textSize="11sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnBack" />
+                    app:layout_constraintTop_toBottomOf="@id/btnBack"/>
 
-                <!-- Dish name -->
+                <!-- Loading indicator -->
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:indeterminateTint="#00C897"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -76,12 +84,11 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp">
 
-                    <!-- Accent bar -->
                     <View
                         android:layout_width="21dp"
                         android:layout_height="21dp"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/ic_ingredients" />
+                        android:background="@drawable/ic_ingredients"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -91,7 +98,7 @@
                         android:letterSpacing="0.12"
                         android:text="DETECTED INGREDIENTS"
                         android:textColor="#FFFFFF"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"/>
 
                     <!-- Count badge -->
                     <TextView
@@ -106,7 +113,7 @@
                         android:paddingBottom="3dp"
                         android:textColor="#00C897"
                         android:textSize="11sp"
-                        tools:text="8 items" />
+                        tools:text="8 items"/>
 
                 </LinearLayout>
 
@@ -118,7 +125,7 @@
                     android:clipToPadding="false"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
             </LinearLayout>
 
@@ -145,12 +152,11 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp">
 
-                    <!-- Accent bar -->
                     <View
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/ic_reciper" />
+                        android:background="@drawable/ic_reciper"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -160,21 +166,21 @@
                         android:letterSpacing="0.12"
                         android:text="RECIPES YOU CAN MAKE"
                         android:textColor="#FFFFFF"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"/>
 
                     <!-- Count badge -->
                     <TextView
                         android:id="@+id/tvRecipeCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/shape_circle_glass"
+                        android:background="@drawable/shape_calories_badge"
                         android:paddingStart="10dp"
                         android:paddingTop="3dp"
                         android:paddingEnd="10dp"
                         android:paddingBottom="3dp"
-                        android:textColor="#80FFFFFF"
+                        android:textColor="#00C897"
                         android:textSize="11sp"
-                        tools:text="5 found" />
+                        tools:text="5 found"/>
 
                 </LinearLayout>
 
@@ -187,7 +193,7 @@
                     android:paddingStart="16dp"
                     android:text="Based on your scanned ingredients"
                     android:textColor="#4DFFFFFF"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <!-- Divider -->
                 <View
@@ -196,7 +202,31 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="12dp"
-                    android:background="#0DFFFFFF" />
+                    android:background="#0DFFFFFF"/>
+
+                <!-- Loading recipes state -->
+                <LinearLayout
+                    android:id="@+id/layoutLoadingRecipes"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <ProgressBar
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:indeterminateTint="#00C897"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Finding matching recipes..."
+                        android:textColor="#4DFFFFFF"
+                        android:textSize="12sp"/>
+
+                </LinearLayout>
 
                 <!-- Empty state -->
                 <LinearLayout
@@ -211,7 +241,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="🍽️"
-                        android:textSize="32sp" />
+                        android:textSize="32sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -219,7 +249,7 @@
                         android:layout_marginTop="8dp"
                         android:text="No matching recipes found"
                         android:textColor="#4DFFFFFF"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                 </LinearLayout>
 
@@ -232,7 +262,8 @@
                     android:nestedScrollingEnabled="false"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
             </LinearLayout>
 

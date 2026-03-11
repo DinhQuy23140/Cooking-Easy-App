@@ -1,5 +1,6 @@
 package com.example.cookingeasy.data.repository
 
+import android.util.Log
 import com.example.cookingeasy.data.remote.api.ApiServiceProvider
 import com.example.cookingeasy.data.remote.dto.AreaResponseDto
 import com.example.cookingeasy.data.remote.dto.CategoryResponseDto
@@ -26,7 +27,20 @@ class RecipeRepositoryImp : RecipeRepository{
     }
 
     override suspend fun getRecipes(): List<Recipe> {
-        val response: RecipeResponseDto = recipeService.getRecipes()
-        return RecipeMapper.toRecipeList(response.meals)
+        val allRecipes = mutableListOf<Recipe>()
+        val alphabet = ('a'..'z').toList()
+
+        for (char in alphabet) {
+            try {
+                val response = recipeService.getRecipes(char.toString())
+                response.meals?.let { meals ->
+                    allRecipes.addAll(RecipeMapper.toRecipeList(meals))
+                }
+            } catch (e: Exception) {
+                Log.e("RecipeRepository", "Error fetching letter $char: ${e.message}")
+            }
+        }
+
+        return allRecipes
     }
 }

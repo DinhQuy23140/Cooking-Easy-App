@@ -1,7 +1,7 @@
 package com.example.cookingeasy.data.remote.dto
 
 data class RecipeResponseDto(
-    val meals: List<RecipeDto>
+    val meals: MutableList<RecipeDto>
 )
 
 data class RecipeDto(
