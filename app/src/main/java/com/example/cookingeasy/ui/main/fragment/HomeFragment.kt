@@ -157,7 +157,7 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.listRecipe.collect { data ->
                 if (!data.isEmpty()) {
-                    recipeAdapter = RecipeAdapter(data, object : RecipeListener {
+                    recipeAdapter = RecipeAdapter(data as MutableList<Recipe>, object : RecipeListener {
                         override fun OnClickItem(recipe: Recipe) {
                             recipeShareViewmodel.selectedRecipe(recipe)
                             val fragmentTransaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()

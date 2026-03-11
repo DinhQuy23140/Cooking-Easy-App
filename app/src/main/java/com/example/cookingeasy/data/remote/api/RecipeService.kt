@@ -5,6 +5,7 @@ import com.example.cookingeasy.data.remote.dto.CategoryResponseDto
 import com.example.cookingeasy.data.remote.dto.RecipeResponseDto
 import com.example.cookingeasy.domain.model.Category
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 
 interface RecipeService {
@@ -14,6 +15,8 @@ interface RecipeService {
     @GET("list.php?a=list")
     suspend fun getArea() : AreaResponseDto
 
-    @GET("search.php?f=a")
-    suspend fun getRecipes(): RecipeResponseDto
+    @GET("search.php")
+    suspend fun getRecipes(
+        @Query("f") letter: String
+    ): RecipeResponseDto
 }

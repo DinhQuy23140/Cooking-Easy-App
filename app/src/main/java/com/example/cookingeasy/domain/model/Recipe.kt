@@ -138,8 +138,11 @@ class Recipe(
 
     fun containsAnyIgnoreCase(other: List<String>): Boolean {
         val listIngredient = getIngredients()
-        return listIngredient.any{ itemA -> other.any{ itemB->
-            itemB.equals(itemA, ignoreCase = true)
-        } }
+        return listIngredient.any { itemA ->
+            other.any { itemB ->
+                itemA.contains(itemB, ignoreCase = true) ||
+                        itemB.contains(itemA, ignoreCase = true)
+            }
+        }
     }
 }

@@ -145,7 +145,7 @@ class ScanFragment : Fragment() {
         bundle.putString("ingredients", ingredients)
         resultScanFragment.arguments = bundle
         fragmentTransaction.replace(R.id.container, resultScanFragment)
-        fragmentTransaction.addToBackStack(null).commit()
+        fragmentTransaction.commit()
     }
 
     private fun showError(message: String) {

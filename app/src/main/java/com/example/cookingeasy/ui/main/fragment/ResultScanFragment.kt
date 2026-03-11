@@ -7,13 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.IngredientDetailAdapter
+import com.example.cookingeasy.common.adapter.RecipeAdapter
+import com.example.cookingeasy.common.listener.RecipeListener
 import com.example.cookingeasy.databinding.FragmentResultScanBinding
 import com.example.cookingeasy.domain.model.Ingredient
+import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.ui.viewmodel.ResultScanViewModel
+import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,25 +37,17 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ResultScanFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     private lateinit var binding: FragmentResultScanBinding
     private lateinit var ingredientDetailAdapter: IngredientDetailAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var recipeAdapter: RecipeAdapter
+    private val resultScanViewModel: ResultScanViewModel by viewModels()
+    private val listIngredientName: MutableList<String> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         binding = FragmentResultScanBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -52,42 +55,85 @@ class ResultScanFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val bundle = arguments
-        val strIngredients = bundle?.getString("ingredients") ?: ""
+        // Parse ingredients từ bundle
+        val strIngredients = arguments?.getString("ingredients") ?: ""
         val ingredients: List<Ingredient> = Gson().fromJson(
             strIngredients,
             object : TypeToken<List<Ingredient>>() {}.type
         )
 
-        Log.d("Ingredients: ", ingredients.toString())
+        // Lấy tên ingredient viết thường
+        listIngredientName.addAll(ingredients.map { it.name.lowercase(Locale.ROOT) })
 
-        binding.tvIngredientCount.text = ingredients.size.toString()
+        // Setup ingredient RecyclerView
+        ingredientDetailAdapter = IngredientDetailAdapter(ingredients)
         binding.recyclerIngredients.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            ingredientDetailAdapter = IngredientDetailAdapter(ingredients)
             adapter = ingredientDetailAdapter
         }
+        binding.tvIngredientCount.text = "${ingredients.size} items"
 
-        //binding.recyclerIngredients.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        // Setup recipe RecyclerView trước
+        recipeAdapter = RecipeAdapter(mutableListOf(), object : RecipeListener {
+            override fun OnClickItem(recipe: Recipe) {
+                // navigate to detail
+            }
+            override fun OnFavoriteClick(boolean: Boolean) {
+                // handle favorite
+            }
+        })
+
+        binding.recyclerRecipes.layoutManager = GridLayoutManager(context, 2)
+        binding.recyclerRecipes.addItemDecoration(
+            GridSpacingItemDecoration(2, 3)
+        )
+        binding.recyclerRecipes.apply {
+            adapter = recipeAdapter
+        }
+
+        // Back button
+        binding.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
+        observe()
+        loadData()
+    }
+
+    private fun loadData() {
+        resultScanViewModel.getRecipesByIngredients(listIngredientName)
+    }
+
+    private fun observe() {
+        // Observe loading
+        viewLifecycleOwner.lifecycleScope.launch {
+            resultScanViewModel.isLoading.collect { isLoading ->
+                binding.progressBar.isVisible = isLoading
+                if (isLoading) {
+                    binding.tvRecipeCount.text = "Loading..."
+                    binding.layoutEmptyRecipes.isVisible = false
+                }
+            }
+        }
+
+        // Observe recipes
+        viewLifecycleOwner.lifecycleScope.launch {
+            resultScanViewModel.recipeByIngredients.collect { recipes ->
+                recipeAdapter.updateData(recipes)
+                binding.tvRecipeCount.text = "${recipes.size} found"
+                binding.layoutEmptyRecipes.isVisible = recipes.isEmpty()
+                binding.recyclerRecipes.isVisible = recipes.isNotEmpty()
+                binding.progressBar.isVisible = false
+                binding.layoutLoadingRecipes.isVisible = false
+                Log.d("ResultScan", "Recipes found: ${recipes.size}")
+            }
+        }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ResultScanFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ResultScanFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        fun newInstance(ingredients: String) = ResultScanFragment().apply {
+            arguments = Bundle().apply {
+                putString("ingredients", ingredients)
             }
+        }
     }
 }
