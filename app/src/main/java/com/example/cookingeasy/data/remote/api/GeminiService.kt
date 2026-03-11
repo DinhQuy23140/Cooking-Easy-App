@@ -1,14 +1,10 @@
 package com.example.cookingeasy.data.remote.api
 
-import android.R.attr.content
-import android.R.id.content
 import android.graphics.Bitmap
 import com.example.cookingeasy.BuildConfig
 import com.example.cookingeasy.domain.model.Ingredient
 import com.example.cookingeasy.domain.model.ScanResult
 
-import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.content
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.Dispatchers
@@ -29,30 +25,40 @@ class GeminiService {
     // Thay GeminiService bằng OpenRouter
     private val client = OkHttpClient()
 
+    private val freeVisionModels = listOf(
+        "google/gemma-3-4b-it:free",
+        "meta-llama/llama-3.2-11b-vision-instruct:free",
+        "google/gemini-2.0-flash-lite",
+        "moonshotai/kimi-vl-a3b-thinking:free"
+    )
+
     suspend fun scanIngredients(bitmap: Bitmap): Result<ScanResult> {
         val base64 = bitmapToBase64(bitmap)
 
-//        val json = """
-//        {
-//          "model": "google/gemini-2.0-flash-lite-001",
-//          "messages": [{
-//            "role": "user",
-//            "content": [
-//              {
-//                "type": "image_url",
-//                "image_url": { "url": "data:image/jpeg;base64,$base64" }
-//              },
-//              {
-//                "type": "text",
-//                "text": "Analyze this food image. Return ONLY JSON: {\"dish_name\": \"...\", \"ingredients\": [{\"name\": \"...\", \"amount\": \"...\", \"unit\": \"...\", \"calories\": 0}]}"
-//              }
-//            ]
-//          }]
-//        }
-//    """.trimIndent()
+        for (model in freeVisionModels) {
+            Log.d("OpenRouter", "Trying model: $model")
+            val result = tryScanWithModel(base64, model)
+
+            if (result.isSuccess) return result
+
+            val error = result.exceptionOrNull()?.message ?: ""
+            val isRateLimit = error.contains("429") || error.contains("rate") || error.contains("Provider returned error")
+
+            if (isRateLimit) {
+                Log.w("OpenRouter", "Model $model rate limited, trying next...")
+                continue // thử model tiếp theo
+            }
+
+            return result // lỗi khác thì dừng luôn
+        }
+
+        return Result.failure(Exception("Tất cả model đang bận, vui lòng thử lại sau"))
+    }
+
+    private suspend fun tryScanWithModel(base64: String, model: String): Result<ScanResult> {
         val json = """
         {
-          "model": "openrouter/free",
+          "model": "$model",
           "messages": [{
             "role": "user",
             "content": [
@@ -81,17 +87,13 @@ class GeminiService {
                 client.newCall(request).execute()
             }
             val body = response.body?.string() ?: throw Exception("Empty response")
-
-            // Log response để debug
-            Log.d("OpenRouter", "Response code: ${response.code}")
-            Log.d("OpenRouter", "Response body: $body")
+            Log.d("OpenRouter", "[$model] Code: ${response.code} Body: $body")
 
             val jsonObject = JSONObject(body)
 
-            // Kiểm tra có lỗi không
             if (jsonObject.has("error")) {
                 val error = jsonObject.getJSONObject("error")
-                throw Exception("API Error: ${error.getString("message")}")
+                throw Exception(error.getString("message"))
             }
 
             val content = jsonObject
@@ -99,15 +101,93 @@ class GeminiService {
                 .getJSONObject(0)
                 .getJSONObject("message")
                 .getString("content")
-                .replace("```json", "").replace("```", "").trim()
 
-            val result = Gson().fromJson(content, ScanResultDto::class.java)
+            val cleanJson = content
+                .trim()
+                .removePrefix("```json")
+                .removePrefix("```JSON")
+                .removePrefix("```")
+                .removeSuffix("```")
+                .trim()
+                .let { str ->
+                    val start = str.indexOf("{")
+                    val end = str.lastIndexOf("}")
+                    if (start != -1 && end != -1) str.substring(start, end + 1)
+                    else str
+                }
+
+            val result = Gson().fromJson(cleanJson, ScanResultDto::class.java)
             Result.success(result.toDomain())
+
         } catch (e: Exception) {
-            Log.e("ScanError", "Error scan: ${e.message}")
+            Log.e("OpenRouter", "[$model] Error: ${e.message}")
             Result.failure(e)
         }
     }
+
+//    suspend fun scanIngredients(bitmap: Bitmap): Result<ScanResult> {
+//        val base64 = bitmapToBase64(bitmap)
+//
+//        val json = """
+//        {
+//          "model": "openrouter/free",
+//          "messages": [{
+//            "role": "user",
+//            "content": [
+//              {
+//                "type": "image_url",
+//                "image_url": { "url": "data:image/jpeg;base64,$base64" }
+//              },
+//              {
+//                "type": "text",
+//                "text": "Analyze this food image. Return ONLY JSON: {\"dish_name\": \"...\", \"ingredients\": [{\"name\": \"...\", \"amount\": \"...\", \"unit\": \"...\", \"calories\": 0}]}"
+//              }
+//            ]
+//          }]
+//        }
+//    """.trimIndent()
+//
+//        val request = Request.Builder()
+//            .url("https://openrouter.ai/api/v1/chat/completions")
+//            .addHeader("Authorization", "Bearer ${BuildConfig.OpenRouter_KEY}")
+//            .addHeader("Content-Type", "application/json")
+//            .post(json.toRequestBody("application/json".toMediaType()))
+//            .build()
+//
+//        return try {
+//            val response = withContext(Dispatchers.IO) {
+//                client.newCall(request).execute()
+//            }
+//            val body = response.body?.string() ?: throw Exception("Empty response")
+//
+//            // Log response để debug
+//            Log.d("OpenRouter", "Response code: ${response.code}")
+//            Log.d("OpenRouter", "Response body: $body")
+//
+//            val jsonObject = JSONObject(body)
+//
+//            // Kiểm tra có lỗi không
+//            if (jsonObject.has("error")) {
+//                val error = jsonObject.getJSONObject("error")
+//                throw Exception("API Error: ${error.getString("message")}")
+//            }
+//
+//            val content = jsonObject
+//                .getJSONArray("choices")
+//                .getJSONObject(0)
+//                .getJSONObject("message")
+//                .getString("content")
+//                .replace("```json", "").replace("```", "").trim()
+//
+//            val result = Gson().fromJson(content, ScanResultDto::class.java)
+//
+//            Log.d("Result Scan: ", result.ingredients.toString())
+//            Result.success(result.toDomain())
+//        } catch (e: Exception) {
+//            Log.e("ScanError", "Error scan: ${e.message}")
+//            Result.failure(e)
+//        }
+//    }
 
     private fun bitmapToBase64(bitmap: Bitmap): String {
         val stream = ByteArrayOutputStream()

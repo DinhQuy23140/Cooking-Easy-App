@@ -1,15 +1,9 @@
 package com.example.cookingeasy.ui.main.fragment
 
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,41 +16,28 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.media3.ui.BuildConfig
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.cookingeasy.common.adapter.DetectIngredientAdapter
-import com.example.cookingeasy.common.adapter.IngredientAdapter
+import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.FragmentScanBinding
 import com.example.cookingeasy.domain.model.ScanResult
 import com.example.cookingeasy.ui.viewmodel.ScanUiState
 import com.example.cookingeasy.ui.viewmodel.ScanViewModel
 import com.google.common.util.concurrent.ListenableFuture
-import dagger.hilt.android.AndroidEntryPoint
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.task.vision.detector.ObjectDetector
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ScanFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ScanFragment : Fragment() {
 
     private val viewModel: ScanViewModel by viewModels()
     private lateinit var binding: FragmentScanBinding
-    private lateinit var ingredientAdapter: IngredientAdapter
 
     // Camera
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -74,18 +55,9 @@ class ScanFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
         setupCamera()
         setupClickListeners()
         observeUiState()
-    }
-
-    private fun setupRecyclerView() {
-        ingredientAdapter = IngredientAdapter()
-        binding.recyclerIngredients.apply {
-            adapter = ingredientAdapter
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        }
     }
 
     private fun setupClickListeners() {
@@ -146,12 +118,8 @@ class ScanFragment : Fragment() {
     }
 
     private fun loadBitmapAndScan(uri: Uri) {
-        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        val bitmap =
             ImageDecoder.decodeBitmap(ImageDecoder.createSource(requireContext().contentResolver, uri))
-        } else {
-            @Suppress("DEPRECATION")
-            MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
-        }
         viewModel.scanImage(bitmap)
     }
 
@@ -161,23 +129,27 @@ class ScanFragment : Fragment() {
         binding.tvDishName.isVisible = false
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showLoading() {
         binding.progressBar.isVisible = true
         binding.tvDishName.text = "Analyzing..."
         binding.tvDishName.isVisible = true
-        ingredientAdapter.submitList(emptyList())
     }
 
     private fun showResult(result: ScanResult) {
         binding.progressBar.isVisible = false
-        binding.tvDishName.text = result.dishName
-        binding.tvDishName.isVisible = true
-        ingredientAdapter.submitList(result.ingredients)
+        val ingredients: String = Gson().toJson(result.ingredients)
+        val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+        val resultScanFragment = ResultScanFragment()
+        val bundle = Bundle()
+        bundle.putString("ingredients", ingredients)
+        resultScanFragment.arguments = bundle
+        fragmentTransaction.replace(R.id.container, resultScanFragment)
+        fragmentTransaction.addToBackStack(null).commit()
     }
 
     private fun showError(message: String) {
         binding.progressBar.isVisible = false
         Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
-        Log.e("Error scan: ", message)
     }
 }

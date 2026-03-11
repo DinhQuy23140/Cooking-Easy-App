@@ -1,11 +1,19 @@
 package com.example.cookingeasy.ui.main.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
+import com.example.cookingeasy.common.adapter.IngredientDetailAdapter
+import com.example.cookingeasy.databinding.FragmentResultScanBinding
+import com.example.cookingeasy.domain.model.Ingredient
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +29,8 @@ class ResultScanFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var binding: FragmentResultScanBinding
+    private lateinit var ingredientDetailAdapter: IngredientDetailAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +45,30 @@ class ResultScanFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_result_scan, container, false)
+        binding = FragmentResultScanBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val bundle = arguments
+        val strIngredients = bundle?.getString("ingredients") ?: ""
+        val ingredients: List<Ingredient> = Gson().fromJson(
+            strIngredients,
+            object : TypeToken<List<Ingredient>>() {}.type
+        )
+
+        Log.d("Ingredients: ", ingredients.toString())
+
+        binding.tvIngredientCount.text = ingredients.size.toString()
+        binding.recyclerIngredients.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            ingredientDetailAdapter = IngredientDetailAdapter(ingredients)
+            adapter = ingredientDetailAdapter
+        }
+
+        //binding.recyclerIngredients.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
     companion object {
