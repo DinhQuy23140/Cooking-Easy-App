@@ -46,8 +46,9 @@ class HomeViewModel() : ViewModel(){
     fun getRecipes() {
         viewModelScope.launch {
             try {
-                _listRecipe.value = recipeRepository.getRecipes()
-                Log.d("Result_Recipe", _listRecipe.value.toString())
+                recipeRepository.getRecipesFlow().collect { recipes ->
+                    _listRecipe.value = recipes
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }

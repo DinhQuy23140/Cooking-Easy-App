@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingVertical="12dp"
+    android:paddingStart="4dp"
     android:orientation="horizontal">
 
     <!-- Timeline column -->
@@ -31,7 +32,7 @@
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:layout_marginTop="4dp"
-            android:background="#E0E0E0"/>
+            android:background="#A2CB8B"/>
 
     </LinearLayout>
 
@@ -41,8 +42,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="#333"
-        android:textSize="15sp"
-        android:lineSpacingExtra="4dp"/>
+        android:layout_marginStart="8dp"
+        android:textColor="#2E5E2E"
+        android:textSize="14sp"
+        android:lineSpacingExtra="5dp"
+        android:lineSpacingMultiplier="1.4"/>
 
 </LinearLayout>

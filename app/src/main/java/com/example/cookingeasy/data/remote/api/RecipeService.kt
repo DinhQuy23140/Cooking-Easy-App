@@ -19,4 +19,19 @@ interface RecipeService {
     suspend fun getRecipes(
         @Query("f") letter: String
     ): RecipeResponseDto
+
+    @GET("filter.php")
+    suspend fun filterRecipesByArea(
+        @Query("a") area: String
+    ): RecipeResponseDto
+
+    @GET("filter.php")
+    suspend fun filterRecipesByCategory(
+        @Query("c") category: String
+    ): RecipeResponseDto
+
+    @GET("filter.php")
+    suspend fun filterRecipesByIngredient(
+        @Query("i") ingredient: String
+    ): RecipeResponseDto
 }

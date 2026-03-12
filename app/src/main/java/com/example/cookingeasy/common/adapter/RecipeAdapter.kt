@@ -1,6 +1,7 @@
 package com.example.cookingeasy.common.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,15 +18,19 @@ class RecipeAdapter(
     private val recipeListener: RecipeListener
 ) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
 
+    private val displayList = mutableListOf<Recipe>()
+    private var currentPage = 0
+    private val pageSize = 10
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
-        val view: View = LayoutInflater.from(parent.context)
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_recipe, parent, false)
         return RecipeViewHolder(view)
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
-        val recipe: Recipe = listRecipe[position]
+        val recipe = displayList[position]
 
         Glide.with(holder.itemView)
             .load(recipe.strMealThumb)
@@ -34,7 +39,7 @@ class RecipeAdapter(
             .into(holder.ivImgRecipe)
 
         holder.tvRecipeName.text = recipe.strMeal
-        holder.tvRecipeArea.text = recipe.strCategory + " • " + recipe.strArea
+        holder.tvRecipeArea.text = "${recipe.strCategory} • ${recipe.strArea}"
         holder.tvRecipeTag.text = recipe.strTags ?: ""
 
         holder.itemView.setOnClickListener {
@@ -46,14 +51,28 @@ class RecipeAdapter(
         }
     }
 
-    override fun getItemCount(): Int = listRecipe.size
+    override fun getItemCount(): Int = displayList.size
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newList: List<Recipe>) {
         listRecipe.clear()
         listRecipe.addAll(newList)
+        displayList.clear()
+        currentPage = 0
+        loadNextPage()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun loadNextPage() {
+        val start = currentPage * pageSize
+        val end = minOf(start + pageSize, listRecipe.size)
+        if (start >= listRecipe.size) return
+        displayList.addAll(listRecipe.subList(start, end))
+        currentPage++
         notifyDataSetChanged()
     }
+
+    fun hasMoreData(): Boolean = currentPage * pageSize < listRecipe.size
 
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ivFavorite: ImageView = itemView.findViewById(R.id.btnFavorite)

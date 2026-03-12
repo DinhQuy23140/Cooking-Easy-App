@@ -1,58 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient_bottom"
+    android:orientation="vertical"
     tools:context=".ui.main.fragment.ResultByTagFragment">
 
+    <!-- ─── HEADER ─── -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_test"
+        android:paddingStart="20dp"
+        android:paddingTop="22dp"
+        android:paddingEnd="10dp">
+
+        <!-- Back button -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/shape_circle_glass"
+            android:padding="10dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.15"
+            android:text="BROWSE BY"
+            android:textColor="#6643A047"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
+
+        <!-- Category name -->
+        <TextView
+            android:id="@+id/tvAreaName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textColor="#2E5E2E"
+            android:textSize="26sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack"
+            tools:text="Dessert" />
+
+        <!-- Result count badge -->
+        <TextView
+            android:id="@+id/txtResultCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_calories_badge"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="12dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="4dp"
+            android:textColor="#43A047"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAreaName"
+            tools:text="24 recipes found" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ─── FILTER / SORT ROW ─── -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/background_color">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp">
 
-        <!-- Toolbar -->
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarResult"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background_color"
-            app:navigationIcon="@drawable/ic_back"
-            app:title="Category"
-            app:titleTextColor="@color/text_color" />
-
+        <!-- Section label -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <!-- Tag Chip -->
+            <View
+                android:layout_width="3dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_accent_bar"/>
 
-            <!-- Result count -->
             <TextView
-                android:id="@+id/txtResultCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="24 recipes found"
-                android:textSize="14sp"
-                android:textColor="#777777"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.1"
+                android:text="ALL RECIPES"
+                android:textColor="#2E5E2E"
+                android:textSize="12sp"/>
 
         </LinearLayout>
 
-        <!-- Recipe List -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvRecipesByTag"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:clipToPadding="false"/>
+        <!-- Sort button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSort"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:text="Sort"
+            android:textColor="#43A047"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif-medium"
+            app:strokeColor="#A2CB8B"
+            app:strokeWidth="1dp"
+            app:cornerRadius="20dp"
+            app:icon="@drawable/ic_sort"
+            app:iconTint="#43A047"
+            app:iconSize="16dp"
+            app:iconPadding="4dp"/>
 
     </LinearLayout>
 
-</FrameLayout>
+    <!-- ─── RECIPE LIST ─── -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecipesByTag"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="16dp"/>
+
+    <!-- Empty state -->
+    <LinearLayout
+        android:id="@+id/layoutEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🍽️"
+            android:textSize="48sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="No recipes found"
+            android:textColor="#2E5E2E"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Try a different category"
+            android:textColor="#80A2CB8B"
+            android:textSize="13sp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,18 +1,20 @@
 package com.example.cookingeasy.ui.main.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.IngredientDetailAdapter
 import com.example.cookingeasy.common.adapter.RecipeAdapter
 import com.example.cookingeasy.common.listener.RecipeListener
@@ -23,6 +25,8 @@ import com.example.cookingeasy.ui.viewmodel.ResultScanViewModel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -43,6 +47,7 @@ class ResultScanFragment : Fragment() {
     private lateinit var recipeAdapter: RecipeAdapter
     private val resultScanViewModel: ResultScanViewModel by viewModels()
     private val listIngredientName: MutableList<String> = mutableListOf()
+    private var isLoadingMore = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,77 +59,109 @@ class ResultScanFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupIngredients()
+        setupRecyclerViews()
+        setupScrollListener()
+        setupClickListeners()
+        observe()
+        loadData()
+    }
 
-        // Parse ingredients từ bundle
+    @SuppressLint("SetTextI18n")
+    private fun setupIngredients() {
         val strIngredients = arguments?.getString("ingredients") ?: ""
         val ingredients: List<Ingredient> = Gson().fromJson(
             strIngredients,
             object : TypeToken<List<Ingredient>>() {}.type
         )
-
-        // Lấy tên ingredient viết thường
         listIngredientName.addAll(ingredients.map { it.name.lowercase(Locale.ROOT) })
 
-        // Setup ingredient RecyclerView
         ingredientDetailAdapter = IngredientDetailAdapter(ingredients)
         binding.recyclerIngredients.apply {
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = ingredientDetailAdapter
+            setHasFixedSize(true)
         }
         binding.tvIngredientCount.text = "${ingredients.size} items"
+    }
 
-        // Setup recipe RecyclerView trước
+    private fun setupRecyclerViews() {
         recipeAdapter = RecipeAdapter(mutableListOf(), object : RecipeListener {
             override fun OnClickItem(recipe: Recipe) {
                 // navigate to detail
             }
-            override fun OnFavoriteClick(boolean: Boolean) {
-                // handle favorite
-            }
+            override fun OnFavoriteClick(boolean: Boolean) { }
         })
 
-        binding.recyclerRecipes.layoutManager = GridLayoutManager(context, 2)
-        binding.recyclerRecipes.addItemDecoration(
-            GridSpacingItemDecoration(2, 3)
-        )
         binding.recyclerRecipes.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            addItemDecoration(GridSpacingItemDecoration(2, 3))
             adapter = recipeAdapter
+            setHasFixedSize(false)
+            isNestedScrollingEnabled = false
         }
+    }
 
-        // Back button
+    private fun setupScrollListener() {
+        binding.content.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+                if (isLoadingMore) return@OnScrollChangeListener
+
+                val totalHeight = v.getChildAt(0).measuredHeight
+                val scrollViewHeight = v.measuredHeight
+
+                if (scrollY >= totalHeight - scrollViewHeight - 200) {
+                    if (recipeAdapter.hasMoreData()) {
+                        isLoadingMore = true
+                        recipeAdapter.loadNextPage()
+                        isLoadingMore = false
+                    }
+                }
+            }
+        )
+    }
+
+    private fun setupClickListeners() {
         binding.btnBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
-
-        observe()
-        loadData()
     }
 
     private fun loadData() {
         resultScanViewModel.getRecipesByIngredients(listIngredientName)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observe() {
-        // Observe loading
         viewLifecycleOwner.lifecycleScope.launch {
-            resultScanViewModel.isLoading.collect { isLoading ->
-                binding.progressBar.isVisible = isLoading
-                if (isLoading) {
-                    binding.tvRecipeCount.text = "Loading..."
-                    binding.layoutEmptyRecipes.isVisible = false
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // Observe loading
+                launch {
+                    resultScanViewModel.isLoading.collect { isLoading ->
+                        binding.layoutLoadingRecipes.isVisible = isLoading
+                        if (isLoading) {
+                            binding.tvRecipeCount.text = "Loading..."
+                            binding.layoutEmptyRecipes.isVisible = false
+                            binding.recyclerRecipes.isVisible = false
+                        }
+                    }
                 }
-            }
-        }
 
-        // Observe recipes
-        viewLifecycleOwner.lifecycleScope.launch {
-            resultScanViewModel.recipeByIngredients.collect { recipes ->
-                recipeAdapter.updateData(recipes)
-                binding.tvRecipeCount.text = "${recipes.size} found"
-                binding.layoutEmptyRecipes.isVisible = recipes.isEmpty()
-                binding.recyclerRecipes.isVisible = recipes.isNotEmpty()
-                binding.progressBar.isVisible = false
-                binding.layoutLoadingRecipes.isVisible = false
-                Log.d("ResultScan", "Recipes found: ${recipes.size}")
+                // Observe recipes
+                launch {
+                    resultScanViewModel.recipeByIngredients
+                        .filter { it.isNotEmpty() }
+                        .distinctUntilChanged()
+                        .collect { recipes ->
+                            binding.layoutLoadingRecipes.isVisible = false
+                            binding.progressBar.isVisible = false
+                            binding.tvRecipeCount.text = "${recipes.size} found"
+                            binding.layoutEmptyRecipes.isVisible = recipes.isEmpty()
+                            binding.recyclerRecipes.isVisible = recipes.isNotEmpty()
+                            recipeAdapter.updateData(recipes)
+                            Log.d("ResultScan", "Recipes found: ${recipes.size}")
+                        }
+                }
             }
         }
     }
