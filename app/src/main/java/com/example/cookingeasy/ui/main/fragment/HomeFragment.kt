@@ -1,22 +1,18 @@
 package com.example.cookingeasy.ui.main.fragment
 
-import android.annotation.SuppressLint
-import android.content.Intent
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.AreaAdapter
 import com.example.cookingeasy.common.adapter.CategoryAdapter
@@ -30,9 +26,9 @@ import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.HomeViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
-import com.example.cookingeasy.util.Constants
 import com.example.cookingeasy.util.GridSpacingItemDecoration
-import com.google.android.material.transition.MaterialFadeThrough
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -46,29 +42,21 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     private val homeViewModel: HomeViewModel by viewModels()
     private val recipeShareViewmodel: RecipeShareViewmodel by activityViewModels()
-    private var categoryAdapter: CategoryAdapter? = null
-    private var areaAdapter: AreaAdapter? = null
-    private var recipeAdapter: RecipeAdapter? = null
     private lateinit var binding: FragmentHomeBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var areaAdapter: AreaAdapter
+    private lateinit var recipeAdapter: RecipeAdapter
+
+    private var isLoadingMore = false // ← tránh gọi loadNextPage nhiều lần
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -80,104 +68,122 @@ class HomeFragment : Fragment() {
         loadData()
         observeData()
     }
-    fun setup() {
-        binding.rvCategories.layoutManager = GridLayoutManager(context, 4)
-        binding.rvCategories.addItemDecoration(
-            GridSpacingItemDecoration(4, 3)
-        )
 
-        binding.rvAreas.layoutManager = GridLayoutManager(context, 3)
-        binding.rvAreas.addItemDecoration(
-            GridSpacingItemDecoration(3, 3)
-        )
+    private fun setup() {
+        categoryAdapter = CategoryAdapter(mutableListOf(), object : CategoryListener {
+            override fun onClickItem(category: Category) {
+                parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_left, R.anim.slide_out_right
+                    )
+                    .replace(R.id.container, ResultByTagFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        })
 
-        binding.rvRecipes.layoutManager = GridLayoutManager(context, 2)
-        binding.rvRecipes.addItemDecoration(
-            GridSpacingItemDecoration(2, 3)
-        )
-    }
+        areaAdapter = AreaAdapter(mutableListOf(), object : AreaListener {
+            override fun OnClickItem(area: Area) { }
+        })
 
-    @SuppressLint("SuspiciousIndentation")
-    fun event() {
-        binding.edtSearch.setOnClickListener {
-            val fragmentTransaction = parentFragmentManager.beginTransaction()
-                fragmentTransaction.setCustomAnimations(
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-            val fragment = SearchFragment()
+        recipeAdapter = RecipeAdapter(mutableListOf(), object : RecipeListener {
+            override fun OnClickItem(recipe: Recipe) {
+                recipeShareViewmodel.selectedRecipe(recipe)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.container, RecipeDetailFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+            override fun OnFavoriteClick(boolean: Boolean) { }
+        })
 
-            fragmentTransaction.replace(R.id.container, fragment).addToBackStack(null)
-            fragmentTransaction.commit()
+        binding.rvCategories.apply {
+            layoutManager = GridLayoutManager(context, 4)
+            addItemDecoration(GridSpacingItemDecoration(4, 3))
+            adapter = categoryAdapter
+            setHasFixedSize(true)
+        }
+
+        binding.rvAreas.apply {
+            layoutManager = GridLayoutManager(context, 3)
+            addItemDecoration(GridSpacingItemDecoration(3, 3))
+            adapter = areaAdapter
+            setHasFixedSize(true)
+        }
+
+        binding.rvRecipes.apply {
+            layoutManager = GridLayoutManager(context, 2)
+            addItemDecoration(GridSpacingItemDecoration(2, 3))
+            adapter = recipeAdapter
+            setHasFixedSize(false)
+            isNestedScrollingEnabled = false
         }
     }
 
-    fun loadData() {
+    private fun event() {
+        binding.edtSearch.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_right, R.anim.slide_out_left,
+                    R.anim.slide_in_left, R.anim.slide_out_right
+                )
+                .replace(R.id.container, SearchFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.content.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+                if (isLoadingMore) return@OnScrollChangeListener
+
+                val totalHeight = v.getChildAt(0).measuredHeight
+                val scrollViewHeight = v.measuredHeight
+
+                // Khi scroll gần cuối (còn 200px)
+                if (scrollY >= totalHeight - scrollViewHeight - 200) {
+                    if (recipeAdapter.hasMoreData()) {
+                        isLoadingMore = true
+                        recipeAdapter.loadNextPage()
+                        isLoadingMore = false
+                    }
+                }
+            }
+        )
+    }
+
+    private fun loadData() {
         homeViewModel.getListCategory()
         homeViewModel.getListArea()
         homeViewModel.getRecipes()
     }
 
-    fun observeData() {
+    private fun observeData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                homeViewModel.lisCategory.collect { data ->
-                    if (!data.isEmpty()) {
-                        categoryAdapter = CategoryAdapter(data, object:CategoryListener {
-                            override fun onClickItem(category: Category) {
-                                val bundle: Bundle = Bundle()
-                                bundle.putString(Constants.KEY_SEARCH, Constants.KEY_CATEGORY)
-                                val fragmentTransacsion: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-                                fragmentTransacsion.replace(R.id.container, ResultByTagFragment())
-                                fragmentTransacsion.addToBackStack(null)
-                                fragmentTransacsion.commit()
-                            }
-                        })
-                        binding.rvCategories.adapter = categoryAdapter
-                    }
+                launch {
+                    homeViewModel.lisCategory
+                        .filter { it.isNotEmpty() }
+                        .collect { data -> categoryAdapter.updateData(data) }
                 }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.listArea.collect { data ->
-                if (!data.isEmpty()) {
-                    areaAdapter = AreaAdapter(data, object : AreaListener {
-                        override fun OnClickItem(are: Area) {
-                            TODO("Not yet implemented")
-                        }
-                    })
-                    binding.rvAreas.adapter = areaAdapter
+                launch {
+                    homeViewModel.listArea
+                        .filter { it.isNotEmpty() }
+                        .collect { data -> areaAdapter.updateData(data) }
                 }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.listRecipe.collect { data ->
-                if (!data.isEmpty()) {
-                    recipeAdapter = RecipeAdapter(data as MutableList<Recipe>, object : RecipeListener {
-                        override fun OnClickItem(recipe: Recipe) {
-                            recipeShareViewmodel.selectedRecipe(recipe)
-                            val fragmentTransaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-                            fragmentTransaction.replace(R.id.container, RecipeDetailFragment())
-                            fragmentTransaction.addToBackStack(null).commit()
+                launch {
+                    homeViewModel.listRecipe
+                        .filter { it.isNotEmpty() }
+                        .distinctUntilChanged() // ← chỉ update khi data thực sự thay đổi
+                        .collect { data ->
+                            recipeAdapter.updateData(data)
                         }
-
-                        override fun OnFavoriteClick(boolean: Boolean) {
-
-                        }
-
-                    })
-                    binding.rvRecipes.adapter = recipeAdapter
                 }
             }
         }
     }
 
     companion object {
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             HomeFragment().apply {

@@ -21,7 +21,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:alpha="0.6"
-            android:src="@drawable/ic_category" />
+            android:src="@drawable/ic_ingredients" />
 
         <!-- Ingredient name -->
         <TextView

@@ -24,10 +24,12 @@ class ResultScanViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val listAllRecipe = recipeRepository.getRecipes()
-                _recipeByIngredients.value = listAllRecipe.filter { recipe ->
-                    recipe.containsAnyIgnoreCase(ingredients)
-                }
+                recipeRepository.getRecipesFlow()
+                    .collect { allRecipes ->
+                        _recipeByIngredients.value = allRecipes.filter { recipe ->
+                            recipe.containsAnyIgnoreCase(ingredients)
+                        }
+                    }
             } catch (e: Exception) {
                 Log.e("ResultScanViewModel", "Error: ${e.message}")
                 _recipeByIngredients.value = emptyList()
