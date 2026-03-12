@@ -14,9 +14,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_test"
         android:paddingStart="20dp"
-        android:paddingTop="52dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="20dp">
+        android:paddingTop="22dp"
+        android:paddingEnd="10dp">
 
         <!-- Back button -->
         <ImageButton
@@ -27,7 +26,7 @@
             android:padding="10dp"
             android:src="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Label -->
         <TextView
@@ -40,23 +39,23 @@
             android:textColor="#6643A047"
             android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack"/>
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
         <!-- Category name -->
         <TextView
-            android:id="@+id/tvCategoryName"
+            android:id="@+id/tvAreaName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
             android:textColor="#2E5E2E"
             android:textSize="26sp"
-            tools:text="Dessert"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnBack"
-            android:layout_marginTop="32dp"/>
+            tools:text="Dessert" />
 
         <!-- Result count badge -->
         <TextView
@@ -72,9 +71,9 @@
             android:paddingBottom="4dp"
             android:textColor="#43A047"
             android:textSize="11sp"
-            tools:text="24 recipes found"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvCategoryName"/>
+            app:layout_constraintTop_toBottomOf="@id/tvAreaName"
+            tools:text="24 recipes found" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -13,4 +13,10 @@ interface RecipeRepository {
 
     suspend fun getRecipes(): List<Recipe>
     fun getRecipesFlow(): Flow<List<Recipe>>
+
+    suspend fun filterRecipesByArea(are: String): List<Recipe>
+
+    suspend fun filterRecipesByCategory(category: String): List<Recipe>
+
+    suspend fun filterRecipesByIngredient(ingredient: String): List<Recipe>
 }

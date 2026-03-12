@@ -44,7 +44,6 @@ class RecipeRepositoryImp : RecipeRepository{
                 Log.e("RecipeRepository", "Error fetching letter $char: ${e.message}")
             }
         }
-
         return allRecipes
     }
 
@@ -64,4 +63,18 @@ class RecipeRepositoryImp : RecipeRepository{
             }
         }
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun filterRecipesByArea(are: String): List<Recipe> {
+        val response: RecipeResponseDto = recipeService.filterRecipesByArea(are)
+        return RecipeMapper.toRecipeList(response.meals)
+    }
+
+    override suspend fun filterRecipesByCategory(category: String): List<Recipe> {
+        val response: RecipeResponseDto = recipeService.filterRecipesByCategory(category)
+        return RecipeMapper.toRecipeList(response.meals)
+    }
+
+    override suspend fun filterRecipesByIngredient(ingredient: String): List<Recipe> {
+        TODO("Not yet implemented")
+    }
 }

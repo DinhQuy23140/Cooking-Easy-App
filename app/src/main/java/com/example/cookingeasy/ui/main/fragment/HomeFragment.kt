@@ -84,7 +84,20 @@ class HomeFragment : Fragment() {
         })
 
         areaAdapter = AreaAdapter(mutableListOf(), object : AreaListener {
-            override fun OnClickItem(area: Area) { }
+            override fun OnClickItem(area: Area) {
+                val fragment = ResultByTagFragment()
+                val bundle = Bundle()
+                bundle.putString("area", area.name)
+                fragment.arguments = bundle
+                parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_left, R.anim.slide_out_right
+                    )
+                    .replace(R.id.container, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
         })
 
         recipeAdapter = RecipeAdapter(mutableListOf(), object : RecipeListener {
