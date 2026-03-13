@@ -6,8 +6,10 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="3dp">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
+    app:strokeColor="#F0F0F0"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,14 +27,22 @@
                 android:layout_height="120dp"
                 android:scaleType="centerCrop"/>
 
+            <!-- Gradient overlay -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/gradient_hero_bottom"/>
+
             <!-- Favorite -->
             <ImageButton
                 android:id="@+id/btnFavorite"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="top|end"
                 android:layout_margin="8dp"
-                android:background="@drawable/bg_circle_white"
+                android:background="@drawable/shape_circle_glass"
+                android:padding="6dp"
                 android:src="@drawable/ic_favorite"/>
 
         </FrameLayout>
@@ -45,9 +55,13 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:minLines="2"
-            android:padding="10dp"
-            android:textColor="#1F1F1F"
-            android:textSize="13sp"
+            android:paddingStart="12dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="10dp"
+            android:textColor="#1A1A1A"
+            android:textSize="12sp"
+            android:lineSpacingExtra="2dp"
             android:fontFamily="sans-serif-medium"/>
 
     </LinearLayout>

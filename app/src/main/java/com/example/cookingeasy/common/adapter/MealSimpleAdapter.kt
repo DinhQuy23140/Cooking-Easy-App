@@ -20,6 +20,7 @@ class MealSimpleAdapter(
 ) : RecyclerView.Adapter<MealSimpleAdapter.MealViewHolder>() {
 
     private val displayList = mutableListOf<Recipe>()
+    private var sourceList = mutableListOf<Recipe>() // list đang được dùng để paging
     private var currentPage = 0
     private val pageSize = 10
 
@@ -45,34 +46,64 @@ class MealSimpleAdapter(
             recipeListener.OnClickItem(meal)
         }
 
-//        holder.btnFavorite.setOnClickListener {
-//            recipeListener.OnFavoriteClick()
-//        }
+        holder.btnFavorite.setOnClickListener {
+            recipeListener.OnFavoriteClick(true)
+        }
     }
 
     override fun getItemCount(): Int = displayList.size
 
+    // Dùng khi load data từ API
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newList: List<Recipe>) {
         listMeal.clear()
         listMeal.addAll(newList)
+        resetPaging(listMeal)
+    }
+
+    // Dùng khi filter search
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateDisplay(filtered: List<Recipe>) {
+        // sourceList đổi sang filtered → paging hoạt động trên filtered
+        resetPaging(filtered)
+    }
+
+    // Dùng khi clear search → khôi phục list gốc
+    @SuppressLint("NotifyDataSetChanged")
+    fun clearFilter() {
+        resetPaging(listMeal)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun resetPaging(source: List<Recipe>) {
+        sourceList.clear()
+        sourceList.addAll(source)
         displayList.clear()
         currentPage = 0
-        loadNextPage()
+
+        val end = minOf(pageSize, sourceList.size)
+        if (end > 0) {
+            displayList.addAll(sourceList.subList(0, end))
+            currentPage = 1
+        }
+        notifyDataSetChanged()
     }
 
+    // Load thêm trang tiếp theo từ sourceList hiện tại
     fun loadNextPage() {
         val start = currentPage * pageSize
-        val end = minOf(start + pageSize, listMeal.size)
-        if (start >= listMeal.size) return
+        val end = minOf(start + pageSize, sourceList.size)
+        if (start >= sourceList.size) return
 
         val insertStart = displayList.size
-        displayList.addAll(listMeal.subList(start, end))
+        val newItems = sourceList.subList(start, end)
+        displayList.addAll(newItems)
         currentPage++
-        notifyItemRangeInserted(insertStart, end - start)
+        notifyItemRangeInserted(insertStart, newItems.size)
     }
 
-    fun hasMoreData(): Boolean = currentPage * pageSize < listMeal.size
+    // hasMoreData dựa trên sourceList hiện tại
+    fun hasMoreData(): Boolean = currentPage * pageSize < sourceList.size
 
     class MealViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgMeal: ImageView = itemView.findViewById(R.id.imgMeal)
