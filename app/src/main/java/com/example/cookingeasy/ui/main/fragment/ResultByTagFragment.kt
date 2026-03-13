@@ -1,11 +1,14 @@
 package com.example.cookingeasy.ui.main.fragment
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -41,6 +44,8 @@ class ResultByTagFragment : Fragment() {
     private lateinit var mealSimpleAdapter: MealSimpleAdapter
     private var area: String = ""
     private val resultByTagViewModel: ResultByTagViewModel by viewModels()
+    private var isLoadingMore = false
+    private lateinit var listRecipe: List<Recipe>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +68,67 @@ class ResultByTagFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getInstance()
         loadData()
+        setUpRecyclerView()
+        setUpListeners()
+        observe()
+    }
+
+    private fun setUpListeners() {
+        binding.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
+        binding.edtSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+            override fun beforeTextChanged(
+                p0: CharSequence?,
+                p1: Int,
+                p2: Int,
+                p3: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                p0: CharSequence?,
+                p1: Int,
+                p2: Int,
+                p3: Int
+            ) {
+                val keyWord = p0.toString()
+                binding.btnClear.isVisible = keyWord.isNotEmpty()
+                filterRecipes(keyWord)
+            }
+
+        })
+
+        binding.btnClear.setOnClickListener {
+            binding.edtSearch.text = null
+            binding.btnClear.isVisible = false
+            mealSimpleAdapter.updateData(listRecipe)
+        }
+    }
+
+    private fun filterRecipes(string: String) {
+        if (string.isEmpty()) {
+            mealSimpleAdapter.updateData(listRecipe)
+        } else {
+            val filteredList = resultByTagViewModel.recipeByArea.value.filter {
+                it.strMeal.contains(string, ignoreCase = true)
+            }
+            mealSimpleAdapter.updateData(filteredList)
+        }
+        val count = if (string.isEmpty()) listRecipe.size
+        else resultByTagViewModel.recipeByArea.value.filter {
+            it.strMeal.contains(string, ignoreCase = true)
+        }.size
+        binding.txtResultCount.text = "$count recipes found"
+        binding.layoutEmpty.isVisible = count == 0
+        binding.rvRecipesByTag.isVisible = count > 0
+    }
+
+    private fun setUpRecyclerView() {
         binding.rvRecipesByTag.apply {
             layoutManager = GridLayoutManager(context, 2)
             addItemDecoration(GridSpacingItemDecoration(2, 3))
@@ -78,7 +144,6 @@ class ResultByTagFragment : Fragment() {
             })
             adapter = mealSimpleAdapter
         }
-        observe()
     }
 
     fun getInstance() {
@@ -97,6 +162,7 @@ class ResultByTagFragment : Fragment() {
                 resultByTagViewModel.recipeByArea.collect {
                     Log.d("Data area: ", it.size.toString())
                     mealSimpleAdapter.updateData(it)
+                    listRecipe = it
                     binding.txtResultCount.text = it.size.toString() + " recipes found"
                 }
             }

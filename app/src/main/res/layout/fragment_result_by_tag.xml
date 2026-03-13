@@ -12,12 +12,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_test"
+        android:background="@drawable/gradient_result_header"
         android:paddingStart="20dp"
         android:paddingTop="22dp"
-        android:paddingEnd="10dp">
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
 
-        <!-- Back button -->
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="40dp"
@@ -26,10 +26,10 @@
             android:padding="10dp"
             android:src="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
-        <!-- Label -->
         <TextView
+            android:id="@+id/tvBrowseBy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -39,14 +39,13 @@
             android:textColor="#6643A047"
             android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack" />
+            app:layout_constraintTop_toBottomOf="@id/btnBack"/>
 
-        <!-- Category name -->
         <TextView
             android:id="@+id/tvAreaName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
@@ -54,10 +53,9 @@
             android:textSize="26sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack"
-            tools:text="Dessert" />
+            app:layout_constraintTop_toBottomOf="@id/tvBrowseBy"
+            tools:text="Dessert"/>
 
-        <!-- Result count badge -->
         <TextView
             android:id="@+id/txtResultCount"
             android:layout_width="wrap_content"
@@ -73,7 +71,53 @@
             android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvAreaName"
-            tools:text="24 recipes found" />
+            tools:text="24 recipes found"/>
+
+        <!-- Search bar -->
+        <LinearLayout
+            android:id="@+id/searchBar"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shape_section_card"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtResultCount">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:alpha="0.4"
+                android:src="@drawable/ic_search"/>
+
+            <EditText
+                android:id="@+id/edtSearch"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Search recipes..."
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="#2E5E2E"
+                android:textSize="13sp"/>
+
+            <ImageButton
+                android:id="@+id/btnClear"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/shape_circle_glass"
+                android:padding="6dp"
+                android:src="@drawable/ic_delete"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -88,7 +132,6 @@
         android:paddingEnd="20dp"
         android:paddingBottom="10dp">
 
-        <!-- Section label -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -113,23 +156,48 @@
 
         </LinearLayout>
 
-        <!-- Sort button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSort"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
+            android:fontFamily="sans-serif-medium"
             android:text="Sort"
             android:textColor="#43A047"
             android:textSize="12sp"
-            android:fontFamily="sans-serif-medium"
-            app:strokeColor="#A2CB8B"
-            app:strokeWidth="1dp"
             app:cornerRadius="20dp"
             app:icon="@drawable/ic_sort"
-            app:iconTint="#43A047"
+            app:iconPadding="4dp"
             app:iconSize="16dp"
-            app:iconPadding="4dp"/>
+            app:iconTint="#43A047"
+            app:strokeColor="#A2CB8B"
+            app:strokeWidth="1dp"/>
+
+    </LinearLayout>
+
+    <!-- ─── LOADING ─── -->
+    <LinearLayout
+        android:id="@+id/layoutLoading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:indeterminateTint="#43A047" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Loading recipes..."
+            android:textColor="#4D2E5E2E"
+            android:textSize="13sp" />
 
     </LinearLayout>
 
@@ -142,9 +210,10 @@
         android:clipToPadding="false"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
-        android:paddingBottom="16dp"/>
+        android:paddingBottom="16dp"
+        android:visibility="visible" />
 
-    <!-- Empty state -->
+    <!-- ─── EMPTY STATE ─── -->
     <LinearLayout
         android:id="@+id/layoutEmpty"
         android:layout_width="match_parent"
@@ -173,7 +242,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Try a different category"
+            android:text="Try a different keyword"
             android:textColor="#80A2CB8B"
             android:textSize="13sp"/>
 

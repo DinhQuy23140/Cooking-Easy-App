@@ -77,4 +77,9 @@ class RecipeRepositoryImp : RecipeRepository{
     override suspend fun filterRecipesByIngredient(ingredient: String): List<Recipe> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun filterRecipesBySearch(query: String): List<Recipe> {
+        val response = recipeService.filterRecipesBySearch(query)
+        return RecipeMapper.toRecipeList(response.meals ?: emptyList())
+    }
 }

@@ -1,79 +1,179 @@
 package com.example.cookingeasy.ui.main.fragment
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cookingeasy.R
+import com.example.cookingeasy.common.adapter.RecipeAdapter
+import com.example.cookingeasy.common.listener.RecipeListener
 import com.example.cookingeasy.databinding.FragmentSearchBinding
+import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.ui.viewmodel.SearchViewModel
+import com.example.cookingeasy.util.GridSpacingItemDecoration
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private lateinit var binding: FragmentSearchBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentSearchBinding
+    private val viewModel: SearchViewModel by viewModels()
+    private lateinit var recipeAdapter: RecipeAdapter
+    private var isLoadingMore = false
+    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         binding = FragmentSearchBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.ivScan.setOnClickListener {
-            val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.container, ScanFragment())
-            fragmentTransaction.setCustomAnimations(
-                R.anim.slide_in_right,
-                R.anim.slide_out_left,
-                R.anim.slide_in_left,
-                R.anim.slide_out_right
-            )
-            fragmentTransaction.addToBackStack(null).commit()
+        setupRecyclerView()
+        setupEvents()
+        observeViewModel()
+    }
+
+    private fun setupRecyclerView() {
+        recipeAdapter = RecipeAdapter(mutableListOf(), object : RecipeListener {
+            override fun OnClickItem(recipe: Recipe) {
+                // navigate to detail
+            }
+            override fun OnFavoriteClick(boolean: Boolean) {
+                // handle favorite
+            }
+        })
+
+        binding.rvSearchResult.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            adapter = recipeAdapter
+            addItemDecoration(GridSpacingItemDecoration(2, 3))
+            setHasFixedSize(false)
+            isNestedScrollingEnabled = false
         }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.searchResult.collect { result ->
+                        val hasKeyword = binding.edtSearchRecipe.text?.isNotEmpty() == true
+                        binding.layoutLoading.isVisible = false
+                        binding.layoutInitial.isVisible = !hasKeyword
+                        binding.layoutResult.isVisible = result.isNotEmpty()
+                        binding.layoutEmpty.isVisible = result.isEmpty() && hasKeyword
+                        binding.txtResult.text = "${result.size} found"
+                        if (result.isNotEmpty()) recipeAdapter.updateData(result)
+                    }
+                }
+
+                launch {
+                    viewModel.isLoading.collect { isLoading ->
+                        if (isLoading) {
+                            binding.layoutLoading.isVisible = true
+                            binding.layoutResult.isVisible = false
+                            binding.layoutEmpty.isVisible = false
+                            binding.layoutInitial.isVisible = false
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    private fun setupEvents() {
+        binding.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
+        binding.btnClear.setOnClickListener {
+            binding.edtSearchRecipe.setText("")
+            resetToInitialState()
+        }
+
+        binding.ivScan.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations( // ← set TRƯỚC replace
+                    R.anim.slide_in_right,
+                    R.anim.slide_out_left,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+                .replace(R.id.container, ScanFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.edtSearchRecipe.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val keyword = s.toString().trim()
+                binding.btnClear.isVisible = keyword.isNotEmpty()
+
+                if (keyword.isEmpty()) {
+                    resetToInitialState()
+                    return
+                }
+
+                // Debounce 300ms — chờ user ngừng gõ mới gọi API
+                searchJob?.cancel()
+                searchJob = viewLifecycleOwner.lifecycleScope.launch {
+                    delay(300)
+                    binding.layoutLoading.isVisible = true
+                    binding.layoutInitial.isVisible = false
+                    binding.layoutEmpty.isVisible = false
+                    viewModel.searchRecipes(keyword)
+                }
+            }
+        })
+
+        binding.content.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+                if (isLoadingMore) return@OnScrollChangeListener
+
+                val totalHeight = v.getChildAt(0).measuredHeight
+                val scrollViewHeight = v.measuredHeight
+
+                if (scrollY >= totalHeight - scrollViewHeight - 200) {
+                    if (recipeAdapter.hasMoreData()) {
+                        isLoadingMore = true
+                        recipeAdapter.loadNextPage()
+                        isLoadingMore = false
+                    }
+                }
+            }
+        )
+    }
+
+    private fun resetToInitialState() {
+        searchJob?.cancel()
+        binding.layoutInitial.isVisible = true
+        binding.layoutResult.isVisible = false
+        binding.layoutLoading.isVisible = false
+        binding.layoutEmpty.isVisible = false
+        binding.btnClear.isVisible = false
+    }
+
+    companion object {
+        fun newInstance() = SearchFragment()
     }
 }
