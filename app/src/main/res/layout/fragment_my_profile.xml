@@ -4,354 +4,672 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@drawable/bg_gradient_bottom"
     android:orientation="vertical"
     tools:context=".ui.main.fragment.MyProfileFragment">
 
+    <!-- ═══════════════════════════════════
+         HERO HEADER  (đồng bộ HomeFragment)
+         ═══════════════════════════════════ -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_hero_header"
+        android:elevation="8dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingStart="20dp"
+        android:paddingTop="52dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="28dp">
 
-        <!-- USER HEADER -->
+        <!-- Top bar: label + Edit button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif"
+                android:letterSpacing="0.08"
+                android:text="MY PROFILE"
+                android:textColor="#80FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btnEditProfile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_circle_glass"
+                android:padding="10dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit profile"/>
+
+        </LinearLayout>
+
+        <!-- Avatar + Name + Email -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/shape_avatar_ring"
+                android:padding="3dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_person" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chef Quy"
+                    android:textColor="#FFFFFF"
+                    android:textSize="22sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:id="@+id/txtEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="quy@gmail.com"
+                    android:textColor="#80FFFFFF"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Stats row: Recipes | Saved | Uploads -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Stat 1: Recipes -->
+            <LinearLayout
+                android:id="@+id/statMyRecipes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvMyRecipesCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Recipes"
+                    android:textColor="#80FFFFFF"
+                    android:textSize="11sp"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="28dp"
+                android:background="#33FFFFFF"/>
+
+            <!-- Stat 2: Saved -->
+            <LinearLayout
+                android:id="@+id/statSaved"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSavedCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="48"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Saved"
+                    android:textColor="#80FFFFFF"
+                    android:textSize="11sp"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="28dp"
+                android:background="#33FFFFFF"/>
+
+            <!-- Stat 3: Uploads -->
+            <LinearLayout
+                android:id="@+id/statUpload"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvUploadCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Uploads"
+                    android:textColor="#80FFFFFF"
+                    android:textSize="11sp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ═══════════════════════════════════
+         SCROLL CONTENT
+         ═══════════════════════════════════ -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="32dp">
 
+            <!-- ─── Quick Actions ─── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="16dp"
+                android:weightSum="3"
+                android:orientation="horizontal">
+
+                <!-- My Recipes -->
+                <LinearLayout
+                    android:id="@+id/quickMyRecipes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/shape_quick_action_card"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/shape_icon_pill_green"
+                        android:padding="7dp"
+                        android:src="@drawable/ic_reciper"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="My Recipes"
+                        android:textColor="#2E5E2E"
+                        android:textSize="11sp"
+                        android:fontFamily="sans-serif-medium"/>
+
+                </LinearLayout>
+
+                <!-- Saved -->
+                <LinearLayout
+                    android:id="@+id/quickSaved"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/shape_quick_action_card"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/shape_icon_pill_green"
+                        android:padding="7dp"
+                        android:src="@drawable/ic_favorite"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Saved"
+                        android:textColor="#2E5E2E"
+                        android:textSize="11sp"
+                        android:fontFamily="sans-serif-medium"/>
+
+                </LinearLayout>
+
+                <!-- Upload -->
+                <LinearLayout
+                    android:id="@+id/quickUpload"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/shape_quick_action_card"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/shape_icon_pill_green"
+                        android:padding="7dp"
+                        android:src="@drawable/ic_explore_filled"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Upload"
+                        android:textColor="#2E5E2E"
+                        android:textSize="11sp"
+                        android:fontFamily="sans-serif-medium"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ─── MANAGE section header ─── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/shape_accent_bar"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MANAGE"
+                    android:textColor="#2E5E2E"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.1"/>
+
+            </LinearLayout>
+
+            <!-- Manage card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="3dp">
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/imgAvatar"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:background="@drawable/bg_circle"
-                        android:scaleType="center"
-                        android:src="@drawable/ic_person" />
-
+                    <!-- Draft Recipes row -->
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:id="@+id/rowDraft"
+                        android:layout_width="match_parent"
+                        android:layout_height="58dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <LinearLayout
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/shape_icon_pill_green"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_cooking"/>
+
+                        </LinearLayout>
 
                         <TextView
-                            android:id="@+id/txtName"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Chef Quy"
-                            android:textColor="#222"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:text="Draft Recipes"
+                            android:textColor="#222222"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"/>
 
-                        <TextView
-                            android:id="@+id/txtEmail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="quy@gmail.com"
-                            android:textColor="#777"
-                            android:textSize="13sp" />
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_right"
+                            android:alpha="0.3"/>
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_right" />
+                    <!-- Inset divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginStart="66dp"
+                        android:background="#1A2E5E2E"/>
+
+                    <!-- Favorite Recipes row -->
+                    <LinearLayout
+                        android:id="@+id/rowFavorite"
+                        android:layout_width="match_parent"
+                        android:layout_height="58dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <LinearLayout
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/shape_icon_pill_green"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_favorite"/>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:text="Favorite Recipes"
+                            android:textColor="#222222"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"/>
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_right"
+                            android:alpha="0.3"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- ─── SETTINGS section header ─── -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:paddingStart="20dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp">
 
-                <!-- MY RECIPES -->
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/shape_accent_bar"/>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="80dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/bg_icon_circle"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_reciper" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="My Recipes"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <!-- SAVED -->
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="80dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/bg_icon_circle"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_favorite" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="Saved"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <!-- UPLOAD -->
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="80dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/bg_icon_circle"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_explore_filled" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="Upload"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SETTINGS"
+                    android:textColor="#2E5E2E"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.1"/>
 
             </LinearLayout>
 
-        </LinearLayout>
+            <!-- Settings card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
 
-        <!-- QUICK ACTION -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-        <!-- MANAGE SECTION -->
+                    <!-- Language row -->
+                    <LinearLayout
+                        android:id="@+id/rowLanguage"
+                        android:layout_width="match_parent"
+                        android:layout_height="58dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"
-            android:text="Manage"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/shape_icon_pill_green"
+                            android:gravity="center">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp">
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_lang"/>
 
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:text="Language"
+                            android:textColor="#222222"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"/>
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_right"
+                            android:alpha="0.3"/>
+
+                    </LinearLayout>
+
+                    <!-- Inset divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginStart="66dp"
+                        android:background="#1A2E5E2E"/>
+
+                    <!-- Dark Mode row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="58dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <LinearLayout
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/shape_icon_pill_green"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_dark"/>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:text="Dark Mode"
+                            android:textColor="#222222"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"/>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchDarkMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:thumbTint="#43A047"
+                            app:trackTint="#A5D6A7"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ─── ACCOUNT section header ─── -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp">
 
-                <!-- DRAFT -->
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/shape_accent_bar"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    android:padding="14dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_cooking" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Draft Recipes"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_right" />
-
-                </LinearLayout>
-
-                <!-- FAVORITE -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    android:padding="14dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_favorite" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Favorite Recipes"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_right" />
-
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACCOUNT"
+                    android:textColor="#2E5E2E"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.1"/>
 
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- SETTINGS -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"
-            android:text="Settings"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp">
-
-            <LinearLayout
+            <!-- Account card: Logout -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!-- LANGUAGE -->
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
+                    android:id="@+id/btnLogout"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="58dp"
                     android:gravity="center_vertical"
-                    android:padding="14dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_lang" />
+                    <LinearLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/shape_icon_pill_red"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_logout"/>
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="14dp"
                         android:layout_weight="1"
-                        android:text="Language"
-                        android:textSize="15sp" />
+                        android:text="Logout"
+                        android:textColor="#D32F2F"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium"/>
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_right" />
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_right"
+                        android:alpha="0.3"/>
 
                 </LinearLayout>
 
-                <!-- DARK MODE -->
+            </com.google.android.material.card.MaterialCardView>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    android:padding="14dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_dark" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Dark Mode"
-                        android:textSize="15sp" />
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- LOGOUT -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/btnLogout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="28dp"
-                android:gravity="center"
-                android:padding="18dp"
-                android:text="Logout"
-                android:textColor="#D32F2F"
-                android:textStyle="bold" />
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

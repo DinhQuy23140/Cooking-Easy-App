@@ -20,6 +20,12 @@ android {
             "OpenRouter_KEY",
             "\"${localProps["OpenRouter_KEY"]}\""
         )
+
+        buildConfigField(
+            "String",
+            "GEMINI_API_KEY",
+            "\"${localProps["GEMINI_API_KEY"]}\""
+        )
         applicationId = "com.example.cookingeasy"
         minSdk = 28
         targetSdk = 35
@@ -51,6 +57,20 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
+    }
+
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/INDEX.LIST",
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/*.kotlin_module"
+            )
+        }
     }
 }
 
