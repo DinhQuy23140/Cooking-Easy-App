@@ -1,85 +1,374 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient_bottom"
+    android:orientation="vertical"
     tools:context=".ui.main.fragment.SearchFragment">
 
+    <!-- ═══════════════════════════════
+         HERO HEADER (đồng bộ HomeFragment)
+         ═══════════════════════════════ -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_hero_header"
+        android:elevation="8dp"
         android:orientation="vertical"
-        android:background="@color/background_color"
-        android:padding="16dp">
+        android:paddingStart="20dp"
+        android:paddingTop="52dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="22dp">
 
-        <!-- SEARCH BAR -->
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Top row: back + greeting -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxCornerRadiusBottomEnd="24dp"
-            app:boxCornerRadiusBottomStart="24dp"
-            app:boxCornerRadiusTopEnd="24dp"
-            app:boxCornerRadiusTopStart="24dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtSearchRecipe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_edittext"
-                android:drawableStart="@drawable/ic_search"
-                android:drawablePadding="5dp"
-                android:hint="Search recipes..."
-                android:textColor="@color/text_color" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
 
             <ImageButton
-                android:id="@+id/ivScan"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/shape_circle_glass"
+                android:padding="8dp"
+                android:src="@drawable/ic_back"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:backgroundTint="#FFFFFF"
-                android:src="@drawable/ic_camera" />
+                android:orientation="vertical">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DISCOVER"
+                    android:textColor="#80FFFFFF"
+                    android:textSize="11sp"
+                    android:fontFamily="sans-serif"
+                    android:letterSpacing="0.15"/>
 
-        <!-- RECENT SEARCH TITLE -->
-        <TextView
-            android:id="@+id/txtRecent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Recent searches"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Search Recipes"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-medium"/>
 
-        <!-- RECENT SEARCH LIST -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvRecentSearch"
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Search bar -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"/>
+            android:layout_height="50dp"
+            android:background="@drawable/shape_search_hero"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp">
 
-        <!-- RESULT TITLE -->
-        <TextView
-            android:id="@+id/txtResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Results"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:alpha="0.6"
+                android:src="@drawable/ic_search"/>
 
-        <!-- SEARCH RESULT -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSearchResult"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"/>
+            <EditText
+                android:id="@+id/edtSearchRecipe"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Search recipes..."
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:singleLine="true"/>
+
+            <!-- Clear button -->
+            <ImageButton
+                android:id="@+id/btnClear"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/shape_circle_glass"
+                android:padding="7dp"
+                android:src="@drawable/ic_delete"
+                android:visibility="gone"/>
+
+            <!-- Camera scan button -->
+            <ImageButton
+                android:id="@+id/ivScan"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/shape_icon_pill_green"
+                android:padding="8dp"
+                android:src="@drawable/ic_camera"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</FrameLayout>
+    <!-- ═══════════════════════════════
+         SCROLL CONTENT
+         ═══════════════════════════════ -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!-- ─── RECENT SEARCHES ─── -->
+            <LinearLayout
+                android:id="@+id/layoutRecent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="12dp">
+
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/shape_accent_bar"/>
+
+                    <TextView
+                        android:id="@+id/txtRecent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="RECENT SEARCHES"
+                        android:textColor="#2E5E2E"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0.1"/>
+
+                    <TextView
+                        android:id="@+id/btnClearAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clear all"
+                        android:textColor="#43A047"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRecentSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <!-- ─── RESULTS ─── -->
+            <LinearLayout
+                android:id="@+id/layoutResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="12dp">
+
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/shape_accent_bar"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="RESULTS"
+                        android:textColor="#2E5E2E"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0.1"/>
+
+                    <TextView
+                        android:id="@+id/txtResult"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_calories_badge"
+                        android:fontFamily="sans-serif-medium"
+                        android:paddingStart="10dp"
+                        android:paddingTop="3dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="3dp"
+                        android:textColor="#43A047"
+                        android:textSize="11sp"
+                        tools:text="12 found"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvSearchResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"/>
+
+            </LinearLayout>
+
+            <!-- ─── LOADING ─── -->
+            <LinearLayout
+                android:id="@+id/layoutLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="80dp"
+                android:paddingBottom="40dp"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:indeterminateTint="#43A047"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Searching..."
+                    android:textColor="#4D2E5E2E"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+            </LinearLayout>
+
+            <!-- ─── EMPTY STATE ─── -->
+            <LinearLayout
+                android:id="@+id/layoutEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="60dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/shape_icon_pill_green"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_search"
+                        android:alpha="0.45"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="No recipes found"
+                    android:textColor="#2E5E2E"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Try a different keyword"
+                    android:textColor="#80A2CB8B"
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
+
+            <!-- ─── INITIAL STATE ─── -->
+            <LinearLayout
+                android:id="@+id/layoutInitial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="60dp">
+
+                <LinearLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/shape_icon_pill_green"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_reciper"
+                        android:alpha="0.45"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Find your recipe"
+                    android:textColor="#2E5E2E"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Type something to get started"
+                    android:textColor="#80A2CB8B"
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

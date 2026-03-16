@@ -27,6 +27,7 @@ import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.HomeViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -72,12 +73,16 @@ class HomeFragment : Fragment() {
     private fun setup() {
         categoryAdapter = CategoryAdapter(mutableListOf(), object : CategoryListener {
             override fun onClickItem(category: Category) {
+                val fragment = ResultByCategoryFragment()
+                val bundle = Bundle()
+                bundle.putString("category", Gson().toJson(category))
+                fragment.arguments = bundle
                 parentFragmentManager.beginTransaction()
                     .setCustomAnimations(
                         R.anim.slide_in_right, R.anim.slide_out_left,
                         R.anim.slide_in_left, R.anim.slide_out_right
                     )
-                    .replace(R.id.container, ResultByTagFragment())
+                    .replace(R.id.container, fragment)
                     .addToBackStack(null)
                     .commit()
             }
@@ -177,19 +182,26 @@ class HomeFragment : Fragment() {
                 launch {
                     homeViewModel.lisCategory
                         .filter { it.isNotEmpty() }
-                        .collect { data -> categoryAdapter.updateData(data) }
+                        .collect { data ->
+                            categoryAdapter.updateData(data)
+                            binding.tvCategoryCount.text = data.size.toString() + "+"
+                        }
                 }
                 launch {
                     homeViewModel.listArea
                         .filter { it.isNotEmpty() }
-                        .collect { data -> areaAdapter.updateData(data) }
+                        .collect { data ->
+                            areaAdapter.updateData(data)
+                            binding.tvCuisneCount.text = data.size.toString() + "+"
+                        }
                 }
                 launch {
                     homeViewModel.listRecipe
                         .filter { it.isNotEmpty() }
-                        .distinctUntilChanged() // ← chỉ update khi data thực sự thay đổi
+                        .distinctUntilChanged()
                         .collect { data ->
                             recipeAdapter.updateData(data)
+                            binding.tvRecipeCount.text = data.size.toString() + "+"
                         }
                 }
             }

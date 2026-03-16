@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 val localProps = Properties()
@@ -19,6 +20,12 @@ android {
             "String",
             "OpenRouter_KEY",
             "\"${localProps["OpenRouter_KEY"]}\""
+        )
+
+        buildConfigField(
+            "String",
+            "GEMINI_API_KEY",
+            "\"${localProps["GEMINI_API_KEY"]}\""
         )
         applicationId = "com.example.cookingeasy"
         minSdk = 28
@@ -52,6 +59,20 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/INDEX.LIST",
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/*.kotlin_module"
+            )
+        }
+    }
 }
 
 kapt {
@@ -66,6 +87,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

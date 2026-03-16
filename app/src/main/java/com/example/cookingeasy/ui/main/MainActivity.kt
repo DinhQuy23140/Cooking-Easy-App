@@ -1,7 +1,5 @@
 package com.example.cookingeasy.ui.main
 
-import android.app.FragmentManager
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +11,7 @@ import com.example.cookingeasy.R
 import com.example.cookingeasy.data.preferences.ShareprefConstants
 import com.example.cookingeasy.databinding.ActivityMainBinding
 import com.example.cookingeasy.ui.main.fragment.AIChatFragment
-import com.example.cookingeasy.ui.main.fragment.AddRecipeFragment
+import com.example.cookingeasy.ui.main.fragment.ManageMyRecipeFragment
 import com.example.cookingeasy.ui.main.fragment.ExploreFragment
 import com.example.cookingeasy.ui.main.fragment.HomeFragment
 import com.example.cookingeasy.ui.main.fragment.MyProfileFragment
@@ -45,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             val fragment = when(item.itemId) {
                 R.id.bottom_home -> HomeFragment()
                 R.id.bottom_explore -> ExploreFragment()
-                R.id.bottom_add_recipe -> AddRecipeFragment()
+                R.id.bottom_add_recipe -> ManageMyRecipeFragment()
                 R.id.bottom_ai -> AIChatFragment()
                 R.id.bottom_person -> MyProfileFragment()
                 else -> null

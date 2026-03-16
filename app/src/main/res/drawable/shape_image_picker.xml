@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Nền xanh nhạt -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#EAF3DE"/>
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+    <!-- Viền dashed xanh lá -->
+    <item>
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="1.5dp"
+                android:color="#A5D6A7"
+                android:dashWidth="8dp"
+                android:dashGap="4dp"/>
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+</layer-list>

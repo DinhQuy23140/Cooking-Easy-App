@@ -8,7 +8,112 @@
     android:orientation="vertical"
     tools:context=".ui.main.fragment.ResultByCategoryFragment">
 
+    <!-- ═══════════════════════════════
+         HERO HEADER (đồng bộ HomeFragment)
+         ═══════════════════════════════ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_hero_header"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="52dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="24dp">
+
+        <!-- Back button -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/shape_circle_glass"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"/>
+
+        <!-- Category icon + info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Category image -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                app:cardBackgroundColor="#26FFFFFF"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="#33FFFFFF"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:id="@+id/imgCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Name + count -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:letterSpacing="0.15"
+                    android:text="CATEGORY"
+                    android:textColor="#80FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvCategoryName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    tools:text="Beef" />
+
+                <TextView
+                    android:id="@+id/tvRecipeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/shape_section_card"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingStart="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="3dp"
+                    android:textColor="#CCFFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    tools:text="24 recipes" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ═══════════════════════════════
+         SCROLL CONTENT
+         ═══════════════════════════════ -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -19,170 +124,128 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
-            <!-- ─── HEADER ─── -->
-            <FrameLayout
+            <!-- ─── ABOUT CARD ─── -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/gradient_result_header"
-                android:paddingStart="20dp"
-                android:paddingTop="52dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="20dp">
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
 
-                <!-- Back button -->
-                <ImageButton
-                    android:id="@+id/btnBack"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="top|start"
-                    android:background="@drawable/shape_circle_glass"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_back"/>
-
-                <!-- Category info row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="56dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <!-- Category thumbnail -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="72dp"
-                        android:layout_height="72dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp"
-                        app:cardBackgroundColor="#1A43A047">
-
-                        <ImageView
-                            android:id="@+id/imgCategory"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="10dp"
-                            android:scaleType="fitCenter"/>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <!-- Category name + count -->
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="14dp"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="10dp">
+
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/shape_accent_bar"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="CATEGORY"
-                            android:textColor="#6643A047"
-                            android:textSize="10sp"
-                            android:fontFamily="sans-serif-medium"
-                            android:letterSpacing="0.15"/>
-
-                        <TextView
-                            android:id="@+id/tvCategoryName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
+                            android:layout_weight="1"
+                            android:text="ABOUT"
                             android:textColor="#2E5E2E"
-                            android:textSize="24sp"
+                            android:textSize="12sp"
                             android:fontFamily="sans-serif-medium"
-                            tools:text="Beef"/>
+                            android:letterSpacing="0.1"/>
 
-                        <TextView
-                            android:id="@+id/tvRecipeCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:background="@drawable/shape_calories_badge"
-                            android:paddingStart="10dp"
-                            android:paddingTop="3dp"
-                            android:paddingEnd="10dp"
-                            android:paddingBottom="3dp"
-                            android:textColor="#43A047"
-                            android:textSize="11sp"
-                            android:fontFamily="sans-serif-medium"
-                            tools:text="24 recipes"/>
+                        <ImageButton
+                            android:id="@+id/btnExpand"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="@android:color/transparent"
+                            android:rotation="90"
+                            android:src="@drawable/ic_right"
+                            android:alpha="0.5"/>
 
                     </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/tvDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lineSpacingExtra="4dp"
+                        android:lineSpacingMultiplier="1.4"
+                        android:maxLines="3"
+                        android:textColor="#4D2E5E2E"
+                        android:textSize="13sp"
+                        android:fontFamily="sans-serif"
+                        tools:text="Beef is the culinary name for meat from cattle."/>
+
                 </LinearLayout>
 
-            </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            <!-- ─── DESCRIPTION CARD ─── -->
+            <!-- ─── SEARCH BAR ─── -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/shape_section_card"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:background="@drawable/shape_quick_action_card"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="8dp">
 
-                <!-- Header -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="10dp">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:alpha="0.4"
+                    android:src="@drawable/ic_search"/>
 
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/shape_accent_bar"/>
+                <EditText
+                    android:id="@+id/edtSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:hint="Search in this category..."
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textColor="#2E5E2E"
+                    android:textSize="13sp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="ABOUT"
-                        android:textColor="#2E5E2E"
-                        android:textSize="12sp"
-                        android:fontFamily="sans-serif-medium"
-                        android:letterSpacing="0.1"/>
-
-                    <!-- Expand/collapse -->
-                    <ImageButton
-                        android:id="@+id/btnExpand"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/ic_back"
-                        android:rotation="-90"/>
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#4D2E5E2E"
-                    android:textSize="13sp"
-                    android:lineSpacingExtra="4dp"
-                    android:lineSpacingMultiplier="1.4"
-                    android:maxLines="3"
-                    android:ellipsize="end"
-                    tools:text="Beef is the culinary name for meat from cattle, particularly skeletal muscle. Humans have been eating beef since prehistoric times."/>
+                <ImageButton
+                    android:id="@+id/btnClear"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/shape_icon_pill_green"
+                    android:padding="7dp"
+                    android:src="@drawable/ic_delete"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
-            <!-- ─── RECIPE LIST ─── -->
+            <!-- ─── ALL RECIPES header ─── -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:paddingStart="20dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="6dp">
 
                 <View
                     android:layout_width="3dp"
@@ -191,27 +254,101 @@
                     android:background="@drawable/shape_accent_bar"/>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="ALL RECIPES"
                     android:textColor="#2E5E2E"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif-medium"
                     android:letterSpacing="0.1"/>
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSort"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Sort"
+                    android:textAllCaps="false"
+                    android:textColor="#43A047"
+                    android:textSize="11sp"
+                    app:cornerRadius="20dp"
+                    app:icon="@drawable/ic_sort"
+                    app:iconPadding="4dp"
+                    app:iconSize="13dp"
+                    app:iconTint="#43A047"
+                    app:strokeColor="#A2CB8B"
+                    app:strokeWidth="1dp" />
+
             </LinearLayout>
 
+            <!-- ─── LOADING INITIAL ─── -->
+            <LinearLayout
+                android:id="@+id/layoutLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:indeterminateTint="#43A047"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Loading recipes..."
+                    android:textColor="#4D2E5E2E"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+            </LinearLayout>
+
+            <!-- ─── RECIPE LIST ─── -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRecipes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:clipToPadding="false"
-                android:isScrollContainer="false"
                 android:nestedScrollingEnabled="false"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp"/>
+                android:paddingEnd="10dp"
+                android:visibility="gone"/>
 
-            <!-- Empty state -->
+            <!-- ─── LOADING MORE ─── -->
+            <LinearLayout
+                android:id="@+id/layoutLoadingMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:indeterminateTint="#43A047"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Loading more..."
+                    android:textColor="#4D2E5E2E"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <!-- ─── EMPTY STATE ─── -->
             <LinearLayout
                 android:id="@+id/layoutEmpty"
                 android:layout_width="match_parent"
@@ -221,20 +358,36 @@
                 android:paddingTop="40dp"
                 android:visibility="gone">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🍽️"
-                    android:textSize="48sp"/>
+                <LinearLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/shape_icon_pill_green"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_reciper"
+                        android:alpha="0.45"/>
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginTop="16dp"
                     android:text="No recipes found"
                     android:textColor="#2E5E2E"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Try a different keyword"
+                    android:textColor="#80A2CB8B"
+                    android:textSize="13sp"/>
 
             </LinearLayout>
 

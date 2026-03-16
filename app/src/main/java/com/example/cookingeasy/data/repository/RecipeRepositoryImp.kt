@@ -77,4 +77,30 @@ class RecipeRepositoryImp : RecipeRepository{
     override suspend fun filterRecipesByIngredient(ingredient: String): List<Recipe> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun filterRecipesBySearch(query: String): List<Recipe> {
+        val response = recipeService.filterRecipesBySearch(query)
+        return RecipeMapper.toRecipeList(response.meals ?: emptyList())
+    }
+
+    override suspend fun getRandomRecipe(): Recipe? {
+        val response = recipeService.getRandomRecipe()
+        val dto = response.meals?.firstOrNull() ?: return null
+        return RecipeMapper.toRecipe(dto)
+    }
+
+    override fun getTrendingRecipe(): Flow<List<Recipe>> = flow {
+        val trendingRecipes = mutableListOf<Recipe>()
+        for (index in 1 .. 10) {
+            try {
+                val response = recipeService.getRandomRecipe()
+                response.meals?.let {
+                    trendingRecipes.add(RecipeMapper.toRecipe(response.meals.first()))
+                    emit(trendingRecipes.toList())
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }.flowOn(Dispatchers.IO)
 }

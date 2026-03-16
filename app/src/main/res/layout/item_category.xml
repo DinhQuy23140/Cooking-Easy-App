@@ -1,17 +1,16 @@
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackgroundBorderless"
+    app:cardBackgroundColor="@android:color/white"
     app:cardCornerRadius="20dp"
     app:cardElevation="2dp"
-    app:strokeWidth="0.5dp"
     app:strokeColor="#E0E0E0"
-    app:cardBackgroundColor="@android:color/white"
-    android:foreground="?selectableItemBackgroundBorderless"
-    android:clickable="true"
-    android:focusable="true">
+    app:strokeWidth="0.5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +21,9 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginBottom="6dp"
             app:cardBackgroundColor="#F5F5F5"
             app:cardCornerRadius="25dp"
@@ -41,15 +42,15 @@
             android:id="@+id/txtCategoryName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="10dp"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
             android:text="Dessert"
             android:textColor="#1E2F23"
-            android:textSize="14sp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="10dp"/>
+            android:textSize="14sp" />
 
     </LinearLayout>
 

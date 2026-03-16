@@ -2,53 +2,89 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
     app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="3dp">
+    app:cardCornerRadius="14dp"
+    app:cardElevation="0dp"
+    app:strokeColor="#1A2E5E2E"
+    app:strokeWidth="0.5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <!-- IMAGE -->
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <!-- Ảnh bên trái -->
+        <ImageView
+            android:id="@+id/imgMeal"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:scaleType="centerCrop"/>
 
-            <ImageView
-                android:id="@+id/imgMeal"
+        <!-- Thông tin bên phải -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="14dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="12dp"
+            android:gravity="center_vertical">
+
+            <!-- Tên món -->
+            <TextView
+                android:id="@+id/txtMealName"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:scaleType="centerCrop"/>
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="#222222"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif-medium"
+                android:lineSpacingExtra="2dp"
+                tools:text="Spicy Arrabiata Penne"/>
 
-            <!-- Favorite -->
+            <!-- Category + Area chips -->
+
+        </LinearLayout>
+
+        <!-- Favorite + chevron -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:paddingEnd="12dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
+
             <ImageButton
                 android:id="@+id/btnFavorite"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="top|end"
-                android:layout_margin="8dp"
-                android:background="@drawable/bg_circle_white"
-                android:src="@drawable/ic_favorite"/>
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_icon_pill_green"
+                android:padding="6dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_favorite" />
 
-        </FrameLayout>
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:alpha="0.25"
+                android:src="@drawable/ic_right" />
 
-        <!-- Meal name -->
-        <TextView
-            android:id="@+id/txtMealName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:minLines="2"
-            android:padding="10dp"
-            android:textColor="#1F1F1F"
-            android:textSize="13sp"
-            android:fontFamily="sans-serif-medium"/>
+        </LinearLayout>
 
     </LinearLayout>
 

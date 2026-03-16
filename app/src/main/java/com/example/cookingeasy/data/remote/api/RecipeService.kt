@@ -34,4 +34,12 @@ interface RecipeService {
     suspend fun filterRecipesByIngredient(
         @Query("i") ingredient: String
     ): RecipeResponseDto
+
+    @GET("search.php")
+    suspend fun filterRecipesBySearch(
+        @Query("s") query: String
+    ): RecipeResponseDto
+
+    @GET("random.php")
+    suspend fun getRandomRecipe(): RecipeResponseDto
 }
