@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="3dp">
+    app:cardCornerRadius="14dp"
+    app:cardElevation="0dp"
+    app:strokeColor="#1A2E5E2E"
+    app:strokeWidth="0.5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,37 +20,43 @@
         <!-- IMAGE -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="130dp">
 
             <ImageView
                 android:id="@+id/imgMeal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:adjustViewBounds="true"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/sample_food" />
+                tools:src="@drawable/sample_food"/>
 
-            <!-- Favorite -->
+            <!-- Gradient overlay -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/gradient_hero_bottom"/>
+
+            <!-- Favorite button -->
             <ImageButton
                 android:id="@+id/btnFavorite"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="top|end"
-                android:layout_margin="20dp"
-                android:background="@drawable/bg_circle_white"
-                android:src="@drawable/ic_favorite" />
+                android:layout_margin="8dp"
+                android:background="@drawable/shape_tag_white"
+                android:padding="6dp"
+                android:src="@drawable/ic_favorite"/>
 
-            <!-- Youtube -->
-            <ImageView
+            <!-- YouTube button -->
+            <ImageButton
                 android:id="@+id/btnYoutube"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="bottom|end"
-                android:layout_margin="20dp"
-                android:background="@drawable/bg_circle_white"
-                android:scaleType="center"
-                android:src="@drawable/ic_youtobe" />
+                android:layout_margin="8dp"
+                android:background="@drawable/shape_circle_glass"
+                android:padding="6dp"
+                android:src="@drawable/ic_youtobe"/>
 
         </FrameLayout>
 
@@ -55,7 +65,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="14dp">
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp">
 
             <!-- Meal name -->
             <TextView
@@ -64,57 +77,69 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="Jerk chicken with rice &amp; peas"
-                android:textColor="#1F1F1F"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:minLines="1"
+                android:textColor="#222222"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium"
+                android:lineSpacingExtra="2dp"
+                tools:text="Jerk chicken with rice &amp; peas"/>
 
             <!-- Category + Area -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="4dp">
 
                 <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_cooking" />
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_cooking"
+                    android:alpha="0.5"/>
 
                 <TextView
                     android:id="@+id/txtCategoryArea"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="5dp"
-                    android:text=""
-                    android:textColor="#757575"
-                    android:textSize="13sp" />
+                    android:layout_weight="1"
+                    android:textColor="#666666"
+                    android:textSize="10sp"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Jamaican · Chicken"/>
+
             </LinearLayout>
 
             <!-- Tags -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center|start"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_tag" />
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_tag"
+                    android:alpha="0.5"/>
 
                 <TextView
                     android:id="@+id/txtTags"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:gravity="center|start"
-                    android:text="Chilli • Curry"
-                    android:textColor="#9E9E9E"
-                    android:textSize="12sp" />
+                    android:layout_weight="1"
+                    android:textColor="#4D2E5E2E"
+                    android:textSize="10sp"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Chilli · Curry"/>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -122,8 +147,8 @@
         <!-- Divider -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#EEEEEE" />
+            android:layout_height="0.5dp"
+            android:background="#1A2E5E2E"/>
 
         <!-- USER INFO -->
         <LinearLayout
@@ -131,24 +156,32 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="12dp">
+            android:paddingStart="10dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="8dp">
 
             <ImageView
                 android:id="@+id/imgUser"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/bg_circle"
-                android:scaleType="center"
-                android:src="@drawable/ic_person" />
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/shape_avatar_ring"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_person"/>
 
             <TextView
                 android:id="@+id/txtUserName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="John Doe"
-                android:textColor="#374151"
-                android:textSize="13sp" />
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:textColor="#666666"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="Chef Admin"/>
 
         </LinearLayout>
 

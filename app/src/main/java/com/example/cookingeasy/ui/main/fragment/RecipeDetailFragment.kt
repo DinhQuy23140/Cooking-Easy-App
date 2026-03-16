@@ -113,6 +113,7 @@ class RecipeDetailFragment : Fragment() {
         binding.tvMealName.text = recipe.strMeal
         binding.tvCategory.text = recipe.strCategory
         binding.tvArea.text = recipe.strArea
+        binding.tvIngredientCount.text = recipe.getIngredients().size.toString() + " ingredients"
 
         val layout = binding.layoutIngredients
 

@@ -1,16 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@drawable/bg_gradient_bottom"
+    android:orientation="vertical"
     tools:context=".ui.main.fragment.AddRecipeFragment">
 
+    <!-- ═══════════════════════════════
+         HERO HEADER (đồng bộ HomeFragment)
+         ═══════════════════════════════ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_hero_header"
+        android:elevation="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="52dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="COOKING"
+                android:textColor="#80FFFFFF"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif"
+                android:letterSpacing="0.12"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="New Recipe"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:fontFamily="sans-serif-medium"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/shape_circle_glass"
+            android:padding="8dp"
+            android:src="@drawable/ic_delete"/>
+
+    </LinearLayout>
+
+    <!-- ═══════════════════════════════
+         SCROLL CONTENT
+         ═══════════════════════════════ -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,604 +73,557 @@
             android:orientation="vertical"
             android:paddingBottom="32dp">
 
-            <!-- ─── HEADER ─── -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/gradient_result_header"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="20dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="20dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:letterSpacing="0.15"
-                        android:text="COOKING"
-                        android:textColor="#6643A047"
-                        android:textSize="11sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="New Recipe"
-                        android:textColor="#2E5E2E"
-                        android:textSize="22sp"/>
-
-                </LinearLayout>
-
-                <ImageButton
-                    android:id="@+id/btnClose"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/shape_circle_glass"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_delete"/>
-
-            </LinearLayout>
-
             <!-- ─── MEAL IMAGE ─── -->
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/shape_section_card"
-                android:orientation="vertical"
-                android:padding="16dp">
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/shape_accent_bar"/>
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:letterSpacing="0.1"
-                        android:text="MEAL IMAGE"
-                        android:textColor="#2E5E2E"
-                        android:textSize="12sp"/>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/shape_accent_bar"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="MEAL IMAGE"
+                            android:textColor="#2E5E2E"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:letterSpacing="0.1"/>
+
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:id="@+id/layoutPickImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:background="@drawable/shape_image_picker">
+
+                        <ImageView
+                            android:id="@+id/imgMeal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:visibility="gone"/>
+
+                        <LinearLayout
+                            android:id="@+id/layoutImagePlaceholder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:alpha="0.35"
+                                android:src="@drawable/ic_camera"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="Tap to add photo"
+                                android:textColor="#4D2E5E2E"
+                                android:textSize="13sp"
+                                android:fontFamily="sans-serif-medium"/>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
 
                 </LinearLayout>
 
-                <!-- Image picker -->
-                <FrameLayout
-                    android:id="@+id/layoutPickImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:background="@drawable/shape_circle_glass">
+            </com.google.android.material.card.MaterialCardView>
 
-                    <ImageView
-                        android:id="@+id/imgMeal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone"/>
+            <!-- ─── BASIC INFO ─── -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <LinearLayout
-                        android:id="@+id/layoutImagePlaceholder"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="14dp">
 
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:alpha="0.4"
-                            android:src="@drawable/ic_camera"/>
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/shape_accent_bar"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:text="BASIC INFO"
+                            android:textColor="#2E5E2E"
+                            android:textSize="12sp"
                             android:fontFamily="sans-serif-medium"
-                            android:text="Tap to add photo"
-                            android:textColor="#4D2E5E2E"
+                            android:letterSpacing="0.1"/>
+
+                    </LinearLayout>
+
+                    <!-- Meal Name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:text="Meal Name *"
+                        android:textColor="#2E5E2E"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="14dp"
+                        android:background="@drawable/shape_input_field"
+                        android:gravity="center_vertical"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp">
+
+                        <EditText
+                            android:id="@+id/edtMealName"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:hint="e.g. Spicy Arrabiata Penne"
+                            android:inputType="textCapSentences"
+                            android:textColor="#2E5E2E"
+                            android:textSize="14sp"/>
+
+                    </LinearLayout>
+
+                    <!-- Category + Area -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="6dp"
+                                android:text="Category"
+                                android:textColor="#2E5E2E"
+                                android:textSize="12sp"
+                                android:fontFamily="sans-serif-medium"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:background="@drawable/shape_input_field"
+                                android:gravity="center_vertical"
+                                android:paddingStart="14dp"
+                                android:paddingEnd="14dp">
+
+                                <EditText
+                                    android:id="@+id/edtCategory"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@android:color/transparent"
+                                    android:hint="e.g. Pasta"
+                                    android:textColor="#2E5E2E"
+                                    android:textSize="13sp"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="6dp"
+                                android:text="Area"
+                                android:textColor="#2E5E2E"
+                                android:textSize="12sp"
+                                android:fontFamily="sans-serif-medium"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:background="@drawable/shape_input_field"
+                                android:gravity="center_vertical"
+                                android:paddingStart="14dp"
+                                android:paddingEnd="14dp">
+
+                                <EditText
+                                    android:id="@+id/edtArea"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@android:color/transparent"
+                                    android:hint="e.g. Italian"
+                                    android:textColor="#2E5E2E"
+                                    android:textSize="13sp"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Tags -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="6dp"
+                        android:text="Tags"
+                        android:textColor="#2E5E2E"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="14dp"
+                        android:background="@drawable/shape_input_field"
+                        android:gravity="center_vertical"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp">
+
+                        <EditText
+                            android:id="@+id/edtTags"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:hint="e.g. Pasta, Curry"
+                            android:textColor="#2E5E2E"
                             android:textSize="13sp"/>
 
                     </LinearLayout>
 
-                </FrameLayout>
-
-            </LinearLayout>
-
-            <!-- ─── BASIC INFO ─── -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/shape_section_card"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="14dp">
-
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/shape_accent_bar"/>
-
+                    <!-- YouTube link -->
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:letterSpacing="0.1"
-                        android:text="BASIC INFO"
-                        android:textColor="#2E5E2E"
-                        android:textSize="12sp"/>
-
-                </LinearLayout>
-
-                <!-- Meal name -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="Meal Name *"
-                    android:textColor="#2E5E2E"
-                    android:textSize="12sp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="14dp"
-                    android:background="@drawable/shape_input_field"
-                    android:gravity="center_vertical"
-                    android:paddingStart="14dp"
-                    android:paddingEnd="14dp">
-
-                    <EditText
-                        android:id="@+id/edtMealName"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:hint="e.g. Spicy Arrabiata Penne"
-                        android:inputType="textCapSentences"
-                        android:textColor="#2E5E2E"
-                        android:textSize="14sp"/>
-
-                </LinearLayout>
-
-                <!-- Category + Area row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <!-- Category -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="6dp"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="Category"
-                            android:textColor="#2E5E2E"
-                            android:textSize="12sp"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/shape_input_field"
-                            android:gravity="center_vertical"
-                            android:paddingStart="14dp"
-                            android:paddingEnd="14dp">
-
-                            <EditText
-                                android:id="@+id/edtCategory"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/transparent"
-                                android:hint="e.g. Pasta"
-                                android:textColor="#2E5E2E"
-                                android:textSize="13sp"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- Area -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="6dp"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="Area"
-                            android:textColor="#2E5E2E"
-                            android:textSize="12sp"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/shape_input_field"
-                            android:gravity="center_vertical"
-                            android:paddingStart="14dp"
-                            android:paddingEnd="14dp">
-
-                            <EditText
-                                android:id="@+id/edtArea"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/transparent"
-                                android:hint="e.g. Italian"
-                                android:textColor="#2E5E2E"
-                                android:textSize="13sp"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- Tags -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginBottom="6dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="Tags"
-                    android:textColor="#2E5E2E"
-                    android:textSize="12sp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@drawable/shape_input_field"
-                    android:gravity="center_vertical"
-                    android:paddingStart="14dp"
-                    android:paddingEnd="14dp">
-
-                    <EditText
-                        android:id="@+id/edtTags"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:hint="e.g. Pasta, Curry"
-                        android:textColor="#2E5E2E"
-                        android:textSize="13sp"/>
-
-                </LinearLayout>
-
-                <!-- YouTube link -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginBottom="6dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="YouTube Link"
-                    android:textColor="#2E5E2E"
-                    android:textSize="12sp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@drawable/shape_input_field"
-                    android:gravity="center_vertical"
-                    android:paddingStart="14dp"
-                    android:paddingEnd="14dp">
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:alpha="0.5"
-                        android:src="@drawable/ic_youtobe"/>
-
-                    <EditText
-                        android:id="@+id/edtYoutube"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:hint="https://youtube.com/..."
-                        android:inputType="textUri"
-                        android:textColor="#2E5E2E"
-                        android:textSize="13sp"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- ─── INGREDIENTS ─── -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/shape_section_card"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="14dp">
-
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/shape_accent_bar"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="sans-serif-medium"
-                        android:letterSpacing="0.1"
-                        android:text="INGREDIENTS"
-                        android:textColor="#2E5E2E"
-                        android:textSize="12sp"/>
-
-                    <TextView
-                        android:id="@+id/tvIngredientCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/shape_calories_badge"
-                        android:fontFamily="sans-serif-medium"
-                        android:paddingStart="10dp"
-                        android:paddingTop="3dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="3dp"
-                        android:text="0 items"
-                        android:textColor="#43A047"
-                        android:textSize="11sp"/>
+                        android:layout_marginBottom="6dp"
+                        android:text="YouTube Link"
+                        android:textColor="#2E5E2E"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/shape_input_field"
+                        android:gravity="center_vertical"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:alpha="0.5"
+                            android:src="@drawable/ic_youtobe"/>
+
+                        <EditText
+                            android:id="@+id/edtYoutube"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:hint="https://youtube.com/..."
+                            android:inputType="textUri"
+                            android:textColor="#2E5E2E"
+                            android:textSize="13sp"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <!-- Column header -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="horizontal">
+            </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="Ingredient"
-                        android:textColor="#4D2E5E2E"
-                        android:textSize="11sp"/>
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="Measure"
-                        android:textColor="#4D2E5E2E"
-                        android:textSize="11sp"/>
-
-                    <View
-                        android:layout_width="28dp"
-                        android:layout_height="1dp"/>
-
-                </LinearLayout>
-
-                <!-- Dynamic ingredient rows -->
-                <LinearLayout
-                    android:id="@+id/layoutIngredients"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
-
-                <!-- Add ingredient button -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAddIngredient"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="42dp"
-                    android:layout_marginTop="12dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="Add Ingredient"
-                    android:textAllCaps="false"
-                    android:textColor="#43A047"
-                    android:textSize="13sp"
-                    app:cornerRadius="12dp"
-                    app:icon="@drawable/ic_add_white"
-                    app:iconPadding="4dp"
-                    app:iconSize="16dp"
-                    app:iconTint="#43A047"
-                    app:strokeColor="#A2CB8B"
-                    app:strokeWidth="1dp"/>
-
-            </LinearLayout>
-
-            <!-- ─── INSTRUCTIONS ─── -->
-            <LinearLayout
+            <!-- ─── INGREDIENTS ─── -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/shape_section_card"
-                android:orientation="vertical"
-                android:padding="16dp">
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="14dp">
-
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/shape_accent_bar"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:letterSpacing="0.1"
-                        android:text="INSTRUCTIONS"
-                        android:textColor="#2E5E2E"
-                        android:textSize="12sp"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/shape_input_field"
-                    android:paddingStart="14dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="14dp"
-                    android:paddingBottom="10dp">
-
-                    <EditText
-                        android:id="@+id/edtInstructions"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:gravity="top"
-                        android:hint="Describe the cooking steps..."
-                        android:inputType="textMultiLine|textCapSentences"
-                        android:minLines="5"
-                        android:textColor="#2E5E2E"
-                        android:textSize="13sp"
-                        android:lineSpacingExtra="4dp"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- ─── VIDEO ─── -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/shape_section_card"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <!-- Header -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="14dp">
-
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/shape_accent_bar"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:letterSpacing="0.1"
-                        android:text="COOKING VIDEO"
-                        android:textColor="#2E5E2E"
-                        android:textSize="12sp"/>
-
-                </LinearLayout>
-
-                <!-- Tab chọn kiểu: Upload hoặc YouTube link -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="14dp"
-                    android:background="@drawable/shape_input_field"
-                    android:orientation="horizontal"
-                    android:padding="4dp">
-
-                    <TextView
-                        android:id="@+id/tabUploadVideo"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_calories_badge"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center"
-                        android:text="Upload Video"
-                        android:textColor="#43A047"
-                        android:textSize="12sp"/>
-
-                </LinearLayout>
-
-                <!-- Upload video panel -->
-                <LinearLayout
-                    android:id="@+id/panelUploadVideo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:padding="16dp">
 
-                    <!-- Video picker area -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="14dp">
+
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/shape_accent_bar"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="INGREDIENTS"
+                            android:textColor="#2E5E2E"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:letterSpacing="0.1"/>
+
+                        <TextView
+                            android:id="@+id/tvIngredientCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_calories_badge"
+                            android:fontFamily="sans-serif-medium"
+                            android:paddingStart="10dp"
+                            android:paddingTop="3dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="3dp"
+                            android:text="0 items"
+                            android:textColor="#43A047"
+                            android:textSize="11sp"/>
+
+                    </LinearLayout>
+
+                    <!-- Column header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Ingredient"
+                            android:textColor="#4D2E5E2E"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="Measure"
+                            android:textColor="#4D2E5E2E"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <View
+                            android:layout_width="28dp"
+                            android:layout_height="1dp"/>
+
+                    </LinearLayout>
+
+                    <!-- Dynamic ingredient rows -->
+                    <LinearLayout
+                        android:id="@+id/layoutIngredients"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"/>
+
+                    <!-- Add ingredient button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddIngredient"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Add Ingredient"
+                        android:textAllCaps="false"
+                        android:textColor="#43A047"
+                        android:textSize="13sp"
+                        android:fontFamily="sans-serif-medium"
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/ic_add_white"
+                        app:iconPadding="4dp"
+                        app:iconSize="16dp"
+                        app:iconTint="#43A047"
+                        app:strokeColor="#A2CB8B"
+                        app:strokeWidth="1dp"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ─── INSTRUCTIONS ─── -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="14dp">
+
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/shape_accent_bar"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="INSTRUCTIONS"
+                            android:textColor="#2E5E2E"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:letterSpacing="0.1"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_input_field"
+                        android:paddingStart="14dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="14dp"
+                        android:paddingBottom="10dp">
+
+                        <EditText
+                            android:id="@+id/edtInstructions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:gravity="top"
+                            android:hint="Describe the cooking steps..."
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:minLines="5"
+                            android:textColor="#2E5E2E"
+                            android:textSize="13sp"
+                            android:lineSpacingExtra="4dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ─── COOKING VIDEO ─── -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="14dp">
+
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/shape_accent_bar"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="COOKING VIDEO"
+                            android:textColor="#2E5E2E"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:letterSpacing="0.1"/>
+
+                    </LinearLayout>
+
+                    <!-- Video picker -->
                     <FrameLayout
                         android:id="@+id/layoutPickVideo"
                         android:layout_width="match_parent"
-                        android:layout_height="160dp"
-                        android:background="@drawable/shape_input_field">
+                        android:layout_height="140dp"
+                        android:background="@drawable/shape_image_picker">
 
-                        <!-- Preview thumbnail sau khi chọn -->
                         <ImageView
                             android:id="@+id/imgVideoThumb"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
-                        <!-- Play icon overlay -->
                         <ImageView
                             android:id="@+id/icPlayOverlay"
                             android:layout_width="40dp"
@@ -623,9 +631,8 @@
                             android:layout_gravity="center"
                             android:alpha="0.8"
                             android:src="@drawable/ic_play"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
-                        <!-- Placeholder -->
                         <LinearLayout
                             android:id="@+id/layoutVideoPlaceholder"
                             android:layout_width="wrap_content"
@@ -637,17 +644,17 @@
                             <ImageView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
-                                android:alpha="0.4"
-                                android:src="@drawable/ic_video" />
+                                android:alpha="0.35"
+                                android:src="@drawable/ic_video"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:fontFamily="sans-serif-medium"
                                 android:text="Tap to select video"
                                 android:textColor="#4D2E5E2E"
-                                android:textSize="13sp" />
+                                android:textSize="13sp"
+                                android:fontFamily="sans-serif-medium"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -655,7 +662,7 @@
                                 android:layout_marginTop="4dp"
                                 android:text="MP4, MOV up to 100MB"
                                 android:textColor="#4D2E5E2E"
-                                android:textSize="11sp" />
+                                android:textSize="11sp"/>
 
                         </LinearLayout>
 
@@ -677,10 +684,10 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ellipsize="middle"
-                            android:fontFamily="sans-serif-medium"
                             android:maxLines="1"
                             android:textColor="#2E5E2E"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-medium"/>
 
                         <TextView
                             android:id="@+id/tvVideoSize"
@@ -694,24 +701,22 @@
                             android:paddingEnd="8dp"
                             android:paddingBottom="2dp"
                             android:textColor="#43A047"
-                            android:textSize="11sp" />
+                            android:textSize="11sp"/>
 
                         <ImageButton
                             android:id="@+id/btnRemoveVideo"
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:layout_marginStart="8dp"
-                            android:background="@drawable/shape_input_field"
+                            android:background="@drawable/shape_icon_pill_red"
                             android:padding="6dp"
-                            android:src="@drawable/ic_delete" />
+                            android:src="@drawable/ic_delete"/>
 
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <!-- YouTube link panel -->
-
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- ─── ACTION BUTTONS ─── -->
             <LinearLayout
@@ -726,27 +731,28 @@
                     android:id="@+id/btnSaveDraft"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:fontFamily="sans-serif-medium"
                     android:text="Save Draft"
                     android:textAllCaps="false"
                     android:textColor="#43A047"
                     android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium"
                     app:cornerRadius="16dp"
+                    app:strokeColor="#A2CB8B"
                     app:strokeWidth="1dp"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnPublish"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:fontFamily="sans-serif-medium"
                     android:text="Publish"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium"
                     app:backgroundTint="#43A047"
                     app:cornerRadius="16dp"
                     app:icon="@drawable/ic_add_white"
@@ -758,4 +764,5 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
 </LinearLayout>

@@ -15,6 +15,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.MealSimpleAdapter
 import com.example.cookingeasy.common.listener.RecipeListener
@@ -130,8 +131,7 @@ class ResultByTagFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         binding.rvRecipesByTag.apply {
-            layoutManager = GridLayoutManager(context, 2)
-            addItemDecoration(GridSpacingItemDecoration(2, 3))
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             mealSimpleAdapter = MealSimpleAdapter(mutableListOf<Recipe>(), object : RecipeListener {
                 override fun OnClickItem(recipe: Recipe) {
                     TODO("Not yet implemented")

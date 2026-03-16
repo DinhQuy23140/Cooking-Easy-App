@@ -16,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.MealSimpleAdapter
@@ -87,8 +88,7 @@ class ResultByCategoryFragment : Fragment() {
         )
 
         binding.rvRecipes.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
-            addItemDecoration(GridSpacingItemDecoration(2, 3))
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = mealSimpleAdapter
             setHasFixedSize(false)
             isNestedScrollingEnabled = false
