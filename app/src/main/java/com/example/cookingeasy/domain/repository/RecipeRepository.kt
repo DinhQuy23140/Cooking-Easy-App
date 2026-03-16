@@ -21,4 +21,8 @@ interface RecipeRepository {
     suspend fun filterRecipesByIngredient(ingredient: String): List<Recipe>
 
     suspend fun filterRecipesBySearch(query: String): List<Recipe>
+
+    suspend fun getRandomRecipe(): Recipe?
+
+    fun getTrendingRecipe(): Flow<List<Recipe>>
 }

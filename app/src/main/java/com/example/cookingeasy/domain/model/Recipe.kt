@@ -108,23 +108,46 @@ class Recipe(
     }
 
     fun parseInstructions(): List<InstructionStep> {
-
-        return strInstructions
-            .split(Regex("\\r?\\n\\s*\\r?\\n"))
+        val lines = strInstructions
+            .split(Regex("\\r?\\n"))
             .map { it.trim() }
             .filter { it.isNotEmpty() }
-            .mapIndexed { index, text ->
 
-                val cleanText = text
-                    .replace(Regex("(?i)step\\s*\\d+[:.-]*\\s*"), "") // bỏ Step 1, STEP 2...
-                    .replace("*", "")
-                    .trim()
+        // Tìm index bắt đầu các bước thực sự (bỏ qua Equipment header)
+        val skipKeywords = listOf(
+            "equipment", "ingredients", "notes", "tip", "tools"
+        )
 
-                InstructionStep(
-                    step = index + 1,
-                    content = cleanText
-                )
+        val steps = mutableListOf<String>()
+        var stepIndex = 1
+
+        for (line in lines) {
+            val lower = line.lowercase()
+
+            // Bỏ qua dòng là header section
+            val isHeader = skipKeywords.any { lower.startsWith(it) }
+                    && line.length < 30  // header thường ngắn
+                    && !line.contains(".")
+
+            if (isHeader) continue
+
+            // Bỏ "Step 1:", "STEP 2." ...
+            val cleanLine = line
+                .replace(Regex("(?i)^step\\s*\\d+[:.-]*\\s*"), "")
+                .replace("*", "")
+                .trim()
+
+            if (cleanLine.isNotEmpty()) {
+                steps.add(cleanLine)
             }
+        }
+
+        return steps.mapIndexed { index, text ->
+            InstructionStep(
+                step = index + 1,
+                content = text
+            )
+        }
     }
 
     fun getIngredients(): List<String> {

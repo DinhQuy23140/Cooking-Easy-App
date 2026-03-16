@@ -39,4 +39,7 @@ interface RecipeService {
     suspend fun filterRecipesBySearch(
         @Query("s") query: String
     ): RecipeResponseDto
+
+    @GET("random.php")
+    suspend fun getRandomRecipe(): RecipeResponseDto
 }

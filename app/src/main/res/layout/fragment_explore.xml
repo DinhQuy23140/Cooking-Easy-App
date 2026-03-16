@@ -1,226 +1,416 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_bottom"
+    android:orientation="vertical"
     tools:context=".ui.main.fragment.ExploreFragment">
 
+    <!-- ─── HEADER ─── -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/gradient_result_header"
         android:orientation="vertical"
-        android:paddingBottom="24dp">
+        android:paddingStart="20dp"
+        android:paddingTop="52dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
 
-        <!-- ─── HEADER ─── -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.15"
+            android:text="DISCOVER"
+            android:textColor="#6643A047"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Explore Recipes"
+            android:textColor="#2E5E2E"
+            android:textSize="26sp"/>
+
+        <!-- Search bar -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/gradient_result_header"
-            android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingTop="52dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="24dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="DISCOVER"
-                android:textColor="#6643A047"
-                android:textSize="11sp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.15"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Explore Recipes"
-                android:textColor="#2E5E2E"
-                android:textSize="26sp"
-                android:fontFamily="sans-serif-medium"/>
-
-            <!-- Search bar -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/shape_section_card"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/ic_search"
-                    android:alpha="0.5"/>
-
-                <EditText
-                    android:id="@+id/edtSearch"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:hint="Search recipes..."
-                    android:textColor="#2E5E2E"
-                    android:textSize="14sp"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:singleLine="true"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- ─── TRENDING ─── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shape_section_card"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="20dp"
-            android:paddingTop="24dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="12dp">
+            android:paddingStart="14dp"
+            android:paddingEnd="8dp">
 
-            <View
-                android:layout_width="3dp"
+            <ImageView
+                android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/shape_accent_bar"/>
+                android:alpha="0.4"
+                android:src="@drawable/ic_search"/>
 
-            <TextView
+            <EditText
+                android:id="@+id/edtSearch"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
                 android:layout_weight="1"
-                android:text="TRENDING"
+                android:background="@android:color/transparent"
+                android:focusable="false"
+                android:hint="Search recipes..."
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:singleLine="true"
                 android:textColor="#2E5E2E"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.1"/>
+                android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tvSeeAllTrending"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="See all"
-                android:textColor="#43A047"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif-medium"/>
+            <ImageButton
+                android:id="@+id/btnSearch"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/shape_calories_badge"
+                android:padding="9dp"
+                android:src="@drawable/ic_search"/>
 
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTrending"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-        <!-- ─── POPULAR CATEGORIES ─── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="20dp"
-            android:paddingTop="24dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="12dp">
-
-            <View
-                android:layout_width="3dp"
-                android:layout_height="18dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/shape_accent_bar"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="POPULAR CATEGORIES"
-                android:textColor="#2E5E2E"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.1"/>
-
-            <TextView
-                android:id="@+id/tvSeeAllCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="See all"
-                android:textColor="#43A047"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif-medium"/>
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-        <!-- ─── EXPLORE BY AREA ─── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="20dp"
-            android:paddingTop="24dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="12dp">
-
-            <View
-                android:layout_width="3dp"
-                android:layout_height="18dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/shape_accent_bar"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="EXPLORE BY AREA"
-                android:textColor="#2E5E2E"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.1"/>
-
-            <TextView
-                android:id="@+id/tvSeeAllArea"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="See all"
-                android:textColor="#43A047"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif-medium"/>
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvArea"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+    <!-- ─── SCROLLABLE CONTENT ─── -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="32dp">
+
+            <!-- ─── FEATURED TODAY ─── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="12dp">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/shape_accent_bar"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.1"
+                    android:text="FEATURED TODAY"
+                    android:textColor="#2E5E2E"
+                    android:textSize="12sp"/>
+
+                <ImageButton
+                    android:id="@+id/btnRefreshFeatured"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/shape_circle_glass"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_refresh"/>
+
+            </LinearLayout>
+
+            <!-- Featured card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardFeatured"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imgFeatured"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"/>
+
+                    <!-- Gradient overlay tối hơn ở dưới -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/gradient_featured_overlay"/>
+
+                    <!-- Loading -->
+                    <ProgressBar
+                        android:id="@+id/progressFeatured"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="#FFFFFF"/>
+
+                    <!-- Content overlay -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="32dp">
+
+                        <TextView
+                            android:id="@+id/tvFeaturedName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="sans-serif-medium"
+                            android:maxLines="2"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp"
+                            android:shadowColor="#99000000"
+                            android:shadowDx="0"
+                            android:shadowDy="1"
+                            android:shadowRadius="4"
+                            tools:text="Spicy Arrabiata Penne"/>
+
+                        <!-- Chips row -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="12dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvFeaturedCategory"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/shape_calories_badge"
+                                android:fontFamily="sans-serif-medium"
+                                android:paddingStart="10dp"
+                                android:paddingTop="4dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="4dp"
+                                android:textColor="#43A047"
+                                android:textSize="11sp"
+                                tools:text="Vegetarian"/>
+
+                            <TextView
+                                android:id="@+id/tvFeaturedArea"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:background="@drawable/shape_tag_white"
+                                android:fontFamily="sans-serif-medium"
+                                android:paddingStart="10dp"
+                                android:paddingTop="4dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="4dp"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11sp"
+                                tools:text="🍝 Italian"/>
+
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnCookNow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="Cook Now →"
+                            android:textAllCaps="false"
+                            android:textColor="#2E5E2E"
+                            android:textSize="12sp"
+                            app:backgroundTint="#FFFFFF"
+                            app:cornerRadius="16dp"/>
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- ─── POPULAR CATEGORIES ─── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="12dp">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/shape_accent_bar"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.1"
+                    android:text="POPULAR CATEGORIES"
+                    android:textColor="#2E5E2E"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/tvSeeAllCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="See all"
+                    android:textColor="#43A047"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            <!-- ─── EXPLORE BY AREA ─── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="12dp">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/shape_accent_bar"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.1"
+                    android:text="EXPLORE BY AREA"
+                    android:textColor="#2E5E2E"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/tvSeeAllArea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="See all"
+                    android:textColor="#43A047"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            <!-- ─── TRENDING ─── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="12dp">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/shape_accent_bar"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.1"
+                    android:text="TRENDING"
+                    android:textColor="#2E5E2E"
+                    android:textSize="12sp"/>
+
+                <!-- Loading indicator khi đang fetch random -->
+                <ProgressBar
+                    android:id="@+id/progressTrending"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:indeterminateTint="#43A047"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/tvTrendingCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_calories_badge"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingStart="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="3dp"
+                    android:text="5 picks"
+                    android:textColor="#43A047"
+                    android:textSize="11sp"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTrending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
