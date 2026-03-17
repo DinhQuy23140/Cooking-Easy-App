@@ -88,6 +88,11 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -135,4 +140,5 @@ dependencies {
     implementation ("org.tensorflow:tensorflow-lite-task-vision:0.4.4")
 
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 }

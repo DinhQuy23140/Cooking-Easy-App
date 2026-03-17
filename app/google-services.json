@@ -12,7 +12,20 @@
           "package_name": "com.example.cookingeasy"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "925261047833-0emqd3bbcmtp46ibn4urogb2mg929edg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cookingeasy",
+            "certificate_hash": "cabd8a19c4428f05f77e77f84d5df6bfd3751982"
+          }
+        },
+        {
+          "client_id": "925261047833-pgpsgrg928chr06611uugnmhl24pmmu8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC6a4Veb6ZLdz4vk-6RncWdwKOVC-F71lg"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925261047833-pgpsgrg928chr06611uugnmhl24pmmu8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
