@@ -9,5 +9,6 @@ sealed class LoginState {
         val user: FirebaseUser,
         val isNewUser: Boolean = false   // ← thêm
     ) : LoginState()
+    object ResetSuccess : LoginState()
     data class Error(val message: String) : LoginState()
 }

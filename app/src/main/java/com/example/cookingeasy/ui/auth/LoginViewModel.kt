@@ -58,7 +58,7 @@ class LoginViewModel(): ViewModel() {
             _resetPasswordState.value = LoginState.Loading
             val result = authRepository.resetPassword(email)
             _resetPasswordState.value = result.fold(
-                onSuccess = { LoginState.Success(authRepository.getCurrentUser()!!) },
+                onSuccess = { LoginState.ResetSuccess },    // ← không cần user
                 onFailure = { e -> LoginState.Error(e.message ?: "Reset password failed") }
             )
         }

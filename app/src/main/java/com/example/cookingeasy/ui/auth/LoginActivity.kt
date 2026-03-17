@@ -1,8 +1,14 @@
 package com.example.cookingeasy.ui.auth
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -22,6 +28,7 @@ import com.example.cookingeasy.ui.main.activity.EnterNameActivity
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
+import androidx.core.graphics.drawable.toDrawable
 
 class LoginActivity : AppCompatActivity() {
 
@@ -87,6 +94,12 @@ class LoginActivity : AppCompatActivity() {
                             navigateToMain()        // → Main trực tiếp
                         }
                     }
+                    is LoginState.ResetSuccess -> {
+                        showLoading(false)
+                        showMessage("Reset link sent! Please check your email.")
+                        viewModel.resetState()
+                    }
+
                     is LoginState.Error   -> {
                         showLoading(false)
                         showError(state.message)
@@ -101,18 +114,19 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.resetPasswordState.collect { state ->
                 when (state) {
-                    is LoginState.Idle    -> Unit
-                    is LoginState.Loading -> showLoading(true)
-                    is LoginState.Success -> {
+                    is LoginState.Idle         -> Unit
+                    is LoginState.Loading      -> showLoading(true)
+                    is LoginState.ResetSuccess -> {
                         showLoading(false)
                         showMessage("Reset link sent! Please check your email.")
                         viewModel.resetState()
                     }
-                    is LoginState.Error   -> {
+                    is LoginState.Error        -> {
                         showLoading(false)
                         showError(state.message)
                         viewModel.resetState()
                     }
+                    else -> Unit
                 }
             }
         }
@@ -167,21 +181,28 @@ class LoginActivity : AppCompatActivity() {
     // ─── Forgot Password Dialog ───────────────────────────────────────
 
     private fun showForgotPasswordDialog() {
-        val emailInput = android.widget.EditText(this).apply {
-            hint = "Enter your email"
-            inputType = android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            setPadding(48, 24, 48, 24)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_forgot_password, null)
+        val edtEmail = dialogView.findViewById<EditText>(R.id.edtEmail)
+        val btnSend  = dialogView.findViewById<View>(R.id.btnSend)
+        val btnCancel = dialogView.findViewById<View>(R.id.btnCancel)
+
+        val dialog = Dialog(this).apply {
+            setContentView(dialogView)
+            window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+            window?.setLayout(
+                (resources.displayMetrics.widthPixels * 0.9).toInt(),
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
         }
 
-        AlertDialog.Builder(this)
-            .setTitle("Reset Password")
-            .setMessage("Enter your email to receive a reset link.")
-            .setView(emailInput)
-            .setPositiveButton("Send") { _, _ ->
-                viewModel.resetPassword(emailInput.text.toString().trim())
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
+        btnSend.setOnClickListener {
+            viewModel.resetPassword(edtEmail.text.toString().trim())
+            dialog.dismiss()
+        }
+
+        btnCancel.setOnClickListener { dialog.dismiss() }
+
+        dialog.show()
     }
 
     // ─── Navigation ──────────────────────────────────────────────────
