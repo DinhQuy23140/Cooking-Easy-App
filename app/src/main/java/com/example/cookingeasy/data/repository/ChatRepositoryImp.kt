@@ -8,6 +8,7 @@ import com.example.cookingeasy.domain.model.ChatRole
 import com.example.cookingeasy.domain.model.OpenRouterChatRequest
 import com.example.cookingeasy.domain.model.OpenRouterMessage
 import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.domain.repository.ChatRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
@@ -17,7 +18,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class ChatRepositoryImp {
+class ChatRepositoryImp() : ChatRepository {
 
     companion object {
         private const val BASE_URL = "https://openrouter.ai/api/v1/"
@@ -77,7 +78,7 @@ class ChatRepositoryImp {
 
     private val recipeRepository = RecipeRepositoryImp()
 
-    suspend fun sendMessage(
+    override suspend fun sendMessage(
         userMessage: String,
         history: List<ChatMessage>
     ): Pair<String, List<Recipe>> {

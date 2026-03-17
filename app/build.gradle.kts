@@ -27,6 +27,10 @@ android {
             "GEMINI_API_KEY",
             "\"${localProps["GEMINI_API_KEY"]}\""
         )
+
+        buildConfigField("String", "SUPABASE_URL", "\"${localProps["SUPABASE_URL"]}\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProps["SUPABASE_ANON_KEY"]}\"")
+
         applicationId = "com.example.cookingeasy"
         minSdk = 28
         targetSdk = 35
@@ -88,6 +92,11 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -135,4 +144,5 @@ dependencies {
     implementation ("org.tensorflow:tensorflow-lite-task-vision:0.4.4")
 
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 }

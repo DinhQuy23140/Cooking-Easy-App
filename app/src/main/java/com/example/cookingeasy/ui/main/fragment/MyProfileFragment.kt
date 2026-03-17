@@ -1,60 +1,181 @@
 package com.example.cookingeasy.ui.main.fragment
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.cookingeasy.R
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.example.cookingeasy.data.remote.firebase.AuthDataSource
+import com.example.cookingeasy.databinding.FragmentMyProfileBinding
+import com.example.cookingeasy.ui.auth.LoginActivity
+import com.example.cookingeasy.ui.main.viewmodel.MyProfileViewModel
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MyProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MyProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentMyProfileBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: MyProfileViewModel by viewModels()
+
+    // ─── Lifecycle ───────────────────────────────────────────────────
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMyProfileBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupClickListeners()
+        observeState()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    // ─── Setup ───────────────────────────────────────────────────────
+
+    private fun setupClickListeners() {
+        binding.btnLogout.setOnClickListener {
+            showLogoutDialog()
+        }
+
+        binding.btnEditProfile.setOnClickListener {
+            navigateToEditProfile()
+        }
+
+        binding.rowDraft.setOnClickListener {
+            navigateToDraftRecipes()
+        }
+
+        binding.rowFavorite.setOnClickListener {
+            navigateToFavoriteRecipes()
+        }
+
+        binding.rowLanguage.setOnClickListener {
+            navigateToLanguageSettings()
+        }
+
+        binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+            toggleDarkMode(isChecked)
+        }
+
+        binding.statMyRecipes.setOnClickListener {
+            navigateToMyRecipes()
+        }
+
+        binding.statSaved.setOnClickListener {
+            navigateToFavoriteRecipes()
+        }
+
+        binding.statUpload.setOnClickListener {
+            navigateToUpload()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_profile, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun observeState() {
+        lifecycleScope.launch {
+            viewModel.profileState.collect { state ->
+                when (state) {
+                    is MyProfileViewModel.ProfileState.Idle       -> Unit
+                    is MyProfileViewModel.ProfileState.Loading    -> showLoading(true)
+                    is MyProfileViewModel.ProfileState.UserLoaded -> {
+                        showLoading(false)
+                        bindUserInfo(
+                            name  = state.user.displayName ?: "Chef",
+                            email = state.user.email ?: ""
+                        )
+                    }
+                    is MyProfileViewModel.ProfileState.LoggedOut  -> {
+                        showLoading(false)
+                        navigateToLogin()
+                    }
+                    is MyProfileViewModel.ProfileState.Error      -> {
+                        showLoading(false)
+                        showError(state.message)
+                        viewModel.resetState()
+                    }
                 }
             }
+        }
+    }
+
+    // ─── UI ──────────────────────────────────────────────────────────
+
+    private fun bindUserInfo(name: String, email: String) {
+        binding.txtName.text = name
+        binding.txtEmail.text = email
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.btnLogout.isEnabled = !isLoading
+    }
+
+    private fun showLogoutDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Logout") { _, _ ->
+                viewModel.logout()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun toggleDarkMode(isEnabled: Boolean) {
+        val mode = if (isEnabled) {
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+        }
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(mode)
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    // ─── Navigation ──────────────────────────────────────────────────
+
+    private fun navigateToLogin() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
+    private fun navigateToEditProfile() {
+        // TODO: navigate to EditProfileActivity
+    }
+
+    private fun navigateToDraftRecipes() {
+        // TODO: navigate to DraftRecipesFragment
+    }
+
+    private fun navigateToFavoriteRecipes() {
+        // TODO: navigate to FavoriteRecipesFragment
+    }
+
+    private fun navigateToLanguageSettings() {
+        // TODO: navigate to LanguageSettingsActivity
+    }
+
+    private fun navigateToMyRecipes() {
+        // TODO: navigate to ManageMyRecipeFragment
+    }
+
+    private fun navigateToUpload() {
+        // TODO: navigate to AddRecipeFragment
     }
 }

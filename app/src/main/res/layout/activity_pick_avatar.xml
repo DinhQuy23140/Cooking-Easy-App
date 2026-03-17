@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.main.activity.PickAvatarActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".ui.auth.PickAvatarActivity">
+
+        <!-- ═══════════════════════════════
+             HERO TOP: preview avatar đã chọn
+             ═══════════════════════════════ -->
+        <LinearLayout
+            android:id="@+id/layoutHero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="56dp"
+            android:paddingBottom="28dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Avatar preview + camera badge -->
+            <FrameLayout
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginBottom="14dp">
+
+                <ImageView
+                    android:id="@+id/imgAvatarPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_avatar_ring"
+                    android:padding="3dp"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_person" />
+
+                <!-- Camera edit badge -->
+                <LinearLayout
+                    android:id="@+id/btnUploadBadge"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_gravity="bottom|end"
+                    android:background="@drawable/shape_btn_primary"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/ic_camera" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Pick your avatar"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp" />
+
+            <!-- Subtitle -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
+                android:text="Choose an avatar or upload your own photo"
+                android:textColor="#99FFFFFF"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <!-- ═══════════════════════════════
+             CARD BOTTOM
+             ═══════════════════════════════ -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutHero">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_bottom_card"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="32dp">
+
+                <!-- Upload from gallery -->
+                <LinearLayout
+                    android:id="@+id/btnUploadFromGallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="22dp"
+                    android:background="@drawable/shape_image_picker"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="10dp"
+                        android:alpha="0.7"
+                        android:src="@drawable/ic_camera" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Upload from gallery"
+                        android:textColor="#43A047"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <!-- Section header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="14dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/shape_accent_bar" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0.1"
+                        android:text="CHOOSE AVATAR"
+                        android:textColor="#2E5E2E"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <!-- Avatar grid 4 cột -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAvatars"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="4" />
+
+                <!-- Confirm button -->
+                <TextView
+                    android:id="@+id/btnConfirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/shape_btn_primary"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:text="Confirm &amp; Continue"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp" />
+
+                <!-- Skip -->
+                <TextView
+                    android:id="@+id/btnSkip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="Skip for now"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

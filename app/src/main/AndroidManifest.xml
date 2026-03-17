@@ -17,16 +17,10 @@
         android:theme="@style/Theme.CookingEasy"
         tools:targetApi="31">
         <activity
-            android:name=".ui.main.activity.ForgotPassActivity"
+            android:name=".ui.main.activity.EnterNameActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.main.activity.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.main.activity.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.main.activity.StartActivity"
+            android:name=".ui.main.activity.PickAvatarActivity"
             android:exported="false" />
         <activity
             android:name=".ui.main.activity.FullscreenVideoActivity"
@@ -42,9 +36,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.auth.SplashActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,6 +43,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
