@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:layout_marginBottom="8dp">
+
+    <!-- Step number badge -->
+    <TextView
+        android:id="@+id/tvStepNumber"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/shape_icon_pill_green"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="#2E5E2E"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif-medium"/>
+
+    <!-- Instruction text -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginEnd="6dp"
+        android:background="@drawable/shape_input_field"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp">
+
+        <EditText
+            android:id="@+id/edtInstructionStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="top"
+            android:hint="Describe this step..."
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="2"
+            android:maxLines="4"
+            android:textColor="#2E5E2E"
+            android:textSize="13sp"
+            android:lineSpacingExtra="3dp"/>
+
+    </LinearLayout>
+
+    <!-- Remove button -->
+    <ImageButton
+        android:id="@+id/btnRemoveStep"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/shape_icon_pill_red"
+        android:padding="6dp"
+        android:src="@drawable/ic_delete"/>
+
+</LinearLayout>

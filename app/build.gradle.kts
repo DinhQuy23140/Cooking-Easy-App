@@ -27,6 +27,10 @@ android {
             "GEMINI_API_KEY",
             "\"${localProps["GEMINI_API_KEY"]}\""
         )
+
+        buildConfigField("String", "SUPABASE_URL", "\"${localProps["SUPABASE_URL"]}\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProps["SUPABASE_ANON_KEY"]}\"")
+
         applicationId = "com.example.cookingeasy"
         minSdk = 28
         targetSdk = 35
