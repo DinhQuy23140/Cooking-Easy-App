@@ -1,6 +1,7 @@
 package com.example.cookingeasy.data.remote.firebase
 
 import android.util.Log
+import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -82,5 +83,37 @@ class RecipeFirestoreDataSource {
         return snapshot.documents.mapNotNull {
             it.toObject(RecipeUpload::class.java)
         }
+    }
+
+    fun getFavoritesCollection(uid: String) =
+        db.collection("users")
+            .document(uid)
+            .collection("favorites")
+
+    suspend fun getFavoriteIds(uid: String): List<String> {
+        val snapshot = getFavoritesCollection(uid).get().await()
+        return snapshot.documents.map { it.id }
+    }
+
+    suspend fun addFavorite(uid: String, recipe: Recipe) {
+        val doc = getFavoritesCollection(uid).document(recipe.idMeal.toString())
+
+        val data = hashMapOf(
+            "recipeId" to recipe.idMeal.toString(),
+            "createdAt" to System.currentTimeMillis(),
+            "name" to recipe.strMeal,
+            "image" to recipe.strMealThumb
+        )
+
+        doc.set(data).await()
+    }
+
+    suspend fun removeFavorite(uid: String, recipeId: String) {
+        getFavoritesCollection(uid).document(recipeId).delete().await()
+    }
+
+    suspend fun isFavorite(uid: String, recipeId: String): Boolean {
+        val doc = getFavoritesCollection(uid).document(recipeId).get().await()
+        return doc.exists()
     }
 }

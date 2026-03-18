@@ -80,7 +80,7 @@ class ResultByCategoryFragment : Fragment() {
                     TODO("Not yet implemented")
                 }
 
-                override fun OnFavoriteClick(boolean: Boolean) {
+                override fun OnFavoriteClick(recipe: Recipe) {
                     TODO("Not yet implemented")
                 }
 

@@ -66,6 +66,10 @@ class ManageMyRecipeFragment : Fragment() {
     // ─────────────────────────────────────────────
 
     private fun setupEvents() {
+        binding.btnAddRecipe.setOnClickListener {
+            navigateTo(AddRecipeFragment())
+        }
+
         binding.btnClear.setOnClickListener {
             binding.edtSearchRecipe.setText("")
         }

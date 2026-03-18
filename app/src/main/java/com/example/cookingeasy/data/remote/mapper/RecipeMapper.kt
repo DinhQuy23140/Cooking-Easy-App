@@ -2,6 +2,7 @@ package com.example.cookingeasy.data.remote.mapper
 
 import com.example.cookingeasy.data.remote.dto.RecipeDto
 import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.domain.model.RecipeUpload
 
 object RecipeMapper {
     fun toRecipe(data: RecipeDto): Recipe {
@@ -67,5 +68,84 @@ object RecipeMapper {
 
     fun toRecipeList(listDto: List<RecipeDto>): List<Recipe> {
         return listDto.map { toRecipe(it) }
+    }
+
+    private fun normalizeIngredients(
+        list: List<Map<String, String>>
+    ): List<Map<String, String>> {
+        val padded = list.toMutableList()
+
+        while (padded.size < 20) {
+            padded.add(emptyMap())
+        }
+
+        return padded.take(20)
+    }
+
+    fun mapToRecipe(upload: RecipeUpload): Recipe {
+
+        val list = normalizeIngredients(upload.ingredients)
+
+        fun getName(i: Int) = list[i]["name"] ?: ""
+        fun getMeasure(i: Int) = list[i]["measure"] ?: ""
+
+        return Recipe(
+            idMeal = upload.recipeId.hashCode(),
+            strMeal = upload.mealName,
+            strMealAlternate = false,
+            strCategory = upload.category,
+            strArea = upload.area,
+            strInstructions = upload.instructions,
+            strMealThumb = upload.mealImageUrl,
+            strTags = upload.tags,
+            strYoutube = upload.youtubeLink,
+
+            strIngredient1 = getName(0),
+            strIngredient2 = getName(1),
+            strIngredient3 = getName(2),
+            strIngredient4 = getName(3),
+            strIngredient5 = getName(4),
+            strIngredient6 = getName(5),
+            strIngredient7 = getName(6),
+            strIngredient8 = getName(7),
+            strIngredient9 = getName(8),
+            strIngredient10 = getName(9),
+            strIngredient11 = getName(10),
+            strIngredient12 = getName(11),
+            strIngredient13 = getName(12),
+            strIngredient14 = getName(13),
+            strIngredient15 = getName(14),
+            strIngredient16 = getName(15),
+            strIngredient17 = getName(16),
+            strIngredient18 = getName(17),
+            strIngredient19 = getName(18),
+            strIngredient20 = getName(19),
+
+            strMeasure1 = getMeasure(0),
+            strMeasure2 = getMeasure(1),
+            strMeasure3 = getMeasure(2),
+            strMeasure4 = getMeasure(3),
+            strMeasure5 = getMeasure(4),
+            strMeasure6 = getMeasure(5),
+            strMeasure7 = getMeasure(6),
+            strMeasure8 = getMeasure(7),
+            strMeasure9 = getMeasure(8),
+            strMeasure10 = getMeasure(9),
+            strMeasure11 = getMeasure(10),
+            strMeasure12 = getMeasure(11),
+            strMeasure13 = getMeasure(12),
+            strMeasure14 = getMeasure(13),
+            strMeasure15 = getMeasure(14),
+            strMeasure16 = getMeasure(15),
+            strMeasure17 = getMeasure(16),
+            strMeasure18 = getMeasure(17),
+            strMeasure19 = getMeasure(18),
+            strMeasure20 = getMeasure(19),
+
+            strSource = upload.videoUrl,
+            strImageSource = upload.mealImageUrl,
+            strCreativeCommonsConfirmed = "",
+            dateModified = upload.updatedAt.toString()
+        )
     }
 }

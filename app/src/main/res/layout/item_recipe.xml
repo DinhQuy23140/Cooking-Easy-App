@@ -76,13 +76,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="2"
-                android:minLines="1"
-                android:textColor="#222222"
-                android:textSize="12sp"
                 android:fontFamily="sans-serif-medium"
                 android:lineSpacingExtra="2dp"
-                tools:text="Jerk chicken with rice &amp; peas"/>
+                android:maxLines="2"
+                android:minLines="2"
+                android:textColor="#222222"
+                android:textSize="12sp"
+                tools:text="Jerk chicken with rice &amp; peas" />
 
             <!-- Category + Area -->
             <LinearLayout

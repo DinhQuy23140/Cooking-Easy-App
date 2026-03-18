@@ -47,7 +47,7 @@ class MealSimpleAdapter(
         }
 
         holder.btnFavorite.setOnClickListener {
-            recipeListener.OnFavoriteClick(true)
+            recipeListener.OnFavoriteClick(meal)
         }
     }
 

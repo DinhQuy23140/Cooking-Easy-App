@@ -1,6 +1,6 @@
 package com.example.cookingeasy.domain.model
 
-class Recipe(
+data class Recipe(
     val idMeal: Int,
     val strMeal: String,
     val strMealAlternate: Boolean,
@@ -53,7 +53,8 @@ class Recipe(
     val strSource: String,
     val strImageSource: String,
     val strCreativeCommonsConfirmed: String,
-    val dateModified: String
+    val dateModified: String,
+    val isFavorote: Boolean = false
 ) {
     fun getIngredient(index: Int): String? {
         return when(index) {

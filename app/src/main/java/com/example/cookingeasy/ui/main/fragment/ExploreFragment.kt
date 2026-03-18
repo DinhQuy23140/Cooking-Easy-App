@@ -146,7 +146,7 @@ class ExploreFragment : Fragment() {
 
                 }
 
-                override fun OnFavoriteClick(boolean: Boolean) {
+                override fun OnFavoriteClick(recipe: Recipe) {
 
                 }
 

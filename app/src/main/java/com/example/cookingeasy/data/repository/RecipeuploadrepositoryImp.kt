@@ -21,6 +21,8 @@ class RecipeUploadRepositoryImp(
 
     override suspend fun saveDraft(
         uid: String,
+        userName: String,
+        userImg: String,
         mealName: String,
         category: String,
         area: String,
@@ -35,6 +37,8 @@ class RecipeUploadRepositoryImp(
 
             val recipe = RecipeUpload(
                 uid = uid,
+                userName = userName,
+                userImage = userImg,
                 mealName = mealName,
                 category = category,
                 area = area,
@@ -57,6 +61,8 @@ class RecipeUploadRepositoryImp(
 
     override suspend fun publish(
         uid: String,
+        userName: String,
+        userImg: String,
         mealName: String,
         category: String,
         area: String,
@@ -72,6 +78,8 @@ class RecipeUploadRepositoryImp(
 
             val recipe = RecipeUpload(
                 uid = uid,
+                userName = userName,
+                userImage = userImg,
                 mealName = mealName,
                 category = category,
                 area = area,

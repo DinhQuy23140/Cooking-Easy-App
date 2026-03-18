@@ -5,6 +5,7 @@ import com.example.cookingeasy.data.remote.api.ApiServiceProvider
 import com.example.cookingeasy.data.remote.dto.AreaResponseDto
 import com.example.cookingeasy.data.remote.dto.CategoryResponseDto
 import com.example.cookingeasy.data.remote.dto.RecipeResponseDto
+import com.example.cookingeasy.data.remote.firebase.RecipeFirestoreDataSource
 import com.example.cookingeasy.data.remote.mapper.AreaMapper
 import com.example.cookingeasy.data.remote.mapper.CategoryMapper
 import com.example.cookingeasy.data.remote.mapper.RecipeMapper
@@ -13,13 +14,16 @@ import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.RecipeRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.supervisorScope
 
 class RecipeRepositoryImp : RecipeRepository{
 
     val recipeService = ApiServiceProvider.recipeService
+    val remote = RecipeFirestoreDataSource()
     override suspend fun getCategories(): List<Category> {
         val response: CategoryResponseDto = recipeService.getCategories()
         return CategoryMapper.mapToCategoryList(response.categories)
@@ -103,4 +107,36 @@ class RecipeRepositoryImp : RecipeRepository{
             }
         }
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun getFavoriteRecipes(uid: String): List<Recipe> = supervisorScope {
+
+        val recipesDeferred = async(Dispatchers.IO) {
+            runCatching { getRecipes() }.getOrDefault(emptyList())
+        }
+
+        val favoriteIdsDeferred = async(Dispatchers.IO) {
+            runCatching { remote.getFavoriteIds(uid) }.getOrDefault(emptyList())
+        }
+
+        val recipes = recipesDeferred.await()
+        val favoriteIds = favoriteIdsDeferred.await().toSet()
+
+        return@supervisorScope recipes.filter {
+            it.idMeal.toString() in favoriteIds
+        }
+    }
+
+    override suspend fun toggleFavorite(uid: String, recipe: Recipe) {
+        val isFav = remote.isFavorite(uid, recipe.idMeal.toString())
+
+        if (isFav) {
+            remote.removeFavorite(uid, recipe.idMeal.toString())
+        } else {
+            remote.addFavorite(uid, recipe)
+        }
+    }
+
+    override suspend fun isFavorite(uid: String, recipeId: String): Boolean {
+        return remote.isFavorite(uid, recipeId)
+    }
 }

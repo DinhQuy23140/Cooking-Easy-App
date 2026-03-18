@@ -55,7 +55,7 @@ class SearchFragment : Fragment() {
             override fun OnClickItem(recipe: Recipe) {
                 // navigate to detail
             }
-            override fun OnFavoriteClick(boolean: Boolean) {
+            override fun OnFavoriteClick(recipe: Recipe) {
                 // handle favorite
             }
         })

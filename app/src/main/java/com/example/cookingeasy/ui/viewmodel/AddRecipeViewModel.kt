@@ -3,6 +3,7 @@ package com.example.cookingeasy.ui.main.viewmodel
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cookingeasy.data.repository.UserRepositoryImp
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.example.cookingeasy.domain.repository.IRecipeUploadRepository
@@ -16,6 +17,7 @@ class AddRecipeViewModel(
     private val recipeUploadRepository: IRecipeUploadRepository
 ) : ViewModel() {
 
+    private val userRepository = UserRepositoryImp()
     // ─────────────────────────────────────────────
     // UI State
     // ─────────────────────────────────────────────
@@ -125,25 +127,34 @@ class AddRecipeViewModel(
 
         viewModelScope.launch {
             _state.value = AddRecipeState.Loading
+            userRepository.getUserProfile(uid)
+                .onSuccess {
+                    val displayName = it.get("fullName") ?: "Unknown"
+                    val avatarUrl = it.get("avatarUrl") ?: ""
+                    val result = recipeUploadRepository.saveDraft(
+                        uid = uid,
+                        userName = displayName.toString(),
+                        userImg = avatarUrl.toString(),
+                        mealName = mealName,
+                        category = category,
+                        area = area,
+                        tags = tags,
+                        youtubeLink = youtubeLink,
+                        instructions = instructions,
+                        ingredients = _ingredients.value.map {
+                            mapOf("name" to it.name, "measure" to it.measure)
+                        },
+                        imageUrl = mealImg
+                    )
 
-            val result = recipeUploadRepository.saveDraft(
-                uid = uid,
-                mealName = mealName,
-                category = category,
-                area = area,
-                tags = tags,
-                youtubeLink = youtubeLink,
-                instructions = instructions,
-                ingredients = _ingredients.value.map {
-                    mapOf("name" to it.name, "measure" to it.measure)
-                },
-                imageUrl = mealImg
-            )
-
-            _state.value = result.fold(
-                onSuccess = { AddRecipeState.SavedDraft },
-                onFailure = { AddRecipeState.Error(it.message ?: "Save draft failed") }
-            )
+                    _state.value = result.fold(
+                        onSuccess = { AddRecipeState.SavedDraft },
+                        onFailure = { AddRecipeState.Error(it.message ?: "Save draft failed") }
+                    )
+                }
+                .onFailure {
+                    AddRecipeState.Error(it.message ?: "Save draft failed")
+                }
         }
     }
 
@@ -170,26 +181,36 @@ class AddRecipeViewModel(
 
         viewModelScope.launch {
             _state.value = AddRecipeState.Loading
+            userRepository.getUserProfile(uid)
+                .onSuccess {
+                    val displayName = it.get("fullName") ?: "Unknown"
+                    val avatarUrl = it.get("avatarUrl") ?: ""
 
-            val result = recipeUploadRepository.publish(
-                uid = uid,
-                mealName = mealName,
-                category = category,
-                area = area,
-                tags = tags,
-                youtubeLink = youtubeLink,
-                instructions = instructions,
-                ingredients = _ingredients.value.map {
-                    mapOf("name" to it.name, "measure" to it.measure)
-                },
-                imageUrl = mealImg,
-                videoUri = ""
-            )
+                    val result = recipeUploadRepository.publish(
+                        uid = uid,
+                        userName = displayName.toString(),
+                        userImg = avatarUrl.toString(),
+                        mealName = mealName,
+                        category = category,
+                        area = area,
+                        tags = tags,
+                        youtubeLink = youtubeLink,
+                        instructions = instructions,
+                        ingredients = _ingredients.value.map {
+                            mapOf("name" to it.name, "measure" to it.measure)
+                        },
+                        imageUrl = mealImg,
+                        videoUri = ""
+                    )
 
-            _state.value = result.fold(
-                onSuccess = { AddRecipeState.Published },
-                onFailure = { AddRecipeState.Error(it.message ?: "Publish failed") }
-            )
+                    _state.value = result.fold(
+                        onSuccess = { AddRecipeState.Published },
+                        onFailure = { AddRecipeState.Error(it.message ?: "Publish failed") }
+                    )
+                }
+                .onFailure {
+                    AddRecipeState.Error(it.message ?: "Publish failed")
+                }
         }
     }
 
