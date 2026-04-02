@@ -1,6 +1,5 @@
 package com.example.cookingeasy.data.remote.firebase
 
-import android.util.Log
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.google.firebase.firestore.FirebaseFirestore

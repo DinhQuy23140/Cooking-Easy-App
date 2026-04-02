@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Background tròn -->
+    <path
+        android:fillColor="#FF6B35"
+        android:pathData="M0,0 L108,0 L108,108 L0,108 Z" />
+
+    <!-- Khói / steam - 3 làn -->
+    <path
+        android:strokeColor="#FFD6C4"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M36,30 Q34,26 36,22 Q38,18 36,14" />
+    <path
+        android:strokeColor="#FFD6C4"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M54,30 Q52,26 54,22 Q56,18 54,14" />
+    <path
+        android:strokeColor="#FFD6C4"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M72,30 Q70,26 72,22 Q74,18 72,14" />
+
+    <!-- Nắp nồi -->
+    <path
+        android:fillColor="#FFF5F0"
+        android:pathData="M26,34 A6,6 0 0 1 32,28 L76,28 A6,6 0 0 1 82,34 L82,40 L26,40 Z" />
+
+    <!-- Núm nắp nồi -->
+    <path
+        android:fillColor="#FFF5F0"
+        android:pathData="M50,24 A4,4 0 0 1 58,24 L58,30 L50,30 Z" />
+
+    <!-- Thân nồi -->
+    <path
+        android:fillColor="#FFF5F0"
+        android:pathData="M28,40 L80,40 L80,74 A8,8 0 0 1 72,82 L36,82 A8,8 0 0 1 28,74 Z" />
+
+    <!-- Tay cầm trái -->
+    <path
+        android:fillColor="#FFF5F0"
+        android:pathData="M20,46 A4,4 0 0 1 28,46 L28,56 A4,4 0 0 1 20,56 Z" />
+
+    <!-- Tay cầm phải -->
+    <path
+        android:fillColor="#FFF5F0"
+        android:pathData="M80,46 A4,4 0 0 1 88,46 L88,56 A4,4 0 0 1 80,56 Z" />
+
+    <!-- Cán muỗng -->
+    <path
+        android:strokeColor="#FF6B35"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M78,38 L88,78" />
+
+    <!-- Đầu muỗng (ellipse) -->
+    <path
+        android:fillColor="#FF6B35"
+        android:pathData="M74,34 A5,3 0 1 0 84,34 A5,3 0 1 0 74,34 Z" />
+
+    <!-- Chấm trang trí trên nồi -->
+    <path
+        android:fillColor="#FF6B35"
+        android:fillAlpha="0.25"
+        android:pathData="M40,60 A3,3 0 1 0 46,60 A3,3 0 1 0 40,60 Z" />
+    <path
+        android:fillColor="#FF6B35"
+        android:fillAlpha="0.25"
+        android:pathData="M51,60 A3,3 0 1 0 57,60 A3,3 0 1 0 51,60 Z" />
+    <path
+        android:fillColor="#FF6B35"
+        android:fillAlpha="0.25"
+        android:pathData="M62,60 A3,3 0 1 0 68,60 A3,3 0 1 0 62,60 Z" />
+
+</vector>

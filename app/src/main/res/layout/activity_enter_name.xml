@@ -28,7 +28,7 @@
         <LinearLayout
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:background="@drawable/shape_circle_glass"
+            android:background="@drawable/shape_avatar_ring"
             android:gravity="center"
             android:layout_marginBottom="14dp">
 
@@ -36,7 +36,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/ic_person"
-                android:scaleType="fitCenter"/>
+                android:scaleType="center"/>
 
         </LinearLayout>
 
