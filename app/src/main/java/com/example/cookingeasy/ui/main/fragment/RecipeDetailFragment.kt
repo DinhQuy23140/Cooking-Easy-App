@@ -28,6 +28,7 @@ import com.example.cookingeasy.util.PlayerManager
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.cookingeasy.ui.viewmodel.HomeViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,6 +49,7 @@ class RecipeDetailFragment : Fragment() {
     private var isFullScreen = false
     private lateinit var binding: FragmentRecipeDetailBinding
     private val recipeShareViewmodel: RecipeShareViewmodel by activityViewModels()
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +112,9 @@ class RecipeDetailFragment : Fragment() {
             .error(R.drawable.ic_delete)
             .into(binding.imgRecipe)
 
+        if (recipe.isFavorote) binding.btnFavorite.setImageResource(R.drawable.ic_heart_filled)
+        else binding.btnFavorite.setImageResource(R.drawable.ic_heart_outline)
+
         binding.tvMealName.text = recipe.strMeal
         binding.tvCategory.text = recipe.strCategory
         binding.tvArea.text = recipe.strArea
@@ -157,6 +162,14 @@ class RecipeDetailFragment : Fragment() {
 
         binding.btnYoutube.setOnClickListener {
             openYoutobeVideo(requireContext(), recipe?.strYoutube ?: "")
+        }
+
+        binding.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
+        binding.btnFavorite.setOnClickListener {
+            viewModel.toggleFavorite(recipe)
         }
     }
 

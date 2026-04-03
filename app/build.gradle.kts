@@ -149,4 +149,6 @@ dependencies {
 
     implementation("androidx.paging:paging-runtime:3.2.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 }

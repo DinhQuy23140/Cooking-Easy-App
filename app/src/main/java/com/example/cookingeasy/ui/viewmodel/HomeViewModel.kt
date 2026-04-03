@@ -61,34 +61,9 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun getRecipes() {
-        viewModelScope.launch {
-            try {
-                recipeRepository.getRecipesFlow().collect { recipes ->
-                    val ids = _favoriteIds.value.toSet()
-                    _listRecipe.value = recipes.map { recipe ->
-                        recipe.copy(isFavorote = ids.contains(recipe.idMeal.toString()))
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
     // ─────────────────────────────────────────────
     // Favorites
     // ─────────────────────────────────────────────
-
-    private suspend fun loadFavoritesSync() {
-        val uid = authRepository.getCurrentUser()?.uid ?: return
-        try {
-            val recipes = recipeRepository.getFavoriteRecipes(uid)
-            _favoriteIds.value = recipes.map { it.idMeal.toString() }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     fun loadFavorites() {
         viewModelScope.launch {
@@ -131,5 +106,9 @@ class HomeViewModel : ViewModel() {
         return if (screenDisplay < 500) 2
         else if (screenDisplay in 500.0..<700.0) 3
         else 4
+    }
+
+    fun getTimeText() {
+
     }
 }

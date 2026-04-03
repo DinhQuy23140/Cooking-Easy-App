@@ -108,10 +108,10 @@ class RecipeFirestoreDataSource {
         val doc = getFavoritesCollection(uid).document(recipe.idMeal.toString())
 
         val data = hashMapOf(
-            "recipeId" to recipe.idMeal.toString(),
+            "idMeal" to recipe.idMeal.toString(),
             "createdAt" to System.currentTimeMillis(),
-            "name" to recipe.strMeal,
-            "image" to recipe.strMealThumb
+            "strMeal" to recipe.strMeal,
+            "strMealThumb" to recipe.strMealThumb
         )
 
         doc.set(data).await()

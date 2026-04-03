@@ -144,7 +144,8 @@ class RecipeRepositoryImp : RecipeRepository{
 
 
 
-    override suspend fun getFavRecipeFirebase(uid: String): List<Recipe> {
+    override suspend fun getFavRecipeFirebase(): List<Recipe> {
+        val uid = auth.uid.toString()
         return remote.getFavorites(uid)
     }
 

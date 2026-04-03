@@ -32,7 +32,7 @@ interface RecipeRepository {
 
     suspend fun isFavorite(uid: String, recipeId: String): Boolean
 
-    suspend fun getFavRecipeFirebase(uid: String): List<Recipe>
+    suspend fun getFavRecipeFirebase(): List<Recipe>
 
     suspend fun getFavRecipeIds(): List<String>
 }

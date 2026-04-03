@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -164,6 +166,17 @@ class HomeFragment : Fragment() {
                 }
             }
         )
+
+        binding.btnFavorite.setOnClickListener {
+            val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+                fragmentTransaction.setCustomAnimations(
+                    R.anim.slide_in_right, R.anim.slide_out_left,
+                    R.anim.slide_in_left, R.anim.slide_out_right
+                )
+            fragmentTransaction.replace(R.id.container, FavoriteFragment())
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
     }
 
 
