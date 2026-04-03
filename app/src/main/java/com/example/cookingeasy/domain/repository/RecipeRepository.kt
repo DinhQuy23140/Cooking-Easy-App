@@ -31,4 +31,8 @@ interface RecipeRepository {
     suspend fun toggleFavorite(uid: String, recipe: Recipe)
 
     suspend fun isFavorite(uid: String, recipeId: String): Boolean
+
+    suspend fun getFavRecipeFirebase(uid: String): List<Recipe>
+
+    suspend fun getFavRecipeIds(): List<String>
 }

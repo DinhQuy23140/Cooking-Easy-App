@@ -89,6 +89,16 @@ class RecipeFirestoreDataSource {
             .document(uid)
             .collection("favorites")
 
+    suspend fun getFavorites(uid: String): List<Recipe> {
+        val snapShot = db.collection("users")
+            .document(uid)
+            .collection("favorites")
+            .get().await()
+        return snapShot.documents.map {
+            it.toObject(Recipe::class.java) as Recipe
+        }
+    }
+
     suspend fun getFavoriteIds(uid: String): List<String> {
         val snapshot = getFavoritesCollection(uid).get().await()
         return snapshot.documents.map { it.id }
