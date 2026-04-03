@@ -13,6 +13,7 @@ import com.example.cookingeasy.domain.model.Area
 import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.RecipeRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +25,7 @@ class RecipeRepositoryImp : RecipeRepository{
 
     val recipeService = ApiServiceProvider.recipeService
     val remote = RecipeFirestoreDataSource()
+    val auth = FirebaseAuth.getInstance()
     override suspend fun getCategories(): List<Category> {
         val response: CategoryResponseDto = recipeService.getCategories()
         return CategoryMapper.mapToCategoryList(response.categories)
@@ -127,7 +129,7 @@ class RecipeRepositoryImp : RecipeRepository{
     }
 
     override suspend fun toggleFavorite(uid: String, recipe: Recipe) {
-        val isFav = remote.isFavorite(uid, recipe.idMeal.toString())
+        val isFav = recipe.isFavorote
 
         if (isFav) {
             remote.removeFavorite(uid, recipe.idMeal.toString())
@@ -138,5 +140,16 @@ class RecipeRepositoryImp : RecipeRepository{
 
     override suspend fun isFavorite(uid: String, recipeId: String): Boolean {
         return remote.isFavorite(uid, recipeId)
+    }
+
+
+
+    override suspend fun getFavRecipeFirebase(uid: String): List<Recipe> {
+        return remote.getFavorites(uid)
+    }
+
+    override suspend fun getFavRecipeIds(): List<String> {
+        val uid = auth.uid.toString()
+        return remote.getFavoriteIds(uid)
     }
 }

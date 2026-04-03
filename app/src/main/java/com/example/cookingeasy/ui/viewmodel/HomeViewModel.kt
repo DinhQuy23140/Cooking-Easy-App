@@ -1,5 +1,7 @@
 package com.example.cookingeasy.ui.viewmodel
 
+import android.content.Context
+import android.util.DisplayMetrics
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,10 +12,13 @@ import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.example.cookingeasy.domain.repository.RecipeRepository
+import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
@@ -36,10 +41,10 @@ class HomeViewModel : ViewModel() {
     val isFavoritesReady: StateFlow<Boolean> = _isFavoritesReady
 
     init {
-        viewModelScope.launch {
-            loadFavoritesSync()          // ← load favorites trước
-            _isFavoritesReady.value = true // ← báo Fragment sẵn sàng
-        }
+//        viewModelScope.launch {
+//            loadFavoritesSync()          // ← load favorites trước
+//            _isFavoritesReady.value = true // ← báo Fragment sẵn sàng
+//        }
     }
 
     // ─────────────────────────────────────────────
@@ -97,10 +102,19 @@ class HomeViewModel : ViewModel() {
 
     fun loadFavorites() {
         viewModelScope.launch {
-            loadFavoritesSync()
-            val ids = _favoriteIds.value.toSet()
-            _listRecipe.value = _listRecipe.value.map { recipe ->
-                recipe.copy(isFavorote = ids.contains(recipe.idMeal.toString()))
+            combine(
+                recipeRepository.getRecipesFlow(),
+                flow { emit(getFavRecipeIds()) }
+            ) { trending, favorites ->
+
+                val favIds = favorites.map { it }.toSet()
+                Log.d("Fav recipe: ", favIds.toString())
+                trending.map {
+                    it.copy(isFavorote = favIds.contains(it.idMeal.toString()))
+                }
+
+            }.collect { updatedList ->
+                _listRecipe.value = updatedList
             }
         }
     }
@@ -110,11 +124,23 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 recipeRepository.toggleFavorite(uid, recipe)
-                loadFavorites()
+//                loadFavorites()
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Toggle favorite failed: ${e.message}")
                 _favoriteError.emit(recipe)
             }
         }
+    }
+
+    fun caculatorColumn(context: Context): Int {
+        val disPlayMetrics = context.resources.displayMetrics
+        val screenDisplay = disPlayMetrics.widthPixels / disPlayMetrics.density
+        return if (screenDisplay < 500) 2
+        else if (screenDisplay in 500.0..<700.0) 3
+        else 4
+    }
+
+    suspend fun getFavRecipeIds(): List<String> {
+        return recipeRepository.getFavRecipeIds()
     }
 }

@@ -16,6 +16,7 @@ import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.AreaAdapter
 import com.example.cookingeasy.common.adapter.CategoryAdapter
 import com.example.cookingeasy.common.adapter.RecipeAdapter
+import com.example.cookingeasy.common.adapter.RecipeAdapterV2
 import com.example.cookingeasy.common.listener.AreaListener
 import com.example.cookingeasy.common.listener.CategoryListener
 import com.example.cookingeasy.common.listener.RecipeListener
@@ -121,8 +122,9 @@ class HomeFragment : Fragment() {
         }
 
         binding.rvAreas.apply {
-            layoutManager = GridLayoutManager(context, 3)
-            addItemDecoration(GridSpacingItemDecoration(3, 3))
+            val column = homeViewModel.caculatorColumn(context)
+            layoutManager = GridLayoutManager(context, column)
+            addItemDecoration(GridSpacingItemDecoration(column, 3))
             adapter = areaAdapter
             setHasFixedSize(true)
         }
@@ -165,10 +167,11 @@ class HomeFragment : Fragment() {
         )
     }
 
-    // ← Không gọi getRecipes() ở đây nữa
+
     private fun loadData() {
         homeViewModel.getListCategory()
         homeViewModel.getListArea()
+        homeViewModel.loadFavorites()
     }
 
     private fun observeData() {
@@ -203,34 +206,33 @@ class HomeFragment : Fragment() {
                         }
                 }
 
-                launch {
-                    homeViewModel.favoriteIds.collect { ids ->
-                        recipeAdapter.updateFavorites(ids)
-                    }
-                }
+//                launch {
+//                    homeViewModel.favoriteIds.collect { ids ->
+//                        recipeAdapter.updateFavorites(ids)
+//                    }
+//                }
 
-                launch {
-                    homeViewModel.favoriteError.collect { recipe ->
-                        recipeAdapter.toggleFavorite(recipe)
-                        com.google.android.material.snackbar.Snackbar
-                            .make(
-                                binding.root,
-                                "Failed to update favorite",
-                                com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
-                            )
-                            .show()
-                    }
-                }
+//                launch {
+//                    homeViewModel.favoriteError.collect { recipe ->
+//                        recipeAdapter.toggleFavorite(recipe)
+//                        com.google.android.material.snackbar.Snackbar
+//                            .make(
+//                                binding.root,
+//                                "Failed to update favorite",
+//                                com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
+//                            )
+//                            .show()
+//                    }
+//                }
 
-                // ✅ Chờ favorites load xong rồi mới gọi getRecipes()
-                launch {
-                    homeViewModel.isFavoritesReady
-                        .filter { it && !recipesLoaded } // ← chỉ gọi 1 lần
-                        .collect {
-                            recipesLoaded = true
-                            homeViewModel.getRecipes()
-                        }
-                }
+//                launch {
+//                    homeViewModel.isFavoritesReady
+//                        .filter { it && !recipesLoaded } // ← chỉ gọi 1 lần
+//                        .collect {
+//                            recipesLoaded = true
+//                            homeViewModel.getRecipes()
+//                        }
+//                }
             }
         }
     }

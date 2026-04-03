@@ -40,12 +40,12 @@
             <ImageButton
                 android:id="@+id/btnFavorite"
                 android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_height="26dp"
                 android:layout_gravity="top|end"
                 android:layout_margin="8dp"
-                android:background="@drawable/shape_tag_white"
+                android:background="@drawable/shape_tag_red"
                 android:padding="6dp"
-                android:src="@drawable/ic_favorite"/>
+                android:src="@drawable/ic_favorite" />
 
             <!-- YouTube button -->
             <ImageButton
