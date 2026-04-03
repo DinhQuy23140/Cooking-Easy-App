@@ -36,16 +36,6 @@ class HomeViewModel : ViewModel() {
     val lisCategory: StateFlow<List<Category>> = _listCategory
     val listArea: StateFlow<List<Area>> = _listArea
     val listRecipe: StateFlow<List<Recipe>> = _listRecipe
-    val favoriteIds: StateFlow<List<String>> = _favoriteIds
-    val favoriteError: SharedFlow<Recipe> = _favoriteError
-    val isFavoritesReady: StateFlow<Boolean> = _isFavoritesReady
-
-    init {
-//        viewModelScope.launch {
-//            loadFavoritesSync()          // ← load favorites trước
-//            _isFavoritesReady.value = true // ← báo Fragment sẵn sàng
-//        }
-    }
 
     // ─────────────────────────────────────────────
     // Load data
@@ -105,11 +95,11 @@ class HomeViewModel : ViewModel() {
             combine(
                 recipeRepository.getRecipesFlow(),
                 flow { emit(getFavRecipeIds()) }
-            ) { trending, favorites ->
+            ) { recipes, favorites ->
 
                 val favIds = favorites.map { it }.toSet()
                 Log.d("Fav recipe: ", favIds.toString())
-                trending.map {
+                recipes.map {
                     it.copy(isFavorote = favIds.contains(it.idMeal.toString()))
                 }
 
@@ -124,12 +114,15 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 recipeRepository.toggleFavorite(uid, recipe)
-//                loadFavorites()
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Toggle favorite failed: ${e.message}")
                 _favoriteError.emit(recipe)
             }
         }
+    }
+
+    suspend fun getFavRecipeIds(): List<String> {
+        return recipeRepository.getFavRecipeIds()
     }
 
     fun caculatorColumn(context: Context): Int {
@@ -138,9 +131,5 @@ class HomeViewModel : ViewModel() {
         return if (screenDisplay < 500) 2
         else if (screenDisplay in 500.0..<700.0) 3
         else 4
-    }
-
-    suspend fun getFavRecipeIds(): List<String> {
-        return recipeRepository.getFavRecipeIds()
     }
 }

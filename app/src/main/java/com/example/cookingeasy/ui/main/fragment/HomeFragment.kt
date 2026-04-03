@@ -43,7 +43,6 @@ class HomeFragment : Fragment() {
     private lateinit var recipeAdapter: RecipeAdapter
 
     private var isLoadingMore = false
-    private var recipesLoaded = false // ← tránh gọi getRecipes() nhiều lần
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -205,34 +204,6 @@ class HomeFragment : Fragment() {
                             binding.tvRecipeCount.text = "${data.size}+"
                         }
                 }
-
-//                launch {
-//                    homeViewModel.favoriteIds.collect { ids ->
-//                        recipeAdapter.updateFavorites(ids)
-//                    }
-//                }
-
-//                launch {
-//                    homeViewModel.favoriteError.collect { recipe ->
-//                        recipeAdapter.toggleFavorite(recipe)
-//                        com.google.android.material.snackbar.Snackbar
-//                            .make(
-//                                binding.root,
-//                                "Failed to update favorite",
-//                                com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
-//                            )
-//                            .show()
-//                    }
-//                }
-
-//                launch {
-//                    homeViewModel.isFavoritesReady
-//                        .filter { it && !recipesLoaded } // ← chỉ gọi 1 lần
-//                        .collect {
-//                            recipesLoaded = true
-//                            homeViewModel.getRecipes()
-//                        }
-//                }
             }
         }
     }
