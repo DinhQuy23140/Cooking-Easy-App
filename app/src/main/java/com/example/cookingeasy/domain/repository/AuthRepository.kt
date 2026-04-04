@@ -1,5 +1,7 @@
 package com.example.cookingeasy.domain.repository
+import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
+import retrofit2.http.Url
 
 interface AuthRepository {
 

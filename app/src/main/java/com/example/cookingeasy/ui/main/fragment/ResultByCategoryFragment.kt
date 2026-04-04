@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +27,7 @@ import com.example.cookingeasy.data.remote.api.RecipeService
 import com.example.cookingeasy.databinding.FragmentResultByCategoryBinding
 import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.ui.viewmodel.ResultByCategoryViewModel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.gson.Gson
@@ -47,6 +49,7 @@ class ResultByCategoryFragment : Fragment() {
     private lateinit var binding: FragmentResultByCategoryBinding
     private var strCategory = ""
     private val viewModel: ResultByCategoryViewModel by viewModels()
+    private val recipeShareViewmodel: RecipeShareViewmodel by activityViewModels()
     private lateinit var mealSimpleAdapter: MealSimpleAdapter
     private lateinit var listRecipeService: List<Recipe>
     private var isLoadingMore = false
@@ -77,11 +80,19 @@ class ResultByCategoryFragment : Fragment() {
             listMeal = mutableListOf(),
             object : RecipeListener{
                 override fun OnClickItem(recipe: Recipe) {
-                    TODO("Not yet implemented")
+                    recipeShareViewmodel.selectedRecipe(recipe)
+                    parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                            R.anim.slide_in_right, R.anim.slide_out_left,
+                            R.anim.slide_in_left, R.anim.slide_out_right
+                        )
+                        .replace(R.id.container, RecipeDetailFragment())
+                        .addToBackStack(null)
+                        .commit()
                 }
 
-                override fun OnFavoriteClick(boolean: Boolean) {
-                    TODO("Not yet implemented")
+                override fun OnFavoriteClick(recipe: Recipe) {
+                    viewModel.toggleFavorite(recipe)
                 }
 
             }

@@ -66,6 +66,10 @@ class ManageMyRecipeFragment : Fragment() {
     // ─────────────────────────────────────────────
 
     private fun setupEvents() {
+        binding.btnAddRecipe.setOnClickListener {
+            navigateTo(AddRecipeFragment())
+        }
+
         binding.btnClear.setOnClickListener {
             binding.edtSearchRecipe.setText("")
         }
@@ -78,6 +82,13 @@ class ManageMyRecipeFragment : Fragment() {
                 viewModel.filter(s.toString(), currentFilter)
             }
         })
+
+        binding.btnAddRecipe.setOnClickListener {
+            val fragmentTransaction = parentFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.container, AddRecipeFragment())
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
 
         setupFilterChips()
     }

@@ -6,6 +6,8 @@ interface IRecipeUploadRepository {
 
     suspend fun saveDraft(
         uid: String,
+        userName: String,
+        userImg: String,
         mealName: String,
         category: String,
         area: String,
@@ -18,6 +20,8 @@ interface IRecipeUploadRepository {
 
     suspend fun publish(
         uid: String,
+        userName: String,
+        userImg: String,
         mealName: String,
         category: String,
         area: String,

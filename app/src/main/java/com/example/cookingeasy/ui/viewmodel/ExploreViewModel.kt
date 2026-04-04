@@ -2,16 +2,22 @@ package com.example.cookingeasy.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cookingeasy.data.repository.AuthRepositoryImp
 import com.example.cookingeasy.data.repository.RecipeRepositoryImp
 import com.example.cookingeasy.domain.model.Area
 import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import java.util.stream.Collector
+import java.util.stream.Collectors
 
 class ExploreViewModel(): ViewModel() {
     private val _recipeRepository = RecipeRepositoryImp()
+    private val authRepository: AuthRepositoryImp = AuthRepositoryImp()
     private val _randomRecipe: MutableStateFlow<Recipe?> = MutableStateFlow(null)
     private val _categories: MutableStateFlow<List<Category>> = MutableStateFlow(emptyList())
     private val _areas: MutableStateFlow<List<Area>> = MutableStateFlow(emptyList())
@@ -54,14 +60,25 @@ class ExploreViewModel(): ViewModel() {
 
     fun getTrending() {
         viewModelScope.launch {
-            try {
-                _recipeRepository.getTrendingRecipe().collect {
-                    _trendingRecipes.value = it
+            combine(
+                _recipeRepository.getTrendingRecipe(),
+                flow { emit(getFavoriteRecipesIds()) }
+            ) { trending, favorites ->
+
+                val favIds = favorites.map { it }.toSet()
+
+                trending.map {
+                    it.copy(isFavorote = favIds.contains(it.idMeal.toString()))
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
+
+            }.collect { updatedList ->
+                _trendingRecipes.value = updatedList
             }
         }
+    }
+
+    suspend fun getFavoriteRecipesIds(): List<String> {
+        return _recipeRepository.getFavRecipeIds()
     }
 
 }

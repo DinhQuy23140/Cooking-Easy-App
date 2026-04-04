@@ -40,6 +40,9 @@ class MealSimpleAdapter(
             .error(R.drawable.ic_cooking)
             .into(holder.imgMeal)
 
+        if (meal.isFavorote) holder.btnFavorite.setImageResource(R.drawable.ic_heart_filled)
+        else holder.btnFavorite.setImageResource(R.drawable.ic_heart_outline)
+
         holder.txtMealName.text = meal.strMeal
 
         holder.itemView.setOnClickListener {
@@ -47,7 +50,11 @@ class MealSimpleAdapter(
         }
 
         holder.btnFavorite.setOnClickListener {
-            recipeListener.OnFavoriteClick(true)
+            val isFavorite = meal.isFavorote
+            if (isFavorite) holder.btnFavorite.setImageResource(R.drawable.ic_heart_outline)
+            else holder.btnFavorite.setImageResource(R.drawable.ic_heart_filled)
+            listMeal[position].isFavorote = isFavorite
+            recipeListener.OnFavoriteClick(meal)
         }
     }
 

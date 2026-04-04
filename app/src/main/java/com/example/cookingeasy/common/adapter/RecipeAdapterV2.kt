@@ -1,6 +1,6 @@
 package com.example.cookingeasy.common.adapter
 
-import android.annotation.SuppressLint
+import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,29 +10,28 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
+import com.example.cookingeasy.common.adapter.RecipeAdapter.RecipeDiffCallback
+import com.example.cookingeasy.common.adapter.RecipeAdapter.RecipeViewHolder
 import com.example.cookingeasy.common.listener.RecipeListener
 import com.example.cookingeasy.domain.model.Recipe
 
-class RecipeAdapter(
-    private val listRecipe: MutableList<Recipe>,
-    private val recipeListener: RecipeListener
-) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
-
+class RecipeAdapterV2(private val listRecipe: MutableList<Recipe>, private val recipeListener: RecipeListener) : RecyclerView.Adapter<RecipeAdapterV2.RecipeViewHolder>() {
     private val displayList = mutableListOf<Recipe>()
     private var currentPage = 0
     private val pageSize = 10
-
-    companion object {
-        private const val PAYLOAD_FAVORITE = "payload_favorite"
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        p1: Int
+    ): RecipeViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_recipe, parent, false)
         return RecipeViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RecipeViewHolder,
+        position: Int
+    ) {
         val recipe = displayList[position]
 
         Glide.with(holder.itemView)
@@ -55,36 +54,17 @@ class RecipeAdapter(
         }
 
         holder.ivFavorite.setOnClickListener {
-//            toggleFavorite(recipe)
             val isFavorite = recipe.isFavorote
             if (isFavorite) holder.ivFavorite.setImageResource(R.drawable.ic_heart_outline)
             else holder.ivFavorite.setImageResource(R.drawable.ic_heart_filled)
-            displayList[position].isFavorote = !isFavorite
+            recipe.isFavorote = !isFavorite
             recipeListener.OnFavoriteClick(recipe)
         }
     }
 
-//    override fun onBindViewHolder(
-//        holder: RecipeViewHolder,
-//        position: Int,
-//        payloads: MutableList<Any>
-//    ) {
-//        if (payloads.contains(PAYLOAD_FAVORITE)) {
-//            val recipe = displayList[position]
-//            holder.ivFavorite.setImageResource(
-//                if (recipe.isFavorote) R.drawable.ic_heart_filled
-//                else R.drawable.ic_heart_outline
-//            )
-//        } else {
-//            super.onBindViewHolder(holder, position, payloads)
-//        }
-//    }
-
-    override fun getItemCount(): Int = displayList.size
-
-    // ─────────────────────────────────────────────
-    // Data update
-    // ─────────────────────────────────────────────
+    override fun getItemCount(): Int {
+        return listRecipe.size
+    }
 
     fun updateData(newList: List<Recipe>) {
         listRecipe.clear()
@@ -102,7 +82,7 @@ class RecipeAdapter(
 
     fun loadNextPage() {
         val start = currentPage * pageSize
-        val end = minOf(start + pageSize - 1, listRecipe.size)
+        val end = minOf(start + pageSize, listRecipe.size)
         if (start >= listRecipe.size) return
 
         val newItems = listRecipe.subList(start, end)
@@ -113,48 +93,6 @@ class RecipeAdapter(
     }
 
     fun hasMoreData(): Boolean = currentPage * pageSize < listRecipe.size
-
-    // ─────────────────────────────────────────────
-    // Favorite
-    // ─────────────────────────────────────────────
-
-    fun toggleFavorite(recipe: Recipe) {
-        val displayIndex = displayList.indexOfFirst { it.idMeal == recipe.idMeal }
-        if (displayIndex != -1) {
-            displayList[displayIndex] = displayList[displayIndex].copy(
-                isFavorote = !displayList[displayIndex].isFavorote
-            )
-            notifyItemChanged(displayIndex, PAYLOAD_FAVORITE)
-        }
-
-        val listIndex = listRecipe.indexOfFirst { it.idMeal == recipe.idMeal }
-        if (listIndex != -1) {
-            listRecipe[listIndex] = listRecipe[listIndex].copy(
-                isFavorote = !listRecipe[listIndex].isFavorote
-            )
-        }
-    }
-
-    fun updateFavorites(favoriteIds: List<String>) {
-        val ids = favoriteIds.toSet()
-
-        val updatedDisplay = displayList.map { recipe ->
-            recipe.copy(isFavorote = ids.contains(recipe.idMeal.toString()))
-        }
-        displayList.clear()
-        displayList.addAll(updatedDisplay)
-        notifyItemRangeChanged(0, displayList.size, PAYLOAD_FAVORITE)
-
-        val updatedList = listRecipe.map { recipe ->
-            recipe.copy(isFavorote = ids.contains(recipe.idMeal.toString()))
-        }
-        listRecipe.clear()
-        listRecipe.addAll(updatedList)
-    }
-
-    // ─────────────────────────────────────────────
-    // DiffCallback
-    // ─────────────────────────────────────────────
 
     class RecipeDiffCallback(
         private val oldList: List<Recipe>,
@@ -168,10 +106,6 @@ class RecipeAdapter(
             oldList[oldPos] == newList[newPos]
     }
 
-    // ─────────────────────────────────────────────
-    // ViewHolder
-    // ─────────────────────────────────────────────
-
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ivFavorite: ImageView = itemView.findViewById(R.id.btnFavorite)
         val ivImgRecipe: ImageView = itemView.findViewById(R.id.imgMeal)
@@ -182,4 +116,5 @@ class RecipeAdapter(
         val tvRecipeAuthor: TextView = itemView.findViewById(R.id.txtUserName)
         val ivAuthorImg: ImageView = itemView.findViewById(R.id.imgUser)
     }
+
 }

@@ -5,6 +5,8 @@ import java.util.UUID
 data class RecipeUpload(
     val recipeId: String = UUID.randomUUID().toString(), // ← auto generate
     val uid: String = "",
+    val userName: String = "",
+    val userImage: String = "",
     val mealName: String = "",
     val category: String = "",
     val area: String = "",

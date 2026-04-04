@@ -68,7 +68,7 @@
                     android:textColor="#FFFFFF"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    tools:text="Dessert" />
+                    tools:text="Area" />
 
             </LinearLayout>
 

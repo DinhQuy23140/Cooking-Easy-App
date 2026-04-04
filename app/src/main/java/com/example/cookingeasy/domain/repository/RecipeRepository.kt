@@ -25,4 +25,14 @@ interface RecipeRepository {
     suspend fun getRandomRecipe(): Recipe?
 
     fun getTrendingRecipe(): Flow<List<Recipe>>
+
+    suspend fun getFavoriteRecipes(uid: String): List<Recipe>
+
+    suspend fun toggleFavorite(uid: String, recipe: Recipe)
+
+    suspend fun isFavorite(uid: String, recipeId: String): Boolean
+
+    suspend fun getFavRecipeFirebase(): List<Recipe>
+
+    suspend fun getFavRecipeIds(): List<String>
 }
