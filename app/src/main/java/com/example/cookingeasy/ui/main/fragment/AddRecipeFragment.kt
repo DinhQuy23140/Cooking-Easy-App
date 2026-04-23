@@ -16,7 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
-import com.example.cookingeasy.data.remote.firebase.AuthDataSource
+import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
 import com.example.cookingeasy.data.repository.AuthRepositoryImp
 import com.example.cookingeasy.data.repository.RecipeUploadRepositoryImp
 import com.example.cookingeasy.databinding.FragmentAddRecipeBinding

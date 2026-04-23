@@ -4,12 +4,7 @@
     <!-- Pressed -->
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="#EAF6E4"/>
-
-            <stroke
-                android:width="1.5dp"
-                android:color="#66BB6A"/>
-
+            <solid android:color="#66BB6A"/>
             <corners android:radius="24dp"/>
         </shape>
     </item>
@@ -17,11 +12,10 @@
     <!-- Default -->
     <item>
         <shape>
-            <solid android:color="@android:color/white"/>
-
-            <stroke
-                android:width="1.5dp"
-                android:color="#A5D6A7"/>
+            <gradient
+                android:startColor="#81C784"
+                android:endColor="#4CAF50"
+                android:angle="0"/>
 
             <corners android:radius="24dp"/>
         </shape>

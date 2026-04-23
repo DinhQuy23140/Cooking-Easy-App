@@ -3,7 +3,7 @@ package com.example.cookingeasy.data.repository
 import android.content.ContentResolver
 import android.net.Uri
 import android.util.Log
-import com.example.cookingeasy.data.remote.firebase.RecipeFirestoreDataSource
+import com.example.cookingeasy.data.remote.firebase.fireStore.RecipeFirestoreDataSource
 import com.example.cookingeasy.data.remote.supabase.SupabaseStorageDataSource
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.example.cookingeasy.domain.repository.IRecipeUploadRepository

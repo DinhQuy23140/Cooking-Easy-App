@@ -1,16 +1,21 @@
 package com.example.cookingeasy.ui.main.fragment
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.R
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.cookingeasy.data.remote.firebase.AuthDataSource
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
 import com.example.cookingeasy.databinding.FragmentMyProfileBinding
 import com.example.cookingeasy.ui.auth.LoginActivity
 import com.example.cookingeasy.ui.main.viewmodel.MyProfileViewModel
@@ -23,7 +28,13 @@ class MyProfileFragment : Fragment() {
 
     private val viewModel: MyProfileViewModel by viewModels()
 
-    // ─── Lifecycle ───────────────────────────────────────────────────
+    private var selectedImageUri: Uri? = null
+
+    private val galleryLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { setAvatarImage(it) }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +59,10 @@ class MyProfileFragment : Fragment() {
     // ─── Setup ───────────────────────────────────────────────────────
 
     private fun setupClickListeners() {
+        binding.imgAvatar.setOnClickListener {
+            openGallery()
+        }
+
         binding.btnLogout.setOnClickListener {
             showLogoutDialog()
         }
@@ -94,8 +109,7 @@ class MyProfileFragment : Fragment() {
                     is MyProfileViewModel.ProfileState.UserLoaded -> {
                         showLoading(false)
                         bindUserInfo(
-                            name  = state.user.displayName ?: "Chef",
-                            email = state.user.email ?: ""
+                            state.user
                         )
                     }
                     is MyProfileViewModel.ProfileState.LoggedOut  -> {
@@ -112,11 +126,20 @@ class MyProfileFragment : Fragment() {
         }
     }
 
-    // ─── UI ──────────────────────────────────────────────────────────
 
-    private fun bindUserInfo(name: String, email: String) {
-        binding.txtName.text = name
-        binding.txtEmail.text = email
+    private fun bindUserInfo(user: Map<String, Any>) {
+        binding.txtName.text = user.get("fullName") as String
+        binding.txtEmail.text = user.get("email") as String
+        var imgUrl = user.get("avatarUrl").toString()
+        if (!imgUrl.isEmpty()) {
+            Glide.with(binding.imgAvatar)
+                .load(user.get("avatarUrl").toString())
+                .into(binding.imgAvatar)
+        } else {
+            Glide.with(binding.imgAvatar)
+                .load(com.example.cookingeasy.R.drawable.ic_person)
+                .into(binding.imgAvatar)
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -153,6 +176,22 @@ class MyProfileFragment : Fragment() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+    }
+
+    private fun openGallery() {
+        galleryLauncher.launch("image/*")
+    }
+
+    private fun setAvatarImage(uri: Uri) {
+        // Lưu lại uri để dùng khi upload
+        selectedImageUri = uri
+
+        Glide.with(this)
+            .load(uri)
+            .transform(CircleCrop())
+            .placeholder(com.example.cookingeasy.R.drawable.ic_person)
+            .error(com.example.cookingeasy.R.drawable.ic_person)
+            .into(binding.imgAvatar)
     }
 
     private fun navigateToEditProfile() {

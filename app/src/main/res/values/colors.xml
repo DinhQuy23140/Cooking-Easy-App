@@ -27,5 +27,8 @@
     <color name="success">#4CAF50</color>
     <color name="warning">#FFC107</color>
     <color name="danger">#F44336</color>
+    <color name="primaryDark">#E64A19</color>
+    <color name="textPrimary">#333333</color>
+    <color name="textSecondary">#777777</color>
 
 </resources>

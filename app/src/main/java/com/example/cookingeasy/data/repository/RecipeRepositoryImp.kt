@@ -5,7 +5,7 @@ import com.example.cookingeasy.data.remote.api.ApiServiceProvider
 import com.example.cookingeasy.data.remote.dto.AreaResponseDto
 import com.example.cookingeasy.data.remote.dto.CategoryResponseDto
 import com.example.cookingeasy.data.remote.dto.RecipeResponseDto
-import com.example.cookingeasy.data.remote.firebase.RecipeFirestoreDataSource
+import com.example.cookingeasy.data.remote.firebase.fireStore.RecipeFirestoreDataSource
 import com.example.cookingeasy.data.remote.mapper.AreaMapper
 import com.example.cookingeasy.data.remote.mapper.CategoryMapper
 import com.example.cookingeasy.data.remote.mapper.RecipeMapper

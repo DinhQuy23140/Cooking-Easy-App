@@ -33,4 +33,8 @@ interface UserRepository {
     // ─── Check ───────────────────────────────────────────────────────
 
     suspend fun isProfileComplete(uid: String): Boolean
+
+    suspend fun updateImgProfile(uid: String, strImg: String): Result<Unit>
+
+    suspend fun getImgUrl(uid: String): String?
 }

@@ -206,76 +206,95 @@
                 android:layout_marginBottom="24dp"/>
 
             <!-- Button Login -->
-            <TextView
-                android:id="@+id/btnLogin"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:background="@drawable/shape_btn_primary"
-                android:gravity="center"
-                android:text="Login"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="20dp"/>
-
-            <!-- Divider: or continue with -->
             <LinearLayout
+                android:id="@+id/lnNav"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="#E0E0E0"/>
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:text="or continue with"
-                    android:textColor="#AAAAAA"
-                    android:textSize="11sp"/>
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/shape_btn_primary"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:text="Login"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="#E0E0E0"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="#E0E0E0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:text="or continue with"
+                        android:textColor="#AAAAAA"
+                        android:textSize="11sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="#E0E0E0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnGoogle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="28dp"
+                    android:background="@drawable/shape_btn_outline"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_google" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:text="Google"
+                        android:textColor="#444444"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
 
             </LinearLayout>
+
+            <!-- Divider: or continue with -->
 
             <!-- Button Google -->
-            <LinearLayout
-                android:id="@+id/btnGoogle"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/shape_btn_outline"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_marginBottom="28dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_google"
-                    android:layout_marginEnd="10dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Google"
-                    android:textColor="#444444"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif"/>
-
-            </LinearLayout>
 
             <!-- Register -->
+            <ProgressBar
+                android:id="@+id/prb_loading"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

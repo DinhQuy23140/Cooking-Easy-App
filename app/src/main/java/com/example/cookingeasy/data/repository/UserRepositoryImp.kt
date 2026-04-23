@@ -114,4 +114,20 @@ class UserRepositoryImp() : UserRepository {
             false
         }
     }
+
+    override suspend fun updateImgProfile(uid: String, strImg: String): Result<Unit>{
+        return try{
+            usersCollection.document(uid)
+                .update("avatarUrl", strImg)
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getImgUrl(uid: String): String? {
+        val snapshot = usersCollection.document(uid).get().await()
+        return snapshot.getString("avatarUrl")
+    }
 }

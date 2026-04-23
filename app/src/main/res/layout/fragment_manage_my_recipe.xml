@@ -8,9 +8,6 @@
     android:orientation="vertical"
     tools:context=".ui.main.fragment.ManageMyRecipeFragment">
 
-    <!-- ═══════════════════════════════
-         HERO HEADER (đồng bộ HomeFragment)
-         ═══════════════════════════════ -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -188,9 +185,6 @@
 
     </LinearLayout>
 
-    <!-- ═══════════════════════════════
-         RECIPE LIST
-         ═══════════════════════════════ -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMyRecipes"
         android:layout_width="match_parent"
@@ -205,9 +199,6 @@
         tools:itemCount="4"
         tools:listitem="@layout/item_upload_recipe"/>
 
-    <!-- ═══════════════════════════════
-         EMPTY STATE
-         ═══════════════════════════════ -->
     <LinearLayout
         android:id="@+id/layoutEmpty"
         android:layout_width="match_parent"

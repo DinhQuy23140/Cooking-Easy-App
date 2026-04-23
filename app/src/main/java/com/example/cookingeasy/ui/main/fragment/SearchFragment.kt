@@ -15,10 +15,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
+import com.example.cookingeasy.common.adapter.HistorySearchAdapter
 import com.example.cookingeasy.common.adapter.RecipeAdapter
+import com.example.cookingeasy.common.listener.HistorySearchListener
 import com.example.cookingeasy.common.listener.RecipeListener
 import com.example.cookingeasy.databinding.FragmentSearchBinding
+import com.example.cookingeasy.domain.model.HistorySearch
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.SearchViewModel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
@@ -34,6 +38,7 @@ class SearchFragment : Fragment() {
     private lateinit var recipeAdapter: RecipeAdapter
     private var isLoadingMore = false
     private var searchJob: Job? = null
+    private lateinit var historySearchAdapter: HistorySearchAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,10 +65,24 @@ class SearchFragment : Fragment() {
             }
         })
 
+        historySearchAdapter = HistorySearchAdapter(mutableListOf(), object : HistorySearchListener{
+            override fun onClick(historySearch: HistorySearch) {
+                binding.edtSearchRecipe.setText(historySearch.keyword)
+            }
+
+        })
+
         binding.rvSearchResult.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = recipeAdapter
             addItemDecoration(GridSpacingItemDecoration(2, 3))
+            setHasFixedSize(false)
+            isNestedScrollingEnabled = false
+        }
+
+        binding.rvRecentSearch.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = historySearchAdapter
             setHasFixedSize(false)
             isNestedScrollingEnabled = false
         }
@@ -94,8 +113,21 @@ class SearchFragment : Fragment() {
                         }
                     }
                 }
+
+                launch {
+                    if (viewModel.mockHistory.isEmpty()){
+                        binding.layoutInitial.isVisible = true
+                        binding.rvRecentSearch.isVisible = false
+                    } else {
+                        binding.layoutInitial.isVisible = false
+                        binding.rvRecentSearch.isVisible = true
+                        historySearchAdapter.updateData(viewModel.mockHistory)
+                    }
+                }
             }
         }
+
+        historySearchAdapter.updateData(viewModel.mockHistory)
     }
 
     private fun setupEvents() {

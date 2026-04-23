@@ -1,20 +1,15 @@
-package com.example.cookingeasy.data.remote.firebase
+package com.example.cookingeasy.data.remote.firebase.fireStore
 
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class RecipeFirestoreDataSource {
 
     private val db = FirebaseFirestore.getInstance()
     private val recipesCollection = db.collection("recipes")
-
-    // ─── Save recipe ─────────────────────────────────────────────────
 
     suspend fun saveRecipe(recipe: RecipeUpload): String {
         val docRef = recipesCollection.document()

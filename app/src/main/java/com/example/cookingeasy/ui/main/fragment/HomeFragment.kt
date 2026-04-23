@@ -1,10 +1,12 @@
 package com.example.cookingeasy.ui.main.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
@@ -14,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.AreaAdapter
 import com.example.cookingeasy.common.adapter.CategoryAdapter
@@ -43,6 +46,11 @@ class HomeFragment : Fragment() {
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var areaAdapter: AreaAdapter
     private lateinit var recipeAdapter: RecipeAdapter
+    private var listCategory = mutableListOf<Category>()
+    private var shortListCategory = mutableListOf<Category>()
+
+    private var listArea = mutableListOf<Area>()
+    private var shortListArea = mutableListOf<Area>()
 
     private var isLoadingMore = false
 
@@ -177,6 +185,30 @@ class HomeFragment : Fragment() {
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
+
+        binding.tvSeeAllCategories.setOnClickListener {
+            categoryAdapter.updateData(listCategory)
+            binding.tvHide.isVisible = true
+            binding.tvSeeAllCategories.isVisible = false
+        }
+
+        binding.tvHide.setOnClickListener {
+            categoryAdapter.updateData(shortListCategory)
+            binding.tvHide.isVisible = false
+            binding.tvSeeAllCategories.isVisible = true
+        }
+
+        binding.tvSeeAllAreas.setOnClickListener {
+            areaAdapter.updateData(listArea)
+            binding.tvSeeAllAreas.isVisible = false
+            binding.tvHideAreas.isVisible = true
+        }
+
+        binding.tvHideAreas.setOnClickListener {
+            areaAdapter.updateData(shortListArea)
+            binding.tvSeeAllAreas.isVisible = true
+            binding.tvHideAreas.isVisible = false
+        }
     }
 
 
@@ -184,6 +216,14 @@ class HomeFragment : Fragment() {
         homeViewModel.getListCategory()
         homeViewModel.getListArea()
         homeViewModel.loadFavorites()
+        homeViewModel.getInfUser()
+        setUpMessageTime()
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun setUpMessageTime() {
+        val greeting = homeViewModel.getTimeText()
+        binding.txtGreeting.text = "Chào buổi $greeting"
     }
 
     private fun observeData() {
@@ -194,7 +234,9 @@ class HomeFragment : Fragment() {
                     homeViewModel.lisCategory
                         .filter { it.isNotEmpty() }
                         .collect { data ->
-                            categoryAdapter.updateData(data)
+                            listCategory = data as MutableList<Category>
+                            shortListCategory.addAll(listCategory.subList(0, 8))
+                            categoryAdapter.updateData(shortListCategory)
                             binding.tvCategoryCount.text = "${data.size}+"
                         }
                 }
@@ -203,7 +245,9 @@ class HomeFragment : Fragment() {
                     homeViewModel.listArea
                         .filter { it.isNotEmpty() }
                         .collect { data ->
-                            areaAdapter.updateData(data)
+                            listArea = data as MutableList<Area>
+                            shortListArea.addAll(listArea.subList(0, 8))
+                            areaAdapter.updateData(shortListArea)
                             binding.tvCuisneCount.text = "${data.size}+"
                         }
                 }
@@ -216,6 +260,14 @@ class HomeFragment : Fragment() {
                             recipeAdapter.updateData(data)
                             binding.tvRecipeCount.text = "${data.size}+"
                         }
+                }
+                launch {
+                    homeViewModel.userName.collect { binding.txtUserName.text = it }
+                    homeViewModel.imgUrl.collect {
+                        Glide.with(binding.imgAvatar)
+                            .load(it)
+                            .into(binding.imgAvatar)
+                    }
                 }
             }
         }

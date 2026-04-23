@@ -1,4 +1,4 @@
-package com.example.cookingeasy.data.remote.firebase
+package com.example.cookingeasy.data.remote.firebase.fireAuth
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

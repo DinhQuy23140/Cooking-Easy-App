@@ -151,4 +151,5 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 }
