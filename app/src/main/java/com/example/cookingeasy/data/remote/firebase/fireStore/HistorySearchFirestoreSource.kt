@@ -33,7 +33,17 @@ class HistorySearchFirestoreSource {
     }
 
     suspend fun clearHistorySearch() {
-        historySearchCollection.document(getUid()).collection("listHistory")
+        val collectionRef = historySearchCollection.document(getUid()).collection("listHistory")
+        while (true) {
+            val snapshot = collectionRef.limit(500).get().await()
+            if (snapshot.isEmpty) break
+
+            val batch = db.batch()
+            snapshot.documents.forEach {
+                batch.delete(it.reference)
+            }
+            batch.commit().await()
+        }
     }
 
     fun getUid(): String {
