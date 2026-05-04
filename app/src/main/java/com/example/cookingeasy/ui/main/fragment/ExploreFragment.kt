@@ -1,5 +1,7 @@
 package com.example.cookingeasy.ui.main.fragment
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
@@ -26,8 +29,10 @@ import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.ExploreViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
+import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
+import kotlin.ranges.contains
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,6 +48,8 @@ class ExploreFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var isOpenCategory = false
+    private var isOpenArea = false
     private lateinit var binding: FragmentExploreBinding
     private val viewmodel: ExploreViewModel by viewModels()
     private lateinit var recipe: Recipe
@@ -81,6 +88,7 @@ class ExploreFragment : Fragment() {
         viewmodel.getTrending()
     }
 
+    @SuppressLint("SetTextI18n")
     fun observeData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -113,6 +121,7 @@ class ExploreFragment : Fragment() {
                 launch {
                     viewmodel.trendingRecipes.collect {
                         recipeAdapter.updateData(it)
+                        binding.tvTrendingCount.text = it.size.toString() + "picks"
                     }
                 }
             }
@@ -173,17 +182,35 @@ class ExploreFragment : Fragment() {
                 fragmentTransaction.commit()
             }
         }
+
+        binding.tvSeeAllCategory.setOnClickListener {
+            binding.rvCategory.apply {
+                if (!isOpenCategory) {
+                    layoutManager = GridLayoutManager(context, 4)
+                    addItemDecoration(GridSpacingItemDecoration(4, 3))
+                } else {
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                }
+                setHasFixedSize(true)
+                isOpenCategory = !isOpenCategory
+            }
+        }
+
+        binding.tvSeeAllArea.setOnClickListener {
+            binding.rvArea.apply {
+                if (!isOpenArea) {
+                    val column = viewmodel.caculatorColumn(context)
+                    layoutManager = GridLayoutManager(context, column)
+                    addItemDecoration(GridSpacingItemDecoration(column, 3))
+                } else {
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                }
+                isOpenArea = !isOpenArea
+            }
+        }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ExploreFragment.
-         */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

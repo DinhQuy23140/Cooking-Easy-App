@@ -108,7 +108,7 @@ class ResultByCategoryFragment : Fragment() {
 
     private fun loadData() {
         if (strCategory.isEmpty()) {
-            Toast.makeText(requireContext(), "Not found category", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.category_not_found), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -116,7 +116,7 @@ class ResultByCategoryFragment : Fragment() {
 
         binding.tvCategoryName.text = category.strCategory
         binding.tvDescription.text = category.strCategoryDescription
-        binding.tvRecipeCount.text = "Loading..."
+        binding.tvRecipeCount.text = getString(R.string.loading)
 
         Glide.with(requireContext())
             .load(category.strCategoryThumb)
@@ -135,7 +135,11 @@ class ResultByCategoryFragment : Fragment() {
                 launch {
                     viewModel.recipesByCategory.collect { recipes ->
                         mealSimpleAdapter.updateData(recipes)
-                        binding.tvRecipeCount.text = "${recipes.size} recipes"
+                        binding.tvRecipeCount.text = resources.getQuantityString(
+                            R.plurals.recipe_count,
+                            recipes.size,
+                            recipes.size
+                        )
                         binding.layoutEmpty.isVisible = recipes.isEmpty()
                         binding.rvRecipes.isVisible = recipes.isNotEmpty()
                         listRecipeService = recipes
@@ -238,7 +242,11 @@ class ResultByCategoryFragment : Fragment() {
                 it.strMeal.contains(keyword, ignoreCase = true)
             }
 
-        binding.tvRecipeCount.text = "$count recipes"
+        binding.tvRecipeCount.text = resources.getQuantityString(
+            R.plurals.recipe_count,
+            count,
+            count
+        )
         binding.layoutEmpty.isVisible = count == 0
         binding.rvRecipes.isVisible = count > 0
     }

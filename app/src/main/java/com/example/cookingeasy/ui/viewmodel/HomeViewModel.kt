@@ -115,14 +115,15 @@ class HomeViewModel : ViewModel() {
         else 4
     }
 
-    fun getTimeText(): String {
-        val hour = LocalTime.now().hour
+    enum class DayPeriod { MORNING, AFTERNOON, EVENING, NIGHT }
 
+    fun getDayPeriod(): DayPeriod {
+        val hour = LocalTime.now().hour
         return when (hour) {
-            in 5..11 -> "Sáng"
-            in 12..17 -> "Chiều"
-            in 18..21 -> "Tối"
-            else -> "Đêm"
+            in 5..11 -> DayPeriod.MORNING
+            in 12..17 -> DayPeriod.AFTERNOON
+            in 18..21 -> DayPeriod.EVENING
+            else -> DayPeriod.NIGHT
         }
     }
 

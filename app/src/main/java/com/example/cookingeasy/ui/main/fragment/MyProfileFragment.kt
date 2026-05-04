@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.R
 import androidx.appcompat.app.AlertDialog
+import com.example.cookingeasy.R
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -56,7 +56,6 @@ class MyProfileFragment : Fragment() {
         _binding = null
     }
 
-    // ─── Setup ───────────────────────────────────────────────────────
 
     private fun setupClickListeners() {
         binding.imgAvatar.setOnClickListener {
@@ -87,7 +86,7 @@ class MyProfileFragment : Fragment() {
             toggleDarkMode(isChecked)
         }
 
-        binding.statMyRecipes.setOnClickListener {
+        binding.quickMyRecipes.setOnClickListener {
             navigateToMyRecipes()
         }
 
@@ -95,7 +94,7 @@ class MyProfileFragment : Fragment() {
             navigateToFavoriteRecipes()
         }
 
-        binding.statUpload.setOnClickListener {
+        binding.quickUpload.setOnClickListener {
             navigateToUpload()
         }
     }
@@ -148,12 +147,12 @@ class MyProfileFragment : Fragment() {
 
     private fun showLogoutDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Logout")
-            .setMessage("Are you sure you want to logout?")
-            .setPositiveButton("Logout") { _, _ ->
+            .setTitle(getString(R.string.logout_confirm_title))
+            .setMessage(getString(R.string.logout_confirm_message))
+            .setPositiveButton(getString(R.string.action_logout)) { _, _ ->
                 viewModel.logout()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.action_cancel), null)
             .show()
     }
 
@@ -170,8 +169,6 @@ class MyProfileFragment : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    // ─── Navigation ──────────────────────────────────────────────────
-
     private fun navigateToLogin() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -183,7 +180,6 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun setAvatarImage(uri: Uri) {
-        // Lưu lại uri để dùng khi upload
         selectedImageUri = uri
 
         Glide.with(this)
@@ -195,26 +191,47 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun navigateToEditProfile() {
-        // TODO: navigate to EditProfileActivity
+
     }
 
     private fun navigateToDraftRecipes() {
-        // TODO: navigate to DraftRecipesFragment
+
     }
 
     private fun navigateToFavoriteRecipes() {
-        // TODO: navigate to FavoriteRecipesFragment
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
+                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
+            )
+            .replace(com.example.cookingeasy.R.id.container, FavoriteFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun navigateToLanguageSettings() {
-        // TODO: navigate to LanguageSettingsActivity
+
     }
 
     private fun navigateToMyRecipes() {
-        // TODO: navigate to ManageMyRecipeFragment
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
+                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
+            )
+            .replace(com.example.cookingeasy.R.id.container, ManageMyRecipeFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun navigateToUpload() {
-        // TODO: navigate to AddRecipeFragment
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
+                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
+            )
+            .replace(com.example.cookingeasy.R.id.container, AddRecipeFragment())
+            .addToBackStack(null)
+            .commit()
     }
 }

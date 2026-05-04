@@ -90,7 +90,7 @@ object RecipeMapper {
         fun getMeasure(i: Int) = list[i]["measure"] ?: ""
 
         return Recipe(
-            idMeal = upload.recipeId.hashCode(),
+            idMeal = upload.recipeId.hashCode().toString(),
             strMeal = upload.mealName,
             strMealAlternate = false,
             strCategory = upload.category,

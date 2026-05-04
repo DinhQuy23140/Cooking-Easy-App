@@ -5,7 +5,7 @@ data class RecipeResponseDto(
 )
 
 data class RecipeDto(
-    val idMeal: Int,
+    val idMeal: String,
     val strMeal: String,
     val strMealAlternate: Boolean,
     val strCategory: String,

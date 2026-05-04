@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,6 +15,7 @@ import com.example.cookingeasy.common.listener.RecipeListener
 import com.example.cookingeasy.databinding.FragmentFavoriteBinding
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.FavoriteViewModel
+import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import kotlinx.coroutines.launch
 
@@ -32,6 +34,7 @@ class FavoriteFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoriteBinding
     private val viewmodel: FavoriteViewModel by viewModels()
+    private val recipeShareViewmodel: RecipeShareViewmodel by activityViewModels()
     private lateinit var recipeAdapter: RecipeAdapter
     private var param1: String? = null
     private var param2: String? = null
@@ -84,7 +87,15 @@ class FavoriteFragment : Fragment() {
         binding.rvFavoriteRecipes.apply {
             recipeAdapter = RecipeAdapter(mutableListOf(), object: RecipeListener {
                 override fun OnClickItem(recipe: Recipe) {
-
+                    recipeShareViewmodel.selectedRecipe(recipe)
+                    parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                            R.anim.slide_in_right, R.anim.slide_out_left,
+                            R.anim.slide_in_left, R.anim.slide_out_right
+                        )
+                        .replace(R.id.container, RecipeDetailFragment())
+                        .addToBackStack(null)
+                        .commit()
                 }
 
                 override fun OnFavoriteClick(recipe: Recipe) {

@@ -44,10 +44,11 @@
                 android:id="@+id/btnEditProfile"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:background="@drawable/shape_circle_glass"
+                android:contentDescription="Edit profile"
                 android:padding="10dp"
-                android:src="@drawable/ic_edit"
-                android:contentDescription="Edit profile"/>
+                android:src="@drawable/ic_edit" />
 
         </LinearLayout>
 

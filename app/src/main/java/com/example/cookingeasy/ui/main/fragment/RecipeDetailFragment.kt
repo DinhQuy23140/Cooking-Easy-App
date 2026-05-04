@@ -202,7 +202,7 @@ class RecipeDetailFragment : Fragment() {
                 context.startActivity(intent)
             }
         } else {
-            Toast.makeText(requireContext(), "Url not found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.url_not_found), Toast.LENGTH_SHORT).show()
         }
     }
 

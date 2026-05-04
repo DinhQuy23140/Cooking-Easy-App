@@ -254,7 +254,11 @@ class AddRecipeFragment : Fragment() {
 
     private fun updateIngredientCountFromViews() {
         val count = binding.layoutIngredients.childCount
-        binding.tvIngredientCount.text = "$count ${if (count == 1) "item" else "items"}"
+        binding.tvIngredientCount.text = resources.getQuantityString(
+            R.plurals.ingredient_count,
+            count,
+            count
+        )
     }
 
     // ─── Instructions ─────────────────────────────────────────────────
@@ -297,7 +301,11 @@ class AddRecipeFragment : Fragment() {
 
     private fun updateStepCount() {
         val count = binding.layoutInstructions.childCount
-        binding.tvStepCount.text = "$count ${if (count == 1) "step" else "steps"}"
+        binding.tvStepCount.text = resources.getQuantityString(
+            R.plurals.step_count,
+            count,
+            count
+        )
     }
 
     // ─── File helpers ─────────────────────────────────────────────────

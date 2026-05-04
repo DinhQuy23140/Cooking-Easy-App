@@ -100,7 +100,7 @@ class RecipeFirestoreDataSource {
     }
 
     suspend fun addFavorite(uid: String, recipe: Recipe) {
-        val doc = getFavoritesCollection(uid).document(recipe.idMeal.toString())
+        val doc = getFavoritesCollection(uid).document(recipe.idMeal)
 
         val data = hashMapOf(
             "idMeal" to recipe.idMeal.toString(),

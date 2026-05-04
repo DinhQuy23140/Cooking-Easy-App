@@ -21,7 +21,6 @@ import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.AreaAdapter
 import com.example.cookingeasy.common.adapter.CategoryAdapter
 import com.example.cookingeasy.common.adapter.RecipeAdapter
-import com.example.cookingeasy.common.adapter.RecipeAdapterV2
 import com.example.cookingeasy.common.listener.AreaListener
 import com.example.cookingeasy.common.listener.CategoryListener
 import com.example.cookingeasy.common.listener.RecipeListener
@@ -148,6 +147,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun event() {
         binding.edtSearch.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -220,10 +220,17 @@ class HomeFragment : Fragment() {
         setUpMessageTime()
     }
 
-    @SuppressLint("SetTextI18n")
     fun setUpMessageTime() {
-        val greeting = homeViewModel.getTimeText()
-        binding.txtGreeting.text = "Chào buổi $greeting"
+        val periodRes = when (homeViewModel.getDayPeriod()) {
+            HomeViewModel.DayPeriod.MORNING -> R.string.day_period_morning
+            HomeViewModel.DayPeriod.AFTERNOON -> R.string.day_period_afternoon
+            HomeViewModel.DayPeriod.EVENING -> R.string.day_period_evening
+            HomeViewModel.DayPeriod.NIGHT -> R.string.day_period_night
+        }
+        binding.txtGreeting.text = getString(
+            R.string.greeting_template,
+            getString(periodRes)
+        )
     }
 
     private fun observeData() {
@@ -237,7 +244,7 @@ class HomeFragment : Fragment() {
                             listCategory = data as MutableList<Category>
                             shortListCategory.addAll(listCategory.subList(0, 8))
                             categoryAdapter.updateData(shortListCategory)
-                            binding.tvCategoryCount.text = "${data.size}+"
+                            binding.tvCategoryCount.text = getString(R.string.stats_count_plus, data.size)
                         }
                 }
 
@@ -248,7 +255,7 @@ class HomeFragment : Fragment() {
                             listArea = data as MutableList<Area>
                             shortListArea.addAll(listArea.subList(0, 8))
                             areaAdapter.updateData(shortListArea)
-                            binding.tvCuisneCount.text = "${data.size}+"
+                            binding.tvCuisneCount.text = getString(R.string.stats_count_plus, data.size)
                         }
                 }
 
@@ -258,7 +265,7 @@ class HomeFragment : Fragment() {
                         .distinctUntilChanged()
                         .collect { data ->
                             recipeAdapter.updateData(data)
-                            binding.tvRecipeCount.text = "${data.size}+"
+                            binding.tvRecipeCount.text = getString(R.string.stats_count_plus, data.size)
                         }
                 }
                 launch {

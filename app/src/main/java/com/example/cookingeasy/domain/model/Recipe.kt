@@ -1,7 +1,7 @@
 package com.example.cookingeasy.domain.model
 
 data class Recipe(
-    val idMeal: Int = 0,
+    val idMeal: String = "0",
     val strMeal: String = "",
     val strMealAlternate: Boolean = false,
     val strCategory: String = "",
