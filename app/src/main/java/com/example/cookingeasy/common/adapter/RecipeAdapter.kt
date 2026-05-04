@@ -46,6 +46,7 @@ class RecipeAdapter(
         holder.tvRecipeName.text = recipe.strMeal
         holder.tvRecipeArea.text = "${recipe.strCategory} • ${recipe.strArea}"
         holder.tvRecipeTag.text = recipe.strTags ?: ""
+        holder.tvRecipeAuthor.text = recipe.userName
 
         holder.ivFavorite.setImageResource(
             if (recipe.isFavorote) R.drawable.ic_heart_filled

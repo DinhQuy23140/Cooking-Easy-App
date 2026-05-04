@@ -54,6 +54,8 @@ data class Recipe(
     val strImageSource: String = "",
     val strCreativeCommonsConfirmed: String = "",
     val dateModified: String = "",
+    val userName: String = "Unknow",
+    val userImg: String = "",
     var isFavorote: Boolean = false
 ) {
     fun getIngredient(index: Int): String? {

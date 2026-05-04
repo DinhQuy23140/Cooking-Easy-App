@@ -81,6 +81,16 @@ class RecipeFirestoreDataSource {
         }
     }
 
+    suspend fun getPublishedRecipes(): List<RecipeUpload> {
+        val snapshot = recipesCollection
+            .whereEqualTo("status", "published")
+            .get()
+            .await()
+        return snapshot.documents.mapNotNull {
+            it.toObject(RecipeUpload::class.java)
+        }.sortedByDescending { it.createdAt }
+    }
+
     fun getFavoritesCollection(uid: String) =
         db.collection("users")
             .document(uid)

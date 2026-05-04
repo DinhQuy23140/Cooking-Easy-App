@@ -76,13 +76,20 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             combine(
                 _recipeRepository.getRecipesFlow(),
-                flow { emit(getFavRecipeIds()) }
-            ) { recipes, favorites ->
+                flow { emit(getFavRecipeIds()) },
+                flow { emit(_recipeRepository.getAllRecipesFirebase()) }
+            ) { apiRecipes, favorites, firebaseRecipes ->
 
                 val favIds = favorites.map { it }.toSet()
                 Log.d("Fav recipe: ", favIds.toString())
-                recipes.map {
-                    it.copy(isFavorote = favIds.contains(it.idMeal.toString()))
+                Log.d("Firebase recipe: ", firebaseRecipes.toString())
+                val mergedRecipes = buildList {
+                    addAll(firebaseRecipes)
+                    addAll(apiRecipes)
+                }.distinctBy { it.idMeal }
+
+                mergedRecipes.map {
+                    it.copy(isFavorote = favIds.contains(it.idMeal))
                 }
 
             }.collect { updatedList ->

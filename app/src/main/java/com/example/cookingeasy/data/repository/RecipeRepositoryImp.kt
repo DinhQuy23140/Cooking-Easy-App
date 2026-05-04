@@ -9,6 +9,7 @@ import com.example.cookingeasy.data.remote.firebase.fireStore.RecipeFirestoreDat
 import com.example.cookingeasy.data.remote.mapper.AreaMapper
 import com.example.cookingeasy.data.remote.mapper.CategoryMapper
 import com.example.cookingeasy.data.remote.mapper.RecipeMapper
+import com.example.cookingeasy.domain.mapper.toRecipe
 import com.example.cookingeasy.domain.model.Area
 import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
@@ -147,6 +148,10 @@ class RecipeRepositoryImp : RecipeRepository{
     override suspend fun getFavRecipeFirebase(): List<Recipe> {
         val uid = auth.uid.toString()
         return remote.getFavorites(uid)
+    }
+
+    override suspend fun getAllRecipesFirebase(): List<Recipe> {
+        return remote.getPublishedRecipes().map { it.toRecipe() }
     }
 
     override suspend fun getFavRecipeIds(): List<String> {

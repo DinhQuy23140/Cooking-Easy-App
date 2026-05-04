@@ -56,6 +56,8 @@ fun RecipeUpload.toRecipe(): Recipe {
         strMeasure18 = measure(17),
         strMeasure19 = measure(18),
         strMeasure20 = measure(19),
+        userName = userName,
+        userImg = userImage,
         strSource = "user_upload",
         isFavorote = false
     )

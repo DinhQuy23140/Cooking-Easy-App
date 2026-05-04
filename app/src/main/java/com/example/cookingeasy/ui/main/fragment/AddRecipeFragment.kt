@@ -107,6 +107,7 @@ class AddRecipeFragment : Fragment() {
         }
 
         binding.btnSaveDraft.setOnClickListener {
+            showLoading(true)
             collectIngredients()
             viewModel.saveDraft(
                 mealImg = mealImg,
@@ -120,6 +121,7 @@ class AddRecipeFragment : Fragment() {
         }
 
         binding.btnPublish.setOnClickListener {
+            showLoading(true)
             collectIngredients()
             viewModel.publish(
                 mealImg = mealImg,
@@ -335,8 +337,10 @@ class AddRecipeFragment : Fragment() {
     // ─── UI Helpers ──────────────────────────────────────────────────
 
     private fun showLoading(isLoading: Boolean) {
+        binding.progressBarAddRecipe.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.btnPublish.isEnabled   = !isLoading
         binding.btnSaveDraft.isEnabled = !isLoading
+        binding.btnClose.isEnabled = !isLoading
     }
 
     private fun showError(message: String) {
