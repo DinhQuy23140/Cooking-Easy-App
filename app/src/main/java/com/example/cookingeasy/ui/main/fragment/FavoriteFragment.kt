@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -100,6 +101,18 @@ class FavoriteFragment : Fragment() {
 
                 override fun OnFavoriteClick(recipe: Recipe) {
                 }
+
+                override fun onClickInf(recipe: Recipe) {
+                    val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+                    fragmentTransaction.setCustomAnimations(
+                        R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_left, R.anim.slide_out_right
+                    )
+                    fragmentTransaction.replace(R.id.container, OtherUserProfileFragment())
+                    fragmentTransaction.addToBackStack(null)
+                    fragmentTransaction.commit()
+                }
+
             })
             adapter = recipeAdapter
             layoutManager = GridLayoutManager(context, 2)

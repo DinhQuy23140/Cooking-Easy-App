@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Cooking Easy"
+            android:text="@string/login_app_title"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:fontFamily="sans-serif-medium"/>
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Welcome back!"
+            android:text="@string/login_welcome"
             android:textColor="#99FFFFFF"
             android:textSize="13sp"
             android:fontFamily="sans-serif"
@@ -91,7 +91,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign in"
+                android:text="@string/login_section_sign_in"
                 android:textColor="#1B5E20"
                 android:textSize="20sp"
                 android:fontFamily="sans-serif-medium"
@@ -101,7 +101,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EMAIL"
+                android:text="@string/auth_label_email"
                 android:textColor="#888888"
                 android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
@@ -132,7 +132,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="your@email.com"
+                    android:hint="@string/auth_hint_email"
                     android:textSize="14sp"
                     android:inputType="textEmailAddress"
                     android:imeOptions="actionNext"
@@ -144,7 +144,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PASSWORD"
+                android:text="@string/auth_label_password"
                 android:textColor="#888888"
                 android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
@@ -177,7 +177,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="••••••••"
+                    android:hint="@string/auth_hint_password_masked"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:singleLine="true"
@@ -199,7 +199,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="Forgot password?"
+                android:text="@string/login_forgot_password"
                 android:textColor="#43A047"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif-medium"
@@ -221,7 +221,7 @@
                     android:background="@drawable/shape_btn_primary"
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center"
-                    android:text="Login"
+                    android:text="@string/login_btn"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -243,7 +243,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
-                        android:text="or continue with"
+                        android:text="@string/login_or_continue"
                         android:textColor="#AAAAAA"
                         android:textSize="11sp" />
 
@@ -274,7 +274,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif"
-                        android:text="Google"
+                        android:text="@string/login_with_google"
                         android:textColor="#444444"
                         android:textSize="14sp" />
 
@@ -304,7 +304,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Don't have an account? "
+                    android:text="@string/login_no_account"
                     android:textColor="#999999"
                     android:textSize="13sp"/>
 
@@ -312,7 +312,7 @@
                     android:id="@+id/tvSignUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sign up"
+                    android:text="@string/login_sign_up"
                     android:textColor="#43A047"
                     android:textSize="13sp"
                     android:fontFamily="sans-serif-medium"/>

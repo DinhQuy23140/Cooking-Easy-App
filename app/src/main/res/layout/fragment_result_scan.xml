@@ -54,7 +54,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="SCAN RESULT"
+                        android:text="@string/result_scan_header"
                         android:textColor="#80FFFFFF"
                         android:textSize="11sp"
                         android:fontFamily="sans-serif"
@@ -64,7 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="What can I cook?"
+                        android:text="@string/result_scan_title"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp"
                         android:fontFamily="sans-serif-medium"/>
@@ -118,7 +118,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="DETECTED INGREDIENTS"
+                            android:text="@string/result_scan_detected_ingredients"
                             android:textColor="#2E5E2E"
                             android:textSize="12sp"
                             android:fontFamily="sans-serif-medium"
@@ -190,7 +190,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="RECIPES YOU CAN MAKE"
+                            android:text="@string/result_scan_recipes_section"
                             android:textColor="#2E5E2E"
                             android:textSize="12sp"
                             android:fontFamily="sans-serif-medium"
@@ -217,7 +217,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="14dp"
-                        android:text="Based on your scanned ingredients"
+                        android:text="@string/result_scan_footer"
                         android:textColor="#4D2E5E2E"
                         android:textSize="12sp"
                         android:fontFamily="sans-serif"/>
@@ -247,7 +247,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Finding matching recipes..."
+                            android:text="@string/result_scan_finding"
                             android:textColor="#4D2E5E2E"
                             android:textSize="12sp"
                             android:fontFamily="sans-serif"/>
@@ -281,7 +281,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="No matching recipes found"
+                            android:text="@string/result_scan_no_matches"
                             android:textColor="#4D2E5E2E"
                             android:textSize="13sp"
                             android:fontFamily="sans-serif-medium"/>

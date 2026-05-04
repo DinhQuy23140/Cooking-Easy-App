@@ -161,3 +161,39 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 }
+
+tasks.register("replaceLayoutStringsFromTsv") {
+    group = "verification"
+    description = "Replace hardcoded layout/menu text using tools/repl.tsv (UTF-8, tab-separated)."
+    val replFile = rootProject.file("tools/repl.tsv")
+    val layoutDir = file("src/main/res/layout")
+    val menuFile = file("src/main/res/menu/bottom_navigation.xml")
+
+    doLast {
+        require(replFile.exists()) { "Missing ${replFile.absolutePath}" }
+        val pairs = replFile.readLines(Charsets.UTF_8)
+            .map { it.trimEnd('\r') }
+            .filter { it.isNotBlank() && !it.startsWith("#") }
+            .map { line ->
+                val tab = line.indexOf('\t')
+                require(tab > 0) { "Bad repl.tsv line (no tab): $line" }
+                line.substring(0, tab) to line.substring(tab + 1)
+            }
+
+        fun replaceIn(f: java.io.File) {
+            if (!f.exists()) return
+            var text = f.readText(Charsets.UTF_8)
+            val before = text
+            for ((from, to) in pairs) {
+                text = text.replace(from, to)
+            }
+            if (text != before) {
+                f.writeText(text, Charsets.UTF_8)
+                println("Updated: ${f.relativeTo(projectDir)}")
+            }
+        }
+
+        layoutDir.listFiles()?.filter { it.extension == "xml" }?.sortedBy { it.name }?.forEach(::replaceIn)
+        replaceIn(menuFile)
+    }
+}

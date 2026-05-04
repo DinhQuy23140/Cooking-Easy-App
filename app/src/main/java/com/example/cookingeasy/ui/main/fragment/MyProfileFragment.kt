@@ -210,7 +210,14 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun navigateToLanguageSettings() {
-
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
+                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
+            )
+            .replace(com.example.cookingeasy.R.id.container, LanguageFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun navigateToMyRecipes() {

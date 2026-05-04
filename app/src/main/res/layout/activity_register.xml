@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Tạo tài khoản"
+            android:text="@string/register_title"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:fontFamily="sans-serif-medium"/>
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Bắt đầu hành trình nấu ăn"
+            android:text="@string/register_subtitle"
             android:textColor="#99FFFFFF"
             android:textSize="13sp"
             android:fontFamily="sans-serif"
@@ -87,7 +87,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Đăng ký"
+                android:text="@string/register_btn"
                 android:textColor="#1B5E20"
                 android:textSize="20sp"
                 android:fontFamily="sans-serif-medium"
@@ -97,7 +97,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EMAIL"
+                android:text="@string/auth_label_email"
                 android:textColor="#888888"
                 android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
@@ -127,7 +127,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="Email"
+                    android:hint="@string/auth_hint_email"
                     android:textSize="14sp"
                     android:inputType="textEmailAddress"
                     android:imeOptions="actionNext"
@@ -139,7 +139,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MẬT KHẨU"
+                android:text="@string/auth_label_password"
                 android:textColor="#888888"
                 android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
@@ -169,7 +169,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="Mật khẩu"
+                    android:hint="@string/auth_hint_password"
                     android:textSize="14sp"
                     android:inputType="textPassword"
                     android:imeOptions="actionNext"
@@ -190,7 +190,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="XÁC NHẬN MẬT KHẨU"
+                android:text="@string/auth_label_confirm_password"
                 android:textColor="#888888"
                 android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
@@ -220,7 +220,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="Xác nhận mật khẩu"
+                    android:hint="@string/auth_hint_confirm_password"
                     android:textSize="14sp"
                     android:inputType="textPassword"
                     android:imeOptions="actionDone"
@@ -244,7 +244,7 @@
                 android:layout_height="52dp"
                 android:background="@drawable/shape_btn_primary"
                 android:gravity="center"
-                android:text="Đăng ký"
+                android:text="@string/register_btn"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:fontFamily="sans-serif-medium"
@@ -269,7 +269,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginEnd="12dp"
-                    android:text="hoặc đăng ký với"
+                    android:text="@string/register_or_with"
                     android:textColor="#AAAAAA"
                     android:textSize="11sp"/>
 
@@ -300,7 +300,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Google"
+                    android:text="@string/login_with_google"
                     android:textColor="#444444"
                     android:textSize="14sp"
                     android:fontFamily="sans-serif"/>
@@ -317,7 +317,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đã có tài khoản? "
+                    android:text="@string/register_have_account"
                     android:textColor="#999999"
                     android:textSize="13sp"/>
 
@@ -325,7 +325,7 @@
                     android:id="@+id/register_tv_login_link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đăng nhập"
+                    android:text="@string/register_sign_in"
                     android:textColor="#43A047"
                     android:textSize="13sp"
                     android:fontFamily="sans-serif-medium"/>

@@ -120,6 +120,17 @@ class HomeFragment : Fragment() {
             override fun OnFavoriteClick(recipe: Recipe) {
                 homeViewModel.toggleFavorite(recipe)
             }
+
+            override fun onClickInf(recipe: Recipe) {
+                val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+                fragmentTransaction.setCustomAnimations(
+                    R.anim.slide_in_right, R.anim.slide_out_left,
+                    R.anim.slide_in_left, R.anim.slide_out_right
+                )
+                fragmentTransaction.replace(R.id.container, OtherUserProfileFragment())
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+            }
         })
 
         binding.rvCategories.apply {

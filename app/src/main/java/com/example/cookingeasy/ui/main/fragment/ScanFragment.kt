@@ -1,6 +1,5 @@
 package com.example.cookingeasy.ui.main.fragment
 
-import android.annotation.SuppressLint
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Bundle
@@ -129,10 +128,9 @@ class ScanFragment : Fragment() {
         binding.tvDishName.isVisible = false
     }
 
-    @SuppressLint("SetTextI18n")
     private fun showLoading() {
         binding.progressBar.isVisible = true
-        binding.tvDishName.text = "Analyzing..."
+        binding.tvDishName.text = getString(R.string.scan_analyzing)
         binding.tvDishName.isVisible = true
     }
 

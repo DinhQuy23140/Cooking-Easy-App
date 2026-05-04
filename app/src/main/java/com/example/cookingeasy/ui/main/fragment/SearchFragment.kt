@@ -63,6 +63,8 @@ class SearchFragment : Fragment() {
             override fun OnFavoriteClick(recipe: Recipe) {
                 // handle favorite
             }
+
+            override fun onClickInf(recipe: Recipe) = Unit
         })
 
         historySearchAdapter = HistorySearchAdapter(mutableListOf(), object : HistorySearchListener{
@@ -98,7 +100,7 @@ class SearchFragment : Fragment() {
                         binding.layoutInitial.isVisible = !hasKeyword
                         binding.layoutResult.isVisible = result.isNotEmpty()
                         binding.layoutEmpty.isVisible = result.isEmpty() && hasKeyword
-                        binding.txtResult.text = "${result.size} found"
+                        binding.txtResult.text = getString(R.string.format_results_found, result.size)
                         if (result.isNotEmpty()) recipeAdapter.updateData(result)
                     }
                 }

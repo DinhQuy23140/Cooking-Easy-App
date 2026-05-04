@@ -39,7 +39,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:letterSpacing="0.15"
-                        android:text="COOKING"
+                        android:text="@string/brand_cooking"
                         android:textColor="#6643A047"
                         android:textSize="11sp"/>
 
@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:fontFamily="sans-serif-medium"
-                        android:text="New Recipe"
+                        android:text="@string/recipe_form_new_title"
                         android:textColor="#2E5E2E"
                         android:textSize="22sp"/>
 
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:letterSpacing="0.1"
-                        android:text="MEAL IMAGE"
+                        android:text="@string/recipe_form_section_meal_image"
                         android:textColor="#2E5E2E"
                         android:textSize="12sp"/>
 
@@ -132,7 +132,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:fontFamily="sans-serif-medium"
-                            android:text="Tap to add photo"
+                            android:text="@string/recipe_form_tap_add_photo"
                             android:textColor="#4D2E5E2E"
                             android:textSize="13sp"/>
 
@@ -171,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:letterSpacing="0.1"
-                        android:text="BASIC INFO"
+                        android:text="@string/recipe_form_section_basic"
                         android:textColor="#2E5E2E"
                         android:textSize="12sp"/>
 
@@ -183,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Meal Name *"
+                    android:text="@string/recipe_form_label_meal_name_required"
                     android:textColor="#2E5E2E"
                     android:textSize="12sp"/>
 
@@ -201,7 +201,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:hint="e.g. Spicy Arrabiata Penne"
+                        android:hint="@string/hint_meal_name_example"
                         android:inputType="textCapSentences"
                         android:textColor="#2E5E2E"
                         android:textSize="14sp"/>
@@ -227,7 +227,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="6dp"
                             android:fontFamily="sans-serif-medium"
-                            android:text="Category"
+                            android:text="@string/recipe_form_label_category"
                             android:textColor="#2E5E2E"
                             android:textSize="12sp"/>
 
@@ -244,7 +244,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="@android:color/transparent"
-                                android:hint="e.g. Pasta"
+                                android:hint="@string/hint_category_example"
                                 android:textColor="#2E5E2E"
                                 android:textSize="13sp"/>
 
@@ -264,7 +264,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="6dp"
                             android:fontFamily="sans-serif-medium"
-                            android:text="Area"
+                            android:text="@string/recipe_form_label_area"
                             android:textColor="#2E5E2E"
                             android:textSize="12sp"/>
 
@@ -281,7 +281,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="@android:color/transparent"
-                                android:hint="e.g. Italian"
+                                android:hint="@string/hint_area_example"
                                 android:textColor="#2E5E2E"
                                 android:textSize="13sp"/>
 
@@ -298,7 +298,7 @@
                     android:layout_marginTop="14dp"
                     android:layout_marginBottom="6dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Tags"
+                    android:text="@string/recipe_form_label_tags"
                     android:textColor="#2E5E2E"
                     android:textSize="12sp"/>
 
@@ -315,7 +315,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:hint="e.g. Pasta, Curry"
+                        android:hint="@string/hint_tags_example"
                         android:textColor="#2E5E2E"
                         android:textSize="13sp"/>
 
@@ -328,7 +328,7 @@
                     android:layout_marginTop="14dp"
                     android:layout_marginBottom="6dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="YouTube Link"
+                    android:text="@string/recipe_form_label_youtube"
                     android:textColor="#2E5E2E"
                     android:textSize="12sp"/>
 
@@ -352,7 +352,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:hint="https://youtube.com/..."
+                        android:hint="@string/hint_youtube_example"
                         android:inputType="textUri"
                         android:textColor="#2E5E2E"
                         android:textSize="13sp"/>
@@ -391,7 +391,7 @@
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-medium"
                         android:letterSpacing="0.1"
-                        android:text="INGREDIENTS"
+                        android:text="@string/recipe_form_section_ingredients"
                         android:textColor="#2E5E2E"
                         android:textSize="12sp"/>
 
@@ -405,7 +405,7 @@
                         android:paddingTop="3dp"
                         android:paddingEnd="10dp"
                         android:paddingBottom="3dp"
-                        android:text="0 items"
+                        android:text="@string/recipe_form_ingredients_count_zero"
                         android:textColor="#43A047"
                         android:textSize="11sp"/>
 
@@ -423,7 +423,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-medium"
-                        android:text="Ingredient"
+                        android:text="@string/recipe_form_label_ingredient"
                         android:textColor="#4D2E5E2E"
                         android:textSize="11sp"/>
 
@@ -431,7 +431,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
-                        android:text="Measure"
+                        android:text="@string/recipe_form_label_measure"
                         android:textColor="#4D2E5E2E"
                         android:textSize="11sp"/>
 
@@ -456,7 +456,7 @@
                     android:layout_height="42dp"
                     android:layout_marginTop="12dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Add Ingredient"
+                    android:text="@string/recipe_form_add_ingredient"
                     android:textAllCaps="false"
                     android:textColor="#43A047"
                     android:textSize="13sp"
@@ -499,7 +499,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:letterSpacing="0.1"
-                        android:text="INSTRUCTIONS"
+                        android:text="@string/recipe_form_section_instructions"
                         android:textColor="#2E5E2E"
                         android:textSize="12sp"/>
 
@@ -520,7 +520,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:gravity="top"
-                        android:hint="Describe the cooking steps..."
+                        android:hint="@string/hint_recipe_instructions"
                         android:inputType="textMultiLine|textCapSentences"
                         android:minLines="5"
                         android:textColor="#2E5E2E"
@@ -561,7 +561,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:letterSpacing="0.1"
-                        android:text="COOKING VIDEO"
+                        android:text="@string/recipe_form_section_video"
                         android:textColor="#2E5E2E"
                         android:textSize="12sp"/>
 
@@ -584,7 +584,7 @@
                         android:background="@drawable/shape_calories_badge"
                         android:fontFamily="sans-serif-medium"
                         android:gravity="center"
-                        android:text="Upload Video"
+                        android:text="@string/recipe_form_upload_video"
                         android:textColor="#43A047"
                         android:textSize="12sp"/>
 
@@ -643,7 +643,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:fontFamily="sans-serif-medium"
-                                android:text="Tap to select video"
+                                android:text="@string/recipe_form_tap_select_video"
                                 android:textColor="#4D2E5E2E"
                                 android:textSize="13sp" />
 
@@ -651,7 +651,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="MP4, MOV up to 100MB"
+                                android:text="@string/recipe_form_video_formats"
                                 android:textColor="#4D2E5E2E"
                                 android:textSize="11sp" />
 
@@ -728,7 +728,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Save Draft"
+                    android:text="@string/recipe_form_save_draft"
                     android:textAllCaps="false"
                     android:textColor="#43A047"
                     android:textSize="13sp"
@@ -741,7 +741,7 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Publish"
+                    android:text="@string/action_publish"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"

@@ -25,11 +25,11 @@
             android:id="@+id/imgMeal"
             android:layout_width="0dp"
             android:layout_height="136dp"
+            android:contentDescription="@string/cd_recipe_photo"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/cd_recipe_photo"
             tools:src="@drawable/sample_food" />
 
         <View
@@ -161,39 +161,43 @@
             app:layout_constraintTop_toBottomOf="@id/iconTags" />
 
         <!-- Footer: tác giả -->
-        <ImageView
-            android:id="@+id/imgUser"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/shape_avatar_ring"
-            android:contentDescription="@string/cd_user_avatar"
-            android:padding="2dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_person"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dividerMetaFooter" />
-
-        <TextView
-            android:id="@+id/txtUserName"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/layout_inf_chef"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="12dp"
-            android:ellipsize="end"
-            android:fontFamily="sans-serif-medium"
-            android:maxLines="1"
-            android:text="Chef Admin"
-            android:textColor="#444444"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/imgUser"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imgUser"
-            app:layout_constraintTop_toTopOf="@id/imgUser"
-            tools:text="Chef Admin" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dividerMetaFooter">
+
+            <ImageView
+                android:id="@+id/imgUser"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/shape_avatar_ring"
+                android:contentDescription="@string/cd_user_avatar"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_person" />
+
+            <TextView
+                android:id="@+id/txtUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="12dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:text="@string/sample_chef_name"
+                android:textColor="#444444"
+                android:textSize="12sp"
+                tools:text="Chef Admin" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

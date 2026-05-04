@@ -48,7 +48,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DISCOVER"
+                    android:text="@string/explore_discover"
                     android:textColor="#80FFFFFF"
                     android:textSize="11sp"
                     android:fontFamily="sans-serif"
@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Search Recipes"
+                    android:text="@string/search_screen_title"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     android:fontFamily="sans-serif-medium"/>
@@ -90,7 +90,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:hint="Search recipes..."
+                android:hint="@string/hint_search_recipes"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 android:imeOptions="actionSearch"
@@ -165,7 +165,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="RECENT SEARCHES"
+                        android:text="@string/search_recent_section"
                         android:textColor="#2E5E2E"
                         android:textSize="12sp"
                         android:fontFamily="sans-serif-medium"
@@ -175,7 +175,7 @@
                         android:id="@+id/btnClearAll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Clear all"
+                        android:text="@string/search_clear_all"
                         android:textColor="#43A047"
                         android:textSize="12sp"
                         android:fontFamily="sans-serif-medium"/>
@@ -222,7 +222,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="RESULTS"
+                        android:text="@string/search_results_section"
                         android:textColor="#2E5E2E"
                         android:textSize="12sp"
                         android:fontFamily="sans-serif-medium"
@@ -275,7 +275,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Searching..."
+                    android:text="@string/search_searching"
                     android:textColor="#4D2E5E2E"
                     android:textSize="13sp"
                     android:fontFamily="sans-serif-medium"/>
@@ -310,7 +310,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="No recipes found"
+                    android:text="@string/result_no_recipes"
                     android:textColor="#2E5E2E"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"/>
@@ -319,7 +319,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Try a different keyword"
+                    android:text="@string/result_try_different_keyword"
                     android:textColor="#80A2CB8B"
                     android:textSize="13sp"/>
 
@@ -352,7 +352,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Find your recipe"
+                    android:text="@string/search_placeholder_title"
                     android:textColor="#2E5E2E"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"/>
@@ -361,7 +361,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Type something to get started"
+                    android:text="@string/search_placeholder_subtitle"
                     android:textColor="#80A2CB8B"
                     android:textSize="13sp"/>
 

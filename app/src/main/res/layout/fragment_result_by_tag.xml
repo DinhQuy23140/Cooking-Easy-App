@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:letterSpacing="0.15"
-                    android:text="BROWSE BY"
+                    android:text="@string/result_browse_by"
                     android:textColor="#80FFFFFF"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -112,7 +112,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:hint="Search recipes..."
+                android:hint="@string/hint_search_recipes"
                 android:textColor="#FFFFFF"
                 android:textSize="13sp"
                 android:imeOptions="actionSearch"
@@ -154,7 +154,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="ALL RECIPES"
+            android:text="@string/result_all_recipes"
             android:textColor="#2E5E2E"
             android:textSize="12sp"
             android:fontFamily="sans-serif-medium"
@@ -166,7 +166,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
-            android:text="Sort"
+            android:text="@string/result_sort"
             android:textAllCaps="false"
             android:textColor="#43A047"
             android:textSize="11sp"
@@ -199,7 +199,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Loading recipes..."
+            android:text="@string/result_loading_recipes"
             android:textColor="#4D2E5E2E"
             android:textSize="13sp"
             android:fontFamily="sans-serif-medium"/>
@@ -247,7 +247,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="No recipes found"
+            android:text="@string/result_no_recipes"
             android:textColor="#2E5E2E"
             android:textSize="16sp"
             android:fontFamily="sans-serif-medium"/>
@@ -256,7 +256,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Try a different keyword"
+            android:text="@string/result_try_different_keyword"
             android:textColor="#80A2CB8B"
             android:textSize="13sp"/>
 

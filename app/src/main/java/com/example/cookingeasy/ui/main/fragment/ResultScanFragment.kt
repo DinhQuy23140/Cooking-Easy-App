@@ -1,6 +1,5 @@
 package com.example.cookingeasy.ui.main.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.IngredientDetailAdapter
 import com.example.cookingeasy.common.adapter.RecipeAdapter
 import com.example.cookingeasy.common.listener.RecipeListener
@@ -67,7 +67,6 @@ class ResultScanFragment : Fragment() {
         loadData()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setupIngredients() {
         val strIngredients = arguments?.getString("ingredients") ?: ""
         val ingredients: List<Ingredient> = Gson().fromJson(
@@ -82,7 +81,11 @@ class ResultScanFragment : Fragment() {
             adapter = ingredientDetailAdapter
             setHasFixedSize(true)
         }
-        binding.tvIngredientCount.text = "${ingredients.size} items"
+        binding.tvIngredientCount.text = resources.getQuantityString(
+            R.plurals.ingredient_count,
+            ingredients.size,
+            ingredients.size
+        )
     }
 
     private fun setupRecyclerViews() {
@@ -91,6 +94,8 @@ class ResultScanFragment : Fragment() {
                 // navigate to detail
             }
             override fun OnFavoriteClick(recipe: Recipe) { }
+
+            override fun onClickInf(recipe: Recipe) = Unit
         })
 
         binding.recyclerRecipes.apply {
@@ -131,7 +136,6 @@ class ResultScanFragment : Fragment() {
         resultScanViewModel.getRecipesByIngredients(listIngredientName)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun observe() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -140,7 +144,7 @@ class ResultScanFragment : Fragment() {
                     resultScanViewModel.isLoading.collect { isLoading ->
                         binding.layoutLoadingRecipes.isVisible = isLoading
                         if (isLoading) {
-                            binding.tvRecipeCount.text = "Loading..."
+                            binding.tvRecipeCount.text = getString(R.string.result_loading_recipes)
                             binding.layoutEmptyRecipes.isVisible = false
                             binding.recyclerRecipes.isVisible = false
                         }
@@ -155,7 +159,7 @@ class ResultScanFragment : Fragment() {
                         .collect { recipes ->
                             binding.layoutLoadingRecipes.isVisible = false
                             binding.progressBar.isVisible = false
-                            binding.tvRecipeCount.text = "${recipes.size} found"
+                            binding.tvRecipeCount.text = getString(R.string.format_results_found, recipes.size)
                             binding.layoutEmptyRecipes.isVisible = recipes.isEmpty()
                             binding.recyclerRecipes.isVisible = recipes.isNotEmpty()
                             recipeAdapter.updateData(recipes)

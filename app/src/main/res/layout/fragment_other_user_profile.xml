@@ -62,7 +62,7 @@
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chef Anna"
+                android:text="@string/other_user_name_placeholder"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/textPrimary"
@@ -74,7 +74,7 @@
                 android:id="@+id/tvBio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Healthy recipes &amp; meal prep 🥗"
+                android:text="@string/other_user_bio_placeholder"
                 android:textColor="@color/textSecondary"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="6dp"/>
@@ -97,14 +97,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="120"
+                        android:text="@string/stat_sample_120"
                         android:textStyle="bold"
                         android:textColor="@color/textPrimary"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Recipes"
+                        android:text="@string/home_stat_recipes_label"
                         android:textColor="@color/textSecondary"/>
                 </LinearLayout>
 
@@ -118,14 +118,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2.5K"
+                        android:text="@string/other_user_sample_followers_count"
                         android:textStyle="bold"
                         android:textColor="@color/textPrimary"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Followers"
+                        android:text="@string/other_user_label_followers"
                         android:textColor="@color/textSecondary"/>
                 </LinearLayout>
 
@@ -142,7 +142,7 @@
                     android:id="@+id/btnFollow"
                     android:layout_width="140dp"
                     android:layout_height="48dp"
-                    android:text="Follow"
+                    android:text="@string/other_user_follow"
                     android:textColor="@android:color/white"
                     android:background="@drawable/bg_button_primary"
                     app:backgroundTint="@null"/>
@@ -152,7 +152,7 @@
                     android:layout_height="48dp"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_button_outline"
-                    android:text="Message"
+                    android:text="@string/other_user_message"
                     android:textColor="#000000"
                     app:backgroundTint="@null" />
             </LinearLayout>
@@ -167,19 +167,19 @@
                 <com.google.android.material.chip.Chip
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Healthy"
+                    android:text="@string/other_user_tag_healthy"
                     style="@style/Widget.CookingEasy.Chip"/>
 
                 <com.google.android.material.chip.Chip
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vegan"
+                    android:text="@string/other_user_tag_vegan"
                     style="@style/Widget.CookingEasy.Chip"/>
 
                 <com.google.android.material.chip.Chip
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dessert"
+                    android:text="@string/sample_category_name"
                     style="@style/Widget.CookingEasy.Chip"/>
 
             </com.google.android.material.chip.ChipGroup>
@@ -194,12 +194,12 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Recipes"/>
+                    android:text="@string/home_stat_recipes_label"/>
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Saved"/>
+                    android:text="@string/profile_stat_saved"/>
 
             </com.google.android.material.tabs.TabLayout>
 
@@ -226,7 +226,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No recipes yet"
+                    android:text="@string/manage_empty_title"
                     android:textColor="@color/textSecondary"
                     android:layout_marginTop="8dp"/>
 

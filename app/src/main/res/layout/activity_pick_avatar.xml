@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
-                android:text="Pick your avatar"
+                android:text="@string/pick_avatar_title"
                 android:textColor="#FFFFFF"
                 android:textSize="22sp" />
 
@@ -82,7 +82,7 @@
                 android:gravity="center"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
-                android:text="Choose an avatar or upload your own photo"
+                android:text="@string/pick_avatar_subtitle"
                 android:textColor="#99FFFFFF"
                 android:textSize="13sp" />
 
@@ -131,7 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
-                        android:text="Upload from gallery"
+                        android:text="@string/pick_avatar_upload_gallery"
                         android:textColor="#43A047"
                         android:textSize="13sp" />
 
@@ -156,7 +156,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:letterSpacing="0.1"
-                        android:text="CHOOSE AVATAR"
+                        android:text="@string/pick_avatar_section_title"
                         android:textColor="#2E5E2E"
                         android:textSize="12sp" />
 
@@ -181,7 +181,7 @@
                     android:background="@drawable/shape_btn_primary"
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center"
-                    android:text="Confirm &amp; Continue"
+                    android:text="@string/pick_avatar_confirm"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -193,7 +193,7 @@
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="Skip for now"
+                    android:text="@string/action_skip_for_now"
                     android:textColor="#AAAAAA"
                     android:textSize="12sp" />
 

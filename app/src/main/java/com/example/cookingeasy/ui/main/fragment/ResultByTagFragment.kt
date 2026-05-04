@@ -141,6 +141,7 @@ class ResultByTagFragment : Fragment() {
                     TODO("Not yet implemented")
                 }
 
+                override fun onClickInf(recipe: Recipe) = Unit
             })
             adapter = mealSimpleAdapter
         }

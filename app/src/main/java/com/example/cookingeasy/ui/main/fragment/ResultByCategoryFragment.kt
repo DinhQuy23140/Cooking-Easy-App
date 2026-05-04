@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -95,6 +96,16 @@ class ResultByCategoryFragment : Fragment() {
                     viewModel.toggleFavorite(recipe)
                 }
 
+                override fun onClickInf(recipe: Recipe) {
+                    val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+                    fragmentTransaction.setCustomAnimations(
+                        R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_left, R.anim.slide_out_right
+                    )
+                    fragmentTransaction.replace(R.id.container, OtherUserProfileFragment())
+                    fragmentTransaction.addToBackStack(null)
+                    fragmentTransaction.commit()
+                }
             }
         )
 

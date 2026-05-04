@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,7 @@ class RecipeAdapter(
         return RecipeViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
         val recipe = displayList[position]
 
@@ -55,36 +57,20 @@ class RecipeAdapter(
         }
 
         holder.ivFavorite.setOnClickListener {
-//            toggleFavorite(recipe)
             val isFavorite = recipe.isFavorote
             if (isFavorite) holder.ivFavorite.setImageResource(R.drawable.ic_heart_outline)
             else holder.ivFavorite.setImageResource(R.drawable.ic_heart_filled)
             displayList[position].isFavorote = !isFavorite
             recipeListener.OnFavoriteClick(recipe)
         }
+
+        holder.layoutInfChef.setOnClickListener {
+            recipeListener.onClickInf(recipe)
+        }
     }
 
-//    override fun onBindViewHolder(
-//        holder: RecipeViewHolder,
-//        position: Int,
-//        payloads: MutableList<Any>
-//    ) {
-//        if (payloads.contains(PAYLOAD_FAVORITE)) {
-//            val recipe = displayList[position]
-//            holder.ivFavorite.setImageResource(
-//                if (recipe.isFavorote) R.drawable.ic_heart_filled
-//                else R.drawable.ic_heart_outline
-//            )
-//        } else {
-//            super.onBindViewHolder(holder, position, payloads)
-//        }
-//    }
 
     override fun getItemCount(): Int = displayList.size
-
-    // ─────────────────────────────────────────────
-    // Data update
-    // ─────────────────────────────────────────────
 
     fun updateData(newList: List<Recipe>) {
         listRecipe.clear()
@@ -113,49 +99,6 @@ class RecipeAdapter(
     }
 
     fun hasMoreData(): Boolean = currentPage * pageSize < listRecipe.size
-
-    // ─────────────────────────────────────────────
-    // Favorite
-    // ─────────────────────────────────────────────
-
-    fun toggleFavorite(recipe: Recipe) {
-        val displayIndex = displayList.indexOfFirst { it.idMeal == recipe.idMeal }
-        if (displayIndex != -1) {
-            displayList[displayIndex] = displayList[displayIndex].copy(
-                isFavorote = !displayList[displayIndex].isFavorote
-            )
-            notifyItemChanged(displayIndex, PAYLOAD_FAVORITE)
-        }
-
-        val listIndex = listRecipe.indexOfFirst { it.idMeal == recipe.idMeal }
-        if (listIndex != -1) {
-            listRecipe[listIndex] = listRecipe[listIndex].copy(
-                isFavorote = !listRecipe[listIndex].isFavorote
-            )
-        }
-    }
-
-    fun updateFavorites(favoriteIds: List<String>) {
-        val ids = favoriteIds.toSet()
-
-        val updatedDisplay = displayList.map { recipe ->
-            recipe.copy(isFavorote = ids.contains(recipe.idMeal.toString()))
-        }
-        displayList.clear()
-        displayList.addAll(updatedDisplay)
-        notifyItemRangeChanged(0, displayList.size, PAYLOAD_FAVORITE)
-
-        val updatedList = listRecipe.map { recipe ->
-            recipe.copy(isFavorote = ids.contains(recipe.idMeal.toString()))
-        }
-        listRecipe.clear()
-        listRecipe.addAll(updatedList)
-    }
-
-    // ─────────────────────────────────────────────
-    // DiffCallback
-    // ─────────────────────────────────────────────
-
     class RecipeDiffCallback(
         private val oldList: List<Recipe>,
         private val newList: List<Recipe>
@@ -167,11 +110,6 @@ class RecipeAdapter(
         override fun areContentsTheSame(oldPos: Int, newPos: Int) =
             oldList[oldPos] == newList[newPos]
     }
-
-    // ─────────────────────────────────────────────
-    // ViewHolder
-    // ─────────────────────────────────────────────
-
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ivFavorite: ImageView = itemView.findViewById(R.id.btnFavorite)
         val ivImgRecipe: ImageView = itemView.findViewById(R.id.imgMeal)
@@ -181,5 +119,6 @@ class RecipeAdapter(
         val tvRecipeTag: TextView = itemView.findViewById(R.id.txtTags)
         val tvRecipeAuthor: TextView = itemView.findViewById(R.id.txtUserName)
         val ivAuthorImg: ImageView = itemView.findViewById(R.id.imgUser)
+        val layoutInfChef: LinearLayout = itemView.findViewById(R.id.layout_inf_chef)
     }
 }

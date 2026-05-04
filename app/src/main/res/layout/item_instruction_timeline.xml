@@ -20,7 +20,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:gravity="center"
-            android:text="1"
+            android:text="@string/sample_step_index"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:textSize="12sp"
