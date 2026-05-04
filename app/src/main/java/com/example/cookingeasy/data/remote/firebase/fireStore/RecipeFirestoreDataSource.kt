@@ -16,6 +16,8 @@ class RecipeFirestoreDataSource {
         val recipeMap = hashMapOf(
             "recipeId"     to docRef.id,
             "uid"          to recipe.uid,
+            "userName"     to recipe.userName,
+            "userImg"      to recipe.userImage,
             "mealName"     to recipe.mealName,
             "category"     to recipe.category,
             "area"         to recipe.area,

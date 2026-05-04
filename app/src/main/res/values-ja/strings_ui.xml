@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home">ホーム</string>
+    <string name="nav_explore">探索</string>
+    <string name="nav_add_recipe">レシピ追加</string>
+    <string name="nav_chat">チャット</string>
+    <string name="nav_ai">AI</string>
+    <string name="nav_profile">プロフィール</string>
+
+    <string name="brand_cooking">COOKING</string>
+
+    <string name="splash_title_cooking">Cooking</string>
+    <string name="splash_title_easy">EASY</string>
+
+    <string name="login_app_title">Cooking Easy</string>
+    <string name="login_welcome">おかえりなさい</string>
+    <string name="login_section_sign_in">ログイン</string>
+    <string name="auth_label_email">メール</string>
+    <string name="auth_label_password">パスワード</string>
+    <string name="login_forgot_password">パスワードをお忘れですか？</string>
+    <string name="login_btn">ログイン</string>
+    <string name="login_or_continue">または次で続行</string>
+    <string name="login_with_google">Google</string>
+    <string name="login_no_account">アカウントをお持ちでないですか？ </string>
+    <string name="login_sign_up">新規登録</string>
+    <string name="auth_hint_email">your@email.com</string>
+    <string name="auth_hint_password_masked">••••••••</string>
+
+    <string name="register_title">アカウント作成</string>
+    <string name="register_subtitle">料理の旅を始めましょう</string>
+    <string name="register_btn">登録</string>
+    <string name="auth_label_confirm_password">パスワード確認</string>
+    <string name="register_or_with">または次で登録</string>
+    <string name="register_have_account">すでにアカウントをお持ちですか？ </string>
+    <string name="register_sign_in">ログイン</string>
+    <string name="auth_hint_password">パスワード</string>
+    <string name="auth_hint_confirm_password">パスワード（確認）</string>
+
+    <string name="forgot_password_title">パスワードを再設定</string>
+    <string name="forgot_password_subtitle">再設定用のリンクを受け取るメールアドレスを\n入力してください</string>
+    <string name="forgot_password_heading">パスワードをお忘れですか？</string>
+    <string name="forgot_password_info">上記のメールアドレスに再設定手順をお送りします。</string>
+    <string name="forgot_password_send_link">リンクを送信</string>
+    <string name="forgot_password_remember">パスワードを思い出しましたか？ </string>
+    <string name="forgot_password_sign_in">ログイン</string>
+
+    <string name="dialog_forgot_password_title">パスワードをお忘れですか？</string>
+    <string name="dialog_forgot_password_message">メールを入力すると、\n再設定用のリンクをお送りします</string>
+    <string name="dialog_forgot_password_info">このメールアドレスに再設定リンクを送信します。</string>
+    <string name="action_send">送信</string>
+
+    <string name="enter_name_title">お名前は？</string>
+    <string name="enter_name_subtitle">アプリ内で他のシェフに表示される名前です</string>
+    <string name="enter_name_section">お名前を入力</string>
+    <string name="auth_label_full_name">氏名</string>
+    <string name="enter_name_min_hint">2文字以上</string>
+    <string name="enter_name_nickname_label">ニックネーム（任意）</string>
+    <string name="action_continue">続ける</string>
+    <string name="action_skip_for_now">スキップ</string>
+    <string name="enter_name_hint_example">例：山田 太郎</string>
+    <string name="enter_name_nickname_hint_example">例：Chef Taro</string>
+
+    <string name="pick_avatar_title">アバターを選ぶ</string>
+    <string name="pick_avatar_subtitle">用意されたアバターを選ぶか、写真をアップロード</string>
+    <string name="pick_avatar_upload_gallery">ギャラリーから選ぶ</string>
+    <string name="pick_avatar_section_title">アバターを選択</string>
+    <string name="pick_avatar_confirm">確定して続ける</string>
+
+    <string name="home_greeting_placeholder">おはようございます 👋</string>
+    <string name="home_user_placeholder">ユーザー名</string>
+    <string name="home_tagline">今日は何を\n作りますか？</string>
+    <string name="home_stat_recipes_plus">300+</string>
+    <string name="home_stat_recipes_label">レシピ</string>
+    <string name="home_stat_categories_plus">20+</string>
+    <string name="home_stat_categories_label">カテゴリ</string>
+    <string name="home_stat_cuisines_plus">27+</string>
+    <string name="home_stat_cuisines_label">料理</string>
+    <string name="home_section_categories">カテゴリ</string>
+    <string name="home_see_all">すべて表示</string>
+    <string name="home_hide">閉じる</string>
+    <string name="home_section_cuisine">料理のジャンル</string>
+    <string name="home_section_popular">人気のレシピ</string>
+    <string name="hint_search_recipes">レシピを検索…</string>
+
+    <string name="explore_discover">発見</string>
+    <string name="explore_title">レシピを探す</string>
+    <string name="explore_featured_today">本日のおすすめ</string>
+    <string name="explore_cook_now">今すぐ作る →</string>
+    <string name="explore_popular_categories">人気カテゴリ</string>
+    <string name="explore_explore_by_area">地域から探す</string>
+    <string name="explore_trending">トレンド</string>
+    <string name="explore_trending_picks">おすすめ5件</string>
+
+    <string name="profile_screen_title">マイプロフィール</string>
+    <string name="profile_name_placeholder">Chef</string>
+    <string name="profile_email_placeholder">email@example.com</string>
+    <string name="placeholder_stat_number">0</string>
+    <string name="profile_sample_recipes_count">12</string>
+    <string name="profile_sample_saved_count">48</string>
+    <string name="profile_sample_uploads_count">5</string>
+    <string name="profile_stat_recipes">レシピ</string>
+    <string name="profile_stat_saved">保存</string>
+    <string name="profile_stat_uploads">投稿</string>
+    <string name="profile_quick_my_recipes">マイレシピ</string>
+    <string name="profile_quick_saved">保存済み</string>
+    <string name="profile_quick_upload">アップロード</string>
+    <string name="profile_section_manage">管理</string>
+    <string name="profile_draft_recipes">下書き</string>
+    <string name="profile_favorite_recipes">お気に入り</string>
+    <string name="profile_section_settings">設定</string>
+    <string name="profile_row_language">言語</string>
+    <string name="profile_row_dark_mode">ダークモード</string>
+    <string name="profile_section_account">アカウント</string>
+    <string name="cd_edit_profile">プロフィールを編集</string>
+
+    <string name="recipe_form_new_title">新しいレシピ</string>
+    <string name="recipe_form_section_meal_image">料理の写真</string>
+    <string name="recipe_form_tap_add_photo">タップして写真を追加</string>
+    <string name="recipe_form_section_basic">基本情報</string>
+    <string name="recipe_form_label_meal_name_required">料理名 *</string>
+    <string name="recipe_form_label_category">カテゴリ</string>
+    <string name="recipe_form_label_area">地域</string>
+    <string name="recipe_form_label_tags">タグ</string>
+    <string name="recipe_form_label_youtube">YouTube リンク</string>
+    <string name="recipe_form_section_ingredients">材料</string>
+    <string name="recipe_form_ingredients_count_zero">0 件</string>
+    <string name="recipe_form_label_ingredient">材料</string>
+    <string name="recipe_form_label_measure">分量</string>
+    <string name="recipe_form_add_ingredient">材料を追加</string>
+    <string name="recipe_form_section_instructions">手順</string>
+    <string name="recipe_form_section_video">調理動画</string>
+    <string name="recipe_form_upload_video">動画をアップロード</string>
+    <string name="recipe_form_tap_select_video">タップして動画を選択</string>
+    <string name="recipe_form_video_formats">MP4、MOV 最大100MB</string>
+    <string name="recipe_form_save_draft">下書き保存</string>
+    <string name="recipe_form_steps_count_zero">0 ステップ</string>
+    <string name="recipe_form_label_step">ステップ</string>
+    <string name="recipe_form_label_step_description">説明</string>
+    <string name="recipe_form_add_step">ステップを追加</string>
+    <string name="hint_meal_name_example">例：アラビアータ</string>
+    <string name="hint_category_example">例：パスタ</string>
+    <string name="hint_area_example">例：イタリア</string>
+    <string name="hint_tags_example">例：パスタ、カレー</string>
+    <string name="hint_youtube_example">https://youtube.com/…</string>
+    <string name="hint_recipe_instructions">調理の手順を入力…</string>
+    <string name="hint_ingredient_name">例：砂糖</string>
+    <string name="hint_ingredient_measure">例：1カップ</string>
+    <string name="hint_instruction_step">このステップの説明…</string>
+
+    <string name="recipe_detail_ingredients">材料</string>
+    <string name="recipe_detail_instructions">手順</string>
+    <string name="recipe_detail_video">調理動画</string>
+    <string name="recipe_detail_watch_youtube">YouTube で見る</string>
+
+    <string name="favorite_title">お気に入りのレシピ</string>
+    <string name="favorite_tab_all">すべて</string>
+    <string name="tab_all">すべて</string>
+    <string name="favorite_tab_recent">最近追加</string>
+    <string name="favorite_tab_liked">いいね順</string>
+    <string name="favorite_empty_title">お気に入りはまだありません</string>
+    <string name="favorite_empty_subtitle">ハートをタップしてレシピを保存</string>
+    <string name="hint_search_favorites">お気に入りを検索…</string>
+
+    <string name="manage_my_recipes_title">マイレシピ</string>
+    <string name="manage_new_recipe">新しいレシピ</string>
+    <string name="manage_tab_all">すべて</string>
+    <string name="manage_tab_draft">下書き</string>
+    <string name="manage_tab_published">公開済み</string>
+    <string name="manage_tab_favorites">お気に入り</string>
+    <string name="hint_search_my_recipes">マイレシピを検索…</string>
+    <string name="manage_empty_title">レシピはまだありません</string>
+    <string name="manage_empty_subtitle">最初のレシピを作成しましょう</string>
+    <string name="manage_empty_cta">レシピを作成</string>
+
+    <string name="result_category_label">カテゴリ</string>
+    <string name="result_about">概要</string>
+    <string name="result_all_recipes">すべてのレシピ</string>
+    <string name="result_sort">並べ替え</string>
+    <string name="result_loading_recipes">読み込み中…</string>
+    <string name="result_loading_more">さらに読み込み…</string>
+    <string name="result_no_recipes">レシピが見つかりません</string>
+    <string name="result_try_different_keyword">別のキーワードを試す</string>
+    <string name="hint_search_in_category">このカテゴリ内を検索…</string>
+
+    <string name="result_browse_by">閲覧</string>
+    <string name="result_tag_loading">読み込み中…</string>
+
+    <string name="result_scan_header">スキャン結果</string>
+    <string name="result_scan_title">何を作れますか？</string>
+    <string name="result_scan_detected_ingredients">検出された材料</string>
+    <string name="result_scan_recipes_section">作れるレシピ</string>
+    <string name="result_scan_footer">スキャンした材料に基づきます</string>
+    <string name="result_scan_finding">一致するレシピを検索中…</string>
+    <string name="result_scan_no_matches">一致するレシピがありません</string>
+
+    <string name="scan_ingredients_title">材料をスキャン</string>
+    <string name="scan_action_scan">スキャン</string>
+    <string name="scan_action_gallery">ギャラリー</string>
+    <string name="scan_detected_ingredients">検出された材料</string>
+    <string name="scan_analyzing">解析中…</string>
+    <string name="format_results_found">%1$d件見つかりました</string>
+
+    <string name="search_discover">発見</string>
+    <string name="search_screen_title">レシピを検索</string>
+    <string name="search_recent_section">最近の検索</string>
+    <string name="search_clear_all">すべて削除</string>
+    <string name="search_results_section">結果</string>
+    <string name="search_searching">検索中…</string>
+    <string name="search_no_results">レシピが見つかりません</string>
+    <string name="search_try_different">別のキーワードを試す</string>
+    <string name="search_placeholder_title">レシピを見つける</string>
+    <string name="search_placeholder_subtitle">入力して始めましょう</string>
+
+    <string name="ai_chat_title">Chef AI</string>
+    <string name="ai_chat_subtitle">あなたの料理アシスタント</string>
+    <string name="ai_chat_suggestion_dinner">🍽 夕食のアイデア</string>
+    <string name="ai_chat_suggestion_chicken">🍗 鶏肉で作る</string>
+    <string name="ai_chat_suggestion_healthy">🥗 健康的な朝食</string>
+    <string name="ai_chat_suggestion_quick">⚡ 15分で完成</string>
+    <string name="hint_ai_chat">料理について何でも聞いてください…</string>
+    <string name="ai_chat_recipes_you_may_like">おすすめのレシピ</string>
+
+    <string name="upload_video_dialog_title">動画を選択して表示</string>
+    <string name="upload_video_dialog_pick">動画を選択</string>
+    <string name="upload_video_dialog_empty">まだ動画が選択されていません</string>
+    <string name="upload_video_dialog_name_label">動画名</string>
+
+    <string name="user_profile_sample_recipes_count">24</string>
+    <string name="user_profile_sample_likes_count">120</string>
+    <string name="user_profile_sample_saved_count">15</string>
+    <string name="stat_sample_120">120</string>
+    <string name="user_profile_name_placeholder">Chef</string>
+    <string name="user_profile_bio_placeholder">料理とレシピ共有が大好き 🍳</string>
+    <string name="user_profile_stat_recipes">レシピ</string>
+    <string name="user_profile_stat_likes">いいね</string>
+    <string name="user_profile_stat_saved">保存</string>
+    <string name="user_profile_edit">プロフィールを編集</string>
+
+    <string name="other_user_sample_recipes_count">120</string>
+    <string name="other_user_sample_followers_count">2.5K</string>
+    <string name="other_user_label_followers">フォロワー</string>
+    <string name="other_user_name_placeholder">Chef Anna</string>
+    <string name="other_user_bio_placeholder">健康的なレシピと作り置き 🥗</string>
+    <string name="other_user_follow">フォロー</string>
+    <string name="other_user_message">メッセージ</string>
+    <string name="other_user_tag_healthy">ヘルシー</string>
+    <string name="other_user_tag_vegan">ヴィーガン</string>
+    <string name="other_user_tag_dessert">デザート</string>
+    <string name="other_user_tab_recipes">レシピ</string>
+    <string name="other_user_tab_saved">保存</string>
+    <string name="other_user_no_recipes">まだレシピがありません</string>
+
+    <string name="sample_meal_name">チキンカレー</string>
+    <string name="sample_meal_subtitle">アジア • 夕食</string>
+    <string name="sample_cook_time">⏱ 30分</string>
+    <string name="badge_published">公開済み</string>
+    <string name="sample_area_name">ベトナム</string>
+    <string name="sample_category_name">デザート</string>
+    <string name="sample_ingredient">砂糖</string>
+    <string name="sample_measure">1カップ</string>
+    <string name="sample_step_index">1</string>
+    <string name="sample_chef_name">Chef Admin</string>
+    <string name="sample_search_keyword">パスタ</string>
+
+    <string name="cd_clear_search_history">履歴を削除</string>
+
+    <string name="test_profile_name">Chef</string>
+    <string name="test_profile_email">email@example.com</string>
+    <string name="test_stat_recipes">レシピ</string>
+    <string name="test_stat_saved">保存</string>
+    <string name="test_stat_upload">アップロード</string>
+    <string name="test_manage">管理</string>
+    <string name="test_draft_recipes">下書き</string>
+    <string name="test_favorite_recipes">お気に入り</string>
+    <string name="test_settings">設定</string>
+    <string name="test_language">言語</string>
+    <string name="test_dark_mode">ダークモード</string>
+    <string name="test_logout">ログアウト</string>
+
+    <string name="chat_list_title">チャット</string>
+    <string name="chat_list_subtitle">友だち・シェフ</string>
+    <string name="chat_search_hint">チャットを検索…</string>
+    <string name="chat_tab_all">すべて</string>
+    <string name="chat_tab_unread">未読</string>
+    <string name="chat_tab_groups">グループ</string>
+    <string name="chat_active_now">アクティブ</string>
+    <string name="chat_empty_title">まだメッセージがありません</string>
+    <string name="chat_empty_subtitle">シェフや友だちとの会話を始めましょう。</string>
+    <string name="cd_chat_camera">カメラを開く</string>
+    <string name="cd_chat_new_message">新しいメッセージ</string>
+    <string name="cd_chat_fab_compose">新規チャット</string>
+    <string name="cd_chat_row_avatar">会話のアバター</string>
+    <string name="cd_chat_active_avatar">アクティブな連絡先</string>
+    <string name="chat_toast_compose_soon">新規チャット — 近日対応</string>
+    <string name="chat_toast_camera_soon">カメラ — 近日対応</string>
+
+    <string name="chat_detail_name_placeholder">Chef Minh</string>
+    <string name="chat_detail_status_online">オンライン</string>
+    <string name="chat_detail_message_hint">メッセージを入力...</string>
+    <string name="cd_chat_send_message">メッセージを送信</string>
+    <string name="cd_chat_attach_file">ファイルを添付</string>
+    <string name="cd_chat_attach_image">画像を添付</string>
+    <string name="cd_chat_take_photo">写真を撮る</string>
+    <string name="cd_chat_call">音声通話</string>
+    <string name="cd_chat_video_call">ビデオ通話</string>
+    <string name="cd_chat_toggle_attachment">添付アクションの表示切替</string>
+    <string name="chat_open_attachment">添付ファイルを開く</string>
+    <string name="chat_file_unavailable">このファイルを開けません。</string>
+    <string name="chat_image_unavailable">画像を表示できません。</string>
+    <string name="message_status_sending">送信中...</string>
+    <string name="message_status_sent">送信済み</string>
+    <string name="message_status_seen">既読</string>
+</resources>

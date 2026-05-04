@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home">Trang chủ</string>
+    <string name="nav_explore">Khám phá</string>
+    <string name="nav_add_recipe">Thêm công thức</string>
+    <string name="nav_chat">Chat</string>
+    <string name="nav_ai">AI</string>
+    <string name="nav_profile">Cá nhân</string>
+
+    <string name="brand_cooking">COOKING</string>
+
+    <string name="splash_title_cooking">Cooking</string>
+    <string name="splash_title_easy">EASY</string>
+
+    <string name="login_app_title">Cooking Easy</string>
+    <string name="login_welcome">Chào mừng trở lại!</string>
+    <string name="login_section_sign_in">Đăng nhập</string>
+    <string name="auth_label_email">EMAIL</string>
+    <string name="auth_label_password">MẬT KHẨU</string>
+    <string name="login_forgot_password">Quên mật khẩu?</string>
+    <string name="login_btn">Đăng nhập</string>
+    <string name="login_or_continue">hoặc tiếp tục với</string>
+    <string name="login_with_google">Google</string>
+    <string name="login_no_account">Chưa có tài khoản? </string>
+    <string name="login_sign_up">Đăng ký</string>
+    <string name="auth_hint_email">email@cua-ban.com</string>
+    <string name="auth_hint_password_masked">••••••••</string>
+
+    <string name="register_title">Tạo tài khoản</string>
+    <string name="register_subtitle">Bắt đầu hành trình nấu ăn</string>
+    <string name="register_btn">Đăng ký</string>
+    <string name="auth_label_confirm_password">XÁC NHẬN MẬT KHẨU</string>
+    <string name="register_or_with">hoặc đăng ký với</string>
+    <string name="register_have_account">Đã có tài khoản? </string>
+    <string name="register_sign_in">Đăng nhập</string>
+    <string name="auth_hint_password">Mật khẩu</string>
+    <string name="auth_hint_confirm_password">Xác nhận mật khẩu</string>
+
+    <string name="forgot_password_title">Đặt lại mật khẩu</string>
+    <string name="forgot_password_subtitle">Nhập email để nhận liên kết\nđặt lại mật khẩu</string>
+    <string name="forgot_password_heading">Quên mật khẩu?</string>
+    <string name="forgot_password_info">Chúng tôi sẽ gửi email hướng dẫn đặt lại mật khẩu đến địa chỉ trên.</string>
+    <string name="forgot_password_send_link">Gửi liên kết đặt lại</string>
+    <string name="forgot_password_remember">Nhớ mật khẩu rồi? </string>
+    <string name="forgot_password_sign_in">Đăng nhập</string>
+
+    <string name="dialog_forgot_password_title">Quên mật khẩu?</string>
+    <string name="dialog_forgot_password_message">Nhập email của bạn, chúng tôi sẽ gửi\nliên kết đặt lại mật khẩu</string>
+    <string name="dialog_forgot_password_info">Chúng tôi sẽ gửi liên kết đặt lại mật khẩu đến địa chỉ email này.</string>
+    <string name="action_send">Gửi</string>
+
+    <string name="enter_name_title">Tên của bạn là gì?</string>
+    <string name="enter_name_subtitle">Đây là cách các đầu bếp khác nhận ra bạn trong ứng dụng</string>
+    <string name="enter_name_section">Nhập tên của bạn</string>
+    <string name="auth_label_full_name">HỌ TÊN</string>
+    <string name="enter_name_min_hint">Tối thiểu 2 ký tự</string>
+    <string name="enter_name_nickname_label">BIỆT DANH (tuỳ chọn)</string>
+    <string name="action_continue">Tiếp tục</string>
+    <string name="action_skip_for_now">Bỏ qua</string>
+    <string name="enter_name_hint_example">vd: Đình Quý</string>
+    <string name="enter_name_nickname_hint_example">vd: Chef Quý</string>
+
+    <string name="pick_avatar_title">Chọn ảnh đại diện</string>
+    <string name="pick_avatar_subtitle">Chọn avatar có sẵn hoặc tải ảnh của bạn</string>
+    <string name="pick_avatar_upload_gallery">Tải từ thư viện</string>
+    <string name="pick_avatar_section_title">CHỌN AVATAR</string>
+    <string name="pick_avatar_confirm">Xác nhận &amp; Tiếp tục</string>
+
+    <string name="home_greeting_placeholder">Chào buổi sáng 👋</string>
+    <string name="home_user_placeholder">Đình Quý</string>
+    <string name="home_tagline">Hôm nay bạn muốn\nnấu món gì?</string>
+    <string name="home_stat_recipes_plus">300+</string>
+    <string name="home_stat_recipes_label">Công thức</string>
+    <string name="home_stat_categories_plus">20+</string>
+    <string name="home_stat_categories_label">Danh mục</string>
+    <string name="home_stat_cuisines_plus">27+</string>
+    <string name="home_stat_cuisines_label">Ẩm thực</string>
+    <string name="home_section_categories">DANH MỤC</string>
+    <string name="home_see_all">Xem tất cả</string>
+    <string name="home_hide">Thu gọn</string>
+    <string name="home_section_cuisine">ẨM THỰC</string>
+    <string name="home_section_popular">CÔNG THỨC NỔI BẬT</string>
+    <string name="hint_search_recipes">Tìm công thức…</string>
+
+    <string name="explore_discover">KHÁM PHÁ</string>
+    <string name="explore_title">Khám phá công thức</string>
+    <string name="explore_featured_today">NỔI BẬT HÔM NAY</string>
+    <string name="explore_cook_now">Nấu ngay →</string>
+    <string name="explore_popular_categories">DANH MỤC PHỔ BIẾN</string>
+    <string name="explore_explore_by_area">THEO KHU VỰC</string>
+    <string name="explore_trending">XU HƯỚNG</string>
+    <string name="explore_trending_picks">5 gợi ý</string>
+
+    <string name="profile_screen_title">HỒ SƠ</string>
+    <string name="profile_name_placeholder">Chef Quý</string>
+    <string name="profile_email_placeholder">quy@gmail.com</string>
+    <string name="placeholder_stat_number">0</string>
+    <string name="profile_sample_recipes_count">12</string>
+    <string name="profile_sample_saved_count">48</string>
+    <string name="profile_sample_uploads_count">5</string>
+    <string name="profile_stat_recipes">Công thức</string>
+    <string name="profile_stat_saved">Đã lưu</string>
+    <string name="profile_stat_uploads">Đã đăng</string>
+    <string name="profile_quick_my_recipes">Công thức của tôi</string>
+    <string name="profile_quick_saved">Đã lưu</string>
+    <string name="profile_quick_upload">Tải lên</string>
+    <string name="profile_section_manage">QUẢN LÝ</string>
+    <string name="profile_draft_recipes">Bản nháp</string>
+    <string name="profile_favorite_recipes">Yêu thích</string>
+    <string name="profile_section_settings">CÀI ĐẶT</string>
+    <string name="profile_row_language">Ngôn ngữ</string>
+    <string name="profile_row_dark_mode">Chế độ tối</string>
+    <string name="profile_section_account">TÀI KHOẢN</string>
+    <string name="cd_edit_profile">Chỉnh sửa hồ sơ</string>
+
+    <string name="recipe_form_new_title">Công thức mới</string>
+    <string name="recipe_form_section_meal_image">ẢNH MÓN</string>
+    <string name="recipe_form_tap_add_photo">Chạm để thêm ảnh</string>
+    <string name="recipe_form_section_basic">THÔNG TIN CƠ BẢN</string>
+    <string name="recipe_form_label_meal_name_required">Tên món *</string>
+    <string name="recipe_form_label_category">Danh mục</string>
+    <string name="recipe_form_label_area">Khu vực</string>
+    <string name="recipe_form_label_tags">Thẻ</string>
+    <string name="recipe_form_label_youtube">Liên kết YouTube</string>
+    <string name="recipe_form_section_ingredients">NGUYÊN LIỆU</string>
+    <string name="recipe_form_ingredients_count_zero">0 mục</string>
+    <string name="recipe_form_label_ingredient">Nguyên liệu</string>
+    <string name="recipe_form_label_measure">Định lượng</string>
+    <string name="recipe_form_add_ingredient">Thêm nguyên liệu</string>
+    <string name="recipe_form_section_instructions">CÁCH LÀM</string>
+    <string name="recipe_form_section_video">VIDEO NẤU ĂN</string>
+    <string name="recipe_form_upload_video">Tải video lên</string>
+    <string name="recipe_form_tap_select_video">Chạm để chọn video</string>
+    <string name="recipe_form_video_formats">MP4, MOV tối đa 100MB</string>
+    <string name="recipe_form_save_draft">Lưu nháp</string>
+    <string name="recipe_form_steps_count_zero">0 bước</string>
+    <string name="recipe_form_label_step">Bước</string>
+    <string name="recipe_form_label_step_description">Mô tả</string>
+    <string name="recipe_form_add_step">Thêm bước</string>
+    <string name="hint_meal_name_example">vd: Penne Arrabiata cay</string>
+    <string name="hint_category_example">vd: Mì Ý</string>
+    <string name="hint_area_example">vd: Ý</string>
+    <string name="hint_tags_example">vd: Mì, Cà ri</string>
+    <string name="hint_youtube_example">https://youtube.com/…</string>
+    <string name="hint_recipe_instructions">Mô tả các bước nấu…</string>
+    <string name="hint_ingredient_name">vd: Đường</string>
+    <string name="hint_ingredient_measure">vd: 1 cốc</string>
+    <string name="hint_instruction_step">Mô tả bước này…</string>
+
+    <string name="recipe_detail_ingredients">NGUYÊN LIỆU</string>
+    <string name="recipe_detail_instructions">CÁCH LÀM</string>
+    <string name="recipe_detail_video">VIDEO NẤU ĂN</string>
+    <string name="recipe_detail_watch_youtube">Xem trên YouTube</string>
+
+    <string name="favorite_title">Công thức yêu thích</string>
+    <string name="favorite_tab_all">Tất cả</string>
+    <string name="tab_all">Tất cả</string>
+    <string name="favorite_tab_recent">Mới thêm</string>
+    <string name="favorite_tab_liked">Được thích nhất</string>
+    <string name="favorite_empty_title">Chưa có món yêu thích</string>
+    <string name="favorite_empty_subtitle">Chạm biểu tượng trái tim để lưu công thức</string>
+    <string name="hint_search_favorites">Tìm trong yêu thích…</string>
+
+    <string name="manage_my_recipes_title">Công thức của tôi</string>
+    <string name="manage_new_recipe">Công thức mới</string>
+    <string name="manage_tab_all">Tất cả</string>
+    <string name="manage_tab_draft">Nháp</string>
+    <string name="manage_tab_published">Đã xuất bản</string>
+    <string name="manage_tab_favorites">Yêu thích</string>
+    <string name="hint_search_my_recipes">Tìm công thức của bạn…</string>
+    <string name="manage_empty_title">Chưa có công thức</string>
+    <string name="manage_empty_subtitle">Bắt đầu bằng cách tạo công thức đầu tiên</string>
+    <string name="manage_empty_cta">Tạo công thức</string>
+
+    <string name="result_category_label">DANH MỤC</string>
+    <string name="result_about">GIỚI THIỆU</string>
+    <string name="result_all_recipes">TẤT CẢ CÔNG THỨC</string>
+    <string name="result_sort">Sắp xếp</string>
+    <string name="result_loading_recipes">Đang tải công thức…</string>
+    <string name="result_loading_more">Đang tải thêm…</string>
+    <string name="result_no_recipes">Không tìm thấy công thức</string>
+    <string name="result_try_different_keyword">Thử từ khóa khác</string>
+    <string name="hint_search_in_category">Tìm trong danh mục này…</string>
+
+    <string name="result_browse_by">DUYỆT THEO</string>
+    <string name="result_tag_loading">Đang tải công thức…</string>
+
+    <string name="result_scan_header">KẾT QUẢ QUÉT</string>
+    <string name="result_scan_title">Tôi có thể nấu gì?</string>
+    <string name="result_scan_detected_ingredients">NGUYÊN LIỆU NHẬN DIỆN</string>
+    <string name="result_scan_recipes_section">CÔNG THỨC GỢI Ý</string>
+    <string name="result_scan_footer">Dựa trên nguyên liệu đã quét</string>
+    <string name="result_scan_finding">Đang tìm công thức phù hợp…</string>
+    <string name="result_scan_no_matches">Không có công thức phù hợp</string>
+
+    <string name="scan_ingredients_title">Quét nguyên liệu</string>
+    <string name="scan_action_scan">Quét</string>
+    <string name="scan_action_gallery">Thư viện</string>
+    <string name="scan_detected_ingredients">NGUYÊN LIỆU NHẬN DIỆN</string>
+    <string name="scan_analyzing">Đang phân tích…</string>
+    <string name="format_results_found">Tìm được %1$d món</string>
+
+    <string name="search_discover">KHÁM PHÁ</string>
+    <string name="search_screen_title">Tìm công thức</string>
+    <string name="search_recent_section">TÌM GẦN ĐÂY</string>
+    <string name="search_clear_all">Xóa tất cả</string>
+    <string name="search_results_section">KẾT QUẢ</string>
+    <string name="search_searching">Đang tìm…</string>
+    <string name="search_no_results">Không tìm thấy công thức</string>
+    <string name="search_try_different">Thử từ khóa khác</string>
+    <string name="search_placeholder_title">Tìm công thức của bạn</string>
+    <string name="search_placeholder_subtitle">Gõ nội dung để bắt đầu</string>
+
+    <string name="ai_chat_title">Chef AI</string>
+    <string name="ai_chat_subtitle">Trợ lý nấu ăn của bạn</string>
+    <string name="ai_chat_suggestion_dinner">🍽 Gợi ý bữa tối</string>
+    <string name="ai_chat_suggestion_chicken">🍗 Nấu với gà</string>
+    <string name="ai_chat_suggestion_healthy">🥗 Ăn sáng lành mạnh</string>
+    <string name="ai_chat_suggestion_quick">⚡ Món 15 phút</string>
+    <string name="hint_ai_chat">Hỏi gì cũng được về ẩm thực…</string>
+    <string name="ai_chat_recipes_you_may_like">Công thức có thể bạn thích</string>
+
+    <string name="upload_video_dialog_title">Chọn và hiển thị video</string>
+    <string name="upload_video_dialog_pick">Chọn video</string>
+    <string name="upload_video_dialog_empty">Chưa có video được chọn</string>
+    <string name="upload_video_dialog_name_label">Tên video</string>
+
+    <string name="user_profile_sample_recipes_count">24</string>
+    <string name="user_profile_sample_likes_count">120</string>
+    <string name="user_profile_sample_saved_count">15</string>
+    <string name="stat_sample_120">120</string>
+    <string name="user_profile_name_placeholder">Chef Quý</string>
+    <string name="user_profile_bio_placeholder">Yêu nấu ăn &amp; chia sẻ công thức 🍳</string>
+    <string name="user_profile_stat_recipes">Công thức</string>
+    <string name="user_profile_stat_likes">Lượt thích</string>
+    <string name="user_profile_stat_saved">Đã lưu</string>
+    <string name="user_profile_edit">Sửa hồ sơ</string>
+
+    <string name="other_user_sample_recipes_count">120</string>
+    <string name="other_user_sample_followers_count">2.5K</string>
+    <string name="other_user_label_followers">Người theo dõi</string>
+    <string name="other_user_name_placeholder">Chef Anna</string>
+    <string name="other_user_bio_placeholder">Công thức healthy &amp; meal prep 🥗</string>
+    <string name="other_user_follow">Theo dõi</string>
+    <string name="other_user_message">Nhắn tin</string>
+    <string name="other_user_tag_healthy">Healthy</string>
+    <string name="other_user_tag_vegan">Thuần chay</string>
+    <string name="other_user_tag_dessert">Tráng miệng</string>
+    <string name="other_user_tab_recipes">Công thức</string>
+    <string name="other_user_tab_saved">Đã lưu</string>
+    <string name="other_user_no_recipes">Chưa có công thức</string>
+
+    <string name="sample_meal_name">Cà ri gà</string>
+    <string name="sample_meal_subtitle">Châu Á • Tối</string>
+    <string name="sample_cook_time">⏱ 30 phút</string>
+    <string name="badge_published">Đã xuất bản</string>
+    <string name="sample_area_name">Việt Nam</string>
+    <string name="sample_category_name">Tráng miệng</string>
+    <string name="sample_ingredient">Đường</string>
+    <string name="sample_measure">1 cốc</string>
+    <string name="sample_step_index">1</string>
+    <string name="sample_chef_name">Chef Admin</string>
+    <string name="sample_search_keyword">Pasta</string>
+
+    <string name="cd_clear_search_history">Xóa lịch sử</string>
+
+    <string name="test_profile_name">Chef Quý</string>
+    <string name="test_profile_email">quy@gmail.com</string>
+    <string name="test_stat_recipes">Công thức</string>
+    <string name="test_stat_saved">Đã lưu</string>
+    <string name="test_stat_upload">Tải lên</string>
+    <string name="test_manage">Quản lý</string>
+    <string name="test_draft_recipes">Bản nháp</string>
+    <string name="test_favorite_recipes">Yêu thích</string>
+    <string name="test_settings">Cài đặt</string>
+    <string name="test_language">Ngôn ngữ</string>
+    <string name="test_dark_mode">Chế độ tối</string>
+    <string name="test_logout">Đăng xuất</string>
+
+    <string name="chat_list_title">Trò chuyện</string>
+    <string name="chat_list_subtitle">Bạn bè &amp; đầu bếp</string>
+    <string name="chat_search_hint">Tìm cuộc trò chuyện…</string>
+    <string name="chat_tab_all">Tất cả</string>
+    <string name="chat_tab_unread">Chưa đọc</string>
+    <string name="chat_tab_groups">Nhóm</string>
+    <string name="chat_active_now">Đang hoạt động</string>
+    <string name="chat_empty_title">Chưa có tin nhắn</string>
+    <string name="chat_empty_subtitle">Bắt đầu trò chuyện với đầu bếp hoặc bạn bè.</string>
+    <string name="cd_chat_camera">Mở camera</string>
+    <string name="cd_chat_new_message">Tin nhắn mới</string>
+    <string name="cd_chat_fab_compose">Soạn chat mới</string>
+    <string name="cd_chat_row_avatar">Ảnh đại diện cuộc trò chuyện</string>
+    <string name="cd_chat_active_avatar">Liên hệ đang hoạt động</string>
+    <string name="chat_toast_compose_soon">Tin nhắn mới — sắp có</string>
+    <string name="chat_toast_camera_soon">Camera — sắp có</string>
+
+    <string name="chat_detail_name_placeholder">Chef Minh</string>
+    <string name="chat_detail_status_online">Đang hoạt động</string>
+    <string name="chat_detail_message_hint">Nhập tin nhắn...</string>
+    <string name="cd_chat_send_message">Gửi tin nhắn</string>
+    <string name="cd_chat_attach_file">Đính kèm tệp</string>
+    <string name="cd_chat_attach_image">Đính kèm hình ảnh</string>
+    <string name="cd_chat_take_photo">Chụp ảnh</string>
+    <string name="cd_chat_call">Gọi thoại</string>
+    <string name="cd_chat_video_call">Gọi video</string>
+    <string name="cd_chat_toggle_attachment">Hiện/ẩn công cụ đính kèm</string>
+    <string name="chat_open_attachment">Mở tệp đính kèm</string>
+    <string name="chat_file_unavailable">Không thể mở tệp này.</string>
+    <string name="chat_image_unavailable">Không thể hiển thị ảnh.</string>
+    <string name="message_status_sending">Đang gửi...</string>
+    <string name="message_status_sent">Đã gửi</string>
+    <string name="message_status_seen">Đã xem</string>
+</resources>

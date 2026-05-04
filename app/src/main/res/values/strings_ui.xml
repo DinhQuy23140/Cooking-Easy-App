@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bottom navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_explore">Explore</string>
+    <string name="nav_add_recipe">Add recipe</string>
+    <string name="nav_chat">Chats</string>
+    <string name="nav_ai">AI</string>
+    <string name="nav_profile">Profile</string>
+
+    <string name="brand_cooking">COOKING</string>
+
+    <string name="splash_title_cooking">Cooking</string>
+    <string name="splash_title_easy">EASY</string>
+
+    <!-- Login -->
+    <string name="login_app_title">Cooking Easy</string>
+    <string name="login_welcome">Welcome back!</string>
+    <string name="login_section_sign_in">Sign in</string>
+    <string name="auth_label_email">EMAIL</string>
+    <string name="auth_label_password">PASSWORD</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="login_btn">Login</string>
+    <string name="login_or_continue">or continue with</string>
+    <string name="login_with_google">Google</string>
+    <string name="login_no_account">Don\'t have an account? </string>
+    <string name="login_sign_up">Sign up</string>
+    <string name="auth_hint_email">your@email.com</string>
+    <string name="auth_hint_password_masked">••••••••</string>
+
+    <!-- Register -->
+    <string name="register_title">Create account</string>
+    <string name="register_subtitle">Start your cooking journey</string>
+    <string name="register_btn">Sign up</string>
+    <string name="auth_label_confirm_password">CONFIRM PASSWORD</string>
+    <string name="register_or_with">or sign up with</string>
+    <string name="register_have_account">Already have an account? </string>
+    <string name="register_sign_in">Sign in</string>
+    <string name="auth_hint_password">Password</string>
+    <string name="auth_hint_confirm_password">Confirm password</string>
+
+    <!-- Forgot password (activity) -->
+    <string name="forgot_password_title">Reset password</string>
+    <string name="forgot_password_subtitle">Enter your email to receive a\npassword reset link</string>
+    <string name="forgot_password_heading">Forgot password?</string>
+    <string name="forgot_password_info">We will send password reset instructions to the address above.</string>
+    <string name="forgot_password_send_link">Send reset link</string>
+    <string name="forgot_password_remember">Remember your password? </string>
+    <string name="forgot_password_sign_in">Sign in</string>
+
+    <!-- Forgot password (dialog) -->
+    <string name="dialog_forgot_password_title">Forgot Password?</string>
+    <string name="dialog_forgot_password_message">Enter your email and we\'ll send you\na link to reset your password</string>
+    <string name="dialog_forgot_password_info">We\'ll send a password reset link to this email address.</string>
+    <string name="action_send">Send</string>
+
+    <!-- Enter name -->
+    <string name="enter_name_title">What\'s your name?</string>
+    <string name="enter_name_subtitle">This is how other chefs will know you in the app</string>
+    <string name="enter_name_section">Enter your name</string>
+    <string name="auth_label_full_name">FULL NAME</string>
+    <string name="enter_name_min_hint">Min 2 characters</string>
+    <string name="enter_name_nickname_label">NICKNAME (optional)</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_skip_for_now">Skip for now</string>
+    <string name="enter_name_hint_example">e.g. Dinh Quy</string>
+    <string name="enter_name_nickname_hint_example">e.g. Chef Quy</string>
+
+    <!-- Pick avatar -->
+    <string name="pick_avatar_title">Pick your avatar</string>
+    <string name="pick_avatar_subtitle">Choose an avatar or upload your own photo</string>
+    <string name="pick_avatar_upload_gallery">Upload from gallery</string>
+    <string name="pick_avatar_section_title">CHOOSE AVATAR</string>
+    <string name="pick_avatar_confirm">Confirm &amp; Continue</string>
+
+    <!-- Home -->
+    <string name="home_greeting_placeholder">Good Morning 👋</string>
+    <string name="home_user_placeholder">Dinh Quy</string>
+    <string name="home_tagline">What would you like\nto cook today?</string>
+    <string name="home_stat_recipes_plus">300+</string>
+    <string name="home_stat_recipes_label">Recipes</string>
+    <string name="home_stat_categories_plus">20+</string>
+    <string name="home_stat_categories_label">Categories</string>
+    <string name="home_stat_cuisines_plus">27+</string>
+    <string name="home_stat_cuisines_label">Cuisines</string>
+    <string name="home_section_categories">CATEGORIES</string>
+    <string name="home_see_all">See all</string>
+    <string name="home_hide">Hide</string>
+    <string name="home_section_cuisine">CUISINE</string>
+    <string name="home_section_popular">POPULAR RECIPES</string>
+    <string name="hint_search_recipes">Search recipes...</string>
+
+    <!-- Explore -->
+    <string name="explore_discover">DISCOVER</string>
+    <string name="explore_title">Explore Recipes</string>
+    <string name="explore_featured_today">FEATURED TODAY</string>
+    <string name="explore_cook_now">Cook Now →</string>
+    <string name="explore_popular_categories">POPULAR CATEGORIES</string>
+    <string name="explore_explore_by_area">EXPLORE BY AREA</string>
+    <string name="explore_trending">TRENDING</string>
+    <string name="explore_trending_picks">5 picks</string>
+
+    <!-- Profile -->
+    <string name="profile_screen_title">MY PROFILE</string>
+    <string name="profile_name_placeholder">Chef Quy</string>
+    <string name="profile_email_placeholder">quy@gmail.com</string>
+    <string name="placeholder_stat_number">0</string>
+    <string name="profile_sample_recipes_count">12</string>
+    <string name="profile_sample_saved_count">48</string>
+    <string name="profile_sample_uploads_count">5</string>
+    <string name="profile_stat_recipes">Recipes</string>
+    <string name="profile_stat_saved">Saved</string>
+    <string name="profile_stat_uploads">Uploads</string>
+    <string name="profile_quick_my_recipes">My Recipes</string>
+    <string name="profile_quick_saved">Saved</string>
+    <string name="profile_quick_upload">Upload</string>
+    <string name="profile_section_manage">MANAGE</string>
+    <string name="profile_draft_recipes">Draft Recipes</string>
+    <string name="profile_favorite_recipes">Favorite Recipes</string>
+    <string name="profile_section_settings">SETTINGS</string>
+    <string name="profile_row_language">Language</string>
+    <string name="profile_row_dark_mode">Dark Mode</string>
+    <string name="profile_section_account">ACCOUNT</string>
+    <string name="cd_edit_profile">Edit profile</string>
+
+    <!-- Recipe form (add / dialog) -->
+    <string name="recipe_form_new_title">New Recipe</string>
+    <string name="recipe_form_section_meal_image">MEAL IMAGE</string>
+    <string name="recipe_form_tap_add_photo">Tap to add photo</string>
+    <string name="recipe_form_section_basic">BASIC INFO</string>
+    <string name="recipe_form_label_meal_name_required">Meal Name *</string>
+    <string name="recipe_form_label_category">Category</string>
+    <string name="recipe_form_label_area">Area</string>
+    <string name="recipe_form_label_tags">Tags</string>
+    <string name="recipe_form_label_youtube">YouTube Link</string>
+    <string name="recipe_form_section_ingredients">INGREDIENTS</string>
+    <string name="recipe_form_ingredients_count_zero">0 items</string>
+    <string name="recipe_form_label_ingredient">Ingredient</string>
+    <string name="recipe_form_label_measure">Measure</string>
+    <string name="recipe_form_add_ingredient">Add Ingredient</string>
+    <string name="recipe_form_section_instructions">INSTRUCTIONS</string>
+    <string name="recipe_form_section_video">COOKING VIDEO</string>
+    <string name="recipe_form_upload_video">Upload Video</string>
+    <string name="recipe_form_tap_select_video">Tap to select video</string>
+    <string name="recipe_form_video_formats">MP4, MOV up to 100MB</string>
+    <string name="recipe_form_save_draft">Save Draft</string>
+    <string name="recipe_form_steps_count_zero">0 steps</string>
+    <string name="recipe_form_label_step">Step</string>
+    <string name="recipe_form_label_step_description">Description</string>
+    <string name="recipe_form_add_step">Add Step</string>
+    <string name="hint_meal_name_example">e.g. Spicy Arrabiata Penne</string>
+    <string name="hint_category_example">e.g. Pasta</string>
+    <string name="hint_area_example">e.g. Italian</string>
+    <string name="hint_tags_example">e.g. Pasta, Curry</string>
+    <string name="hint_youtube_example">https://youtube.com/...</string>
+    <string name="hint_recipe_instructions">Describe the cooking steps...</string>
+    <string name="hint_ingredient_name">e.g. Sugar</string>
+    <string name="hint_ingredient_measure">e.g. 1 cup</string>
+    <string name="hint_instruction_step">Describe this step...</string>
+
+    <!-- Recipe detail -->
+    <string name="recipe_detail_ingredients">INGREDIENTS</string>
+    <string name="recipe_detail_instructions">INSTRUCTIONS</string>
+    <string name="recipe_detail_video">COOKING VIDEO</string>
+    <string name="recipe_detail_watch_youtube">Watch on YouTube</string>
+
+    <!-- Favorites -->
+    <string name="favorite_title">Favorite Recipes</string>
+    <string name="favorite_tab_all">All</string>
+    <string name="tab_all">All</string>
+    <string name="favorite_tab_recent">Recently Added</string>
+    <string name="favorite_tab_liked">Most Liked</string>
+    <string name="favorite_empty_title">No favorite recipes</string>
+    <string name="favorite_empty_subtitle">Tap the heart icon to save recipes</string>
+    <string name="hint_search_favorites">Search favorite recipes...</string>
+
+    <!-- Manage my recipes -->
+    <string name="manage_my_recipes_title">My Recipes</string>
+    <string name="manage_new_recipe">New Recipe</string>
+    <string name="manage_tab_all">All</string>
+    <string name="manage_tab_draft">Draft</string>
+    <string name="manage_tab_published">Published</string>
+    <string name="manage_tab_favorites">Favorites</string>
+    <string name="hint_search_my_recipes">Search your recipes...</string>
+    <string name="manage_empty_title">No recipes yet</string>
+    <string name="manage_empty_subtitle">Start by creating your first recipe</string>
+    <string name="manage_empty_cta">Create Recipe</string>
+
+    <!-- Result by category -->
+    <string name="result_category_label">CATEGORY</string>
+    <string name="result_about">ABOUT</string>
+    <string name="result_all_recipes">ALL RECIPES</string>
+    <string name="result_sort">Sort</string>
+    <string name="result_loading_recipes">Loading recipes...</string>
+    <string name="result_loading_more">Loading more...</string>
+    <string name="result_no_recipes">No recipes found</string>
+    <string name="result_try_different_keyword">Try a different keyword</string>
+    <string name="hint_search_in_category">Search in this category...</string>
+
+    <!-- Result by tag -->
+    <string name="result_browse_by">BROWSE BY</string>
+    <string name="result_tag_loading">Loading recipes...</string>
+
+    <!-- Result scan -->
+    <string name="result_scan_header">SCAN RESULT</string>
+    <string name="result_scan_title">What can I cook?</string>
+    <string name="result_scan_detected_ingredients">DETECTED INGREDIENTS</string>
+    <string name="result_scan_recipes_section">RECIPES YOU CAN MAKE</string>
+    <string name="result_scan_footer">Based on your scanned ingredients</string>
+    <string name="result_scan_finding">Finding matching recipes...</string>
+    <string name="result_scan_no_matches">No matching recipes found</string>
+
+    <!-- Scan -->
+    <string name="scan_ingredients_title">Scan Ingredients</string>
+    <string name="scan_action_scan">Scan</string>
+    <string name="scan_action_gallery">Gallery</string>
+    <string name="scan_detected_ingredients">DETECTED INGREDIENTS</string>
+    <string name="scan_analyzing">Analyzing…</string>
+    <string name="format_results_found">%1$d found</string>
+
+    <!-- Search -->
+    <string name="search_discover">DISCOVER</string>
+    <string name="search_screen_title">Search Recipes</string>
+    <string name="search_recent_section">RECENT SEARCHES</string>
+    <string name="search_clear_all">Clear all</string>
+    <string name="search_results_section">RESULTS</string>
+    <string name="search_searching">Searching...</string>
+    <string name="search_no_results">No recipes found</string>
+    <string name="search_try_different">Try a different keyword</string>
+    <string name="search_placeholder_title">Find your recipe</string>
+    <string name="search_placeholder_subtitle">Type something to get started</string>
+
+    <!-- AI Chat -->
+    <string name="ai_chat_title">Chef AI</string>
+    <string name="ai_chat_subtitle">Your cooking assistant</string>
+    <string name="ai_chat_suggestion_dinner">🍽 Dinner ideas</string>
+    <string name="ai_chat_suggestion_chicken">🍗 Cook with chicken</string>
+    <string name="ai_chat_suggestion_healthy">🥗 Healthy breakfast</string>
+    <string name="ai_chat_suggestion_quick">⚡ Quick 15 min meals</string>
+    <string name="hint_ai_chat">Ask me anything about food...</string>
+    <string name="ai_chat_recipes_you_may_like">Recipes you may like</string>
+
+    <!-- Upload video dialog -->
+    <string name="upload_video_dialog_title">Select and display video</string>
+    <string name="upload_video_dialog_pick">Pick video</string>
+    <string name="upload_video_dialog_empty">No video selected yet</string>
+    <string name="upload_video_dialog_name_label">Video name</string>
+
+    <!-- User profile (self) -->
+    <string name="user_profile_sample_recipes_count">24</string>
+    <string name="user_profile_sample_likes_count">120</string>
+    <string name="user_profile_sample_saved_count">15</string>
+    <string name="stat_sample_120">120</string>
+
+    <string name="user_profile_name_placeholder">Chef Quy</string>
+    <string name="user_profile_bio_placeholder">Love cooking &amp; sharing recipes 🍳</string>
+    <string name="user_profile_stat_recipes">Recipes</string>
+    <string name="user_profile_stat_likes">Likes</string>
+    <string name="user_profile_stat_saved">Saved</string>
+    <string name="user_profile_edit">Edit Profile</string>
+
+    <!-- Other user profile -->
+    <string name="other_user_sample_recipes_count">120</string>
+    <string name="other_user_sample_followers_count">2.5K</string>
+    <string name="other_user_label_followers">Followers</string>
+
+    <string name="other_user_name_placeholder">Chef Anna</string>
+    <string name="other_user_bio_placeholder">Healthy recipes &amp; meal prep 🥗</string>
+    <string name="other_user_follow">Follow</string>
+    <string name="other_user_message">Message</string>
+    <string name="other_user_tag_healthy">Healthy</string>
+    <string name="other_user_tag_vegan">Vegan</string>
+    <string name="other_user_tag_dessert">Dessert</string>
+    <string name="other_user_tab_recipes">Recipes</string>
+    <string name="other_user_tab_saved">Saved</string>
+    <string name="other_user_no_recipes">No recipes yet</string>
+
+    <!-- List item placeholders (design time; adapters usually overwrite) -->
+    <string name="sample_meal_name">Chicken Curry</string>
+    <string name="sample_meal_subtitle">Asian • Dinner</string>
+    <string name="sample_cook_time">⏱ 30 mins</string>
+    <string name="badge_published">Published</string>
+    <string name="sample_area_name">Vietnamese</string>
+    <string name="sample_category_name">Dessert</string>
+    <string name="sample_ingredient">Sugar</string>
+    <string name="sample_measure">1 cup</string>
+    <string name="sample_step_index">1</string>
+    <string name="sample_chef_name">Chef Admin</string>
+    <string name="sample_search_keyword">Pasta</string>
+
+    <string name="cd_clear_search_history">Clear search history</string>
+
+    <!-- Test / preview layout (optional) -->
+    <string name="test_profile_name">Chef Quy</string>
+    <string name="test_profile_email">quy@gmail.com</string>
+    <string name="test_stat_recipes">My Recipes</string>
+    <string name="test_stat_saved">Saved</string>
+    <string name="test_stat_upload">Upload</string>
+    <string name="test_manage">Manage</string>
+    <string name="test_draft_recipes">Draft Recipes</string>
+    <string name="test_favorite_recipes">Favorite Recipes</string>
+    <string name="test_settings">Settings</string>
+    <string name="test_language">Language</string>
+    <string name="test_dark_mode">Dark Mode</string>
+    <string name="test_logout">Logout</string>
+
+    <!-- Chat list (Messenger-style) -->
+    <string name="chat_list_title">Chats</string>
+    <string name="chat_list_subtitle">Friends &amp; chefs</string>
+    <string name="chat_search_hint">Search chats…</string>
+    <string name="chat_tab_all">All</string>
+    <string name="chat_tab_unread">Unread</string>
+    <string name="chat_tab_groups">Groups</string>
+    <string name="chat_active_now">Active now</string>
+    <string name="chat_empty_title">No messages yet</string>
+    <string name="chat_empty_subtitle">Start a conversation with a chef or friend.</string>
+    <string name="cd_chat_camera">Open camera</string>
+    <string name="cd_chat_new_message">New message</string>
+    <string name="cd_chat_fab_compose">Compose new chat</string>
+    <string name="cd_chat_row_avatar">Conversation avatar</string>
+    <string name="cd_chat_active_avatar">Active contact</string>
+    <string name="chat_toast_compose_soon">New chat — coming soon</string>
+    <string name="chat_toast_camera_soon">Camera — coming soon</string>
+
+    <!-- Chat detail -->
+    <string name="chat_detail_name_placeholder">Chef Minh</string>
+    <string name="chat_detail_status_online">Active now</string>
+    <string name="chat_detail_message_hint">Type a message...</string>
+    <string name="cd_chat_send_message">Send message</string>
+    <string name="cd_chat_attach_file">Attach file</string>
+    <string name="cd_chat_attach_image">Attach image</string>
+    <string name="cd_chat_take_photo">Take photo</string>
+    <string name="cd_chat_call">Call</string>
+    <string name="cd_chat_video_call">Video call</string>
+    <string name="cd_chat_toggle_attachment">Toggle attachment actions</string>
+    <string name="chat_open_attachment">Open attachment</string>
+    <string name="chat_file_unavailable">Cannot open this file.</string>
+    <string name="chat_image_unavailable">Image is unavailable.</string>
+    <string name="message_status_sending">Sending...</string>
+    <string name="message_status_sent">Sent</string>
+    <string name="message_status_seen">Seen</string>
+</resources>

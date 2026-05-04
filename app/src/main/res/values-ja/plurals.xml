@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="recipe_count">
+        <item quantity="one">レシピ %d 件</item>
+        <item quantity="other">レシピ %d 件</item>
+    </plurals>
+
+    <plurals name="ingredient_count">
+        <item quantity="one">材料 %d 個</item>
+        <item quantity="other">材料 %d 個</item>
+    </plurals>
+
+    <plurals name="step_count">
+        <item quantity="one">手順 %d ステップ</item>
+        <item quantity="other">手順 %d ステップ</item>
+    </plurals>
+</resources>

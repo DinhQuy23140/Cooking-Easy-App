@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Một vòng avatar "Active now" — dùng merge để id không trùng khi inflate nhiều lần -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="64dp"
+        android:layout_height="64dp">
+
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_avatar_ring"
+            android:contentDescription="@string/cd_chat_active_avatar"
+            android:padding="3dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_person" />
+    </FrameLayout>
+</merge>

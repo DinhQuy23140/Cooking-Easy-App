@@ -181,7 +181,7 @@
                 android:background="@drawable/shape_avatar_ring"
                 android:contentDescription="@string/cd_user_avatar"
                 android:padding="2dp"
-                android:scaleType="centerCrop"
+                android:scaleType="center"
                 android:src="@drawable/ic_person" />
 
             <TextView

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="recipe_count">
+        <item quantity="one">%d công thức</item>
+        <item quantity="other">%d công thức</item>
+    </plurals>
+
+    <plurals name="ingredient_count">
+        <item quantity="one">%d nguyên liệu</item>
+        <item quantity="other">%d nguyên liệu</item>
+    </plurals>
+
+    <plurals name="step_count">
+        <item quantity="one">%d bước</item>
+        <item quantity="other">%d bước</item>
+    </plurals>
+</resources>

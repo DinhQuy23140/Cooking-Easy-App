@@ -18,9 +18,6 @@ class AddRecipeViewModel(
 ) : ViewModel() {
 
     private val userRepository = UserRepositoryImp()
-    // ─────────────────────────────────────────────
-    // UI State
-    // ─────────────────────────────────────────────
 
     sealed class AddRecipeState {
         object Idle : AddRecipeState()
@@ -33,9 +30,6 @@ class AddRecipeViewModel(
     private val _state = MutableStateFlow<AddRecipeState>(AddRecipeState.Idle)
     val state: StateFlow<AddRecipeState> = _state.asStateFlow()
 
-    // ─────────────────────────────────────────────
-    // Media State
-    // ─────────────────────────────────────────────
 
     private val _mealImageUri = MutableStateFlow<Uri?>(null)
     val mealImageUri: StateFlow<Uri?> = _mealImageUri.asStateFlow()
@@ -49,9 +43,6 @@ class AddRecipeViewModel(
     private val _videoFileSize = MutableStateFlow("")
     val videoFileSize: StateFlow<String> = _videoFileSize.asStateFlow()
 
-    // ─────────────────────────────────────────────
-    // Ingredient
-    // ─────────────────────────────────────────────
 
     data class Ingredient(val name: String, val measure: String)
 
@@ -64,9 +55,6 @@ class AddRecipeViewModel(
     private val _myRecipes = MutableStateFlow<List<RecipeUpload>>(emptyList())
     val myRecipes: StateFlow<List<RecipeUpload>> = _myRecipes.asStateFlow()
 
-    // ─────────────────────────────────────────────
-    // Actions
-    // ─────────────────────────────────────────────
 
     fun setMealImage(uri: Uri) {
         _mealImageUri.value = uri
@@ -104,9 +92,6 @@ class AddRecipeViewModel(
         _ingredientCount.value = "$count ${if (count == 1) "item" else "items"}"
     }
 
-    // ─────────────────────────────────────────────
-    // Save Draft
-    // ─────────────────────────────────────────────
 
     fun saveDraft(
         mealImg: String,
@@ -158,9 +143,6 @@ class AddRecipeViewModel(
         }
     }
 
-    // ─────────────────────────────────────────────
-    // Publish
-    // ─────────────────────────────────────────────
 
     fun publish(
         mealImg: String,
@@ -218,9 +200,6 @@ class AddRecipeViewModel(
         _state.value = AddRecipeState.Idle
     }
 
-    // ─────────────────────────────────────────────
-    // Validation
-    // ─────────────────────────────────────────────
 
     private fun validateBasicInfo(mealName: String): Boolean {
         return when {
