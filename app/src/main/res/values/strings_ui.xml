@@ -278,6 +278,9 @@
     <string name="other_user_tab_recipes">Recipes</string>
     <string name="other_user_tab_saved">Saved</string>
     <string name="other_user_no_recipes">No recipes yet</string>
+    <string name="other_user_profile_unavailable">No cook profile is linked to this recipe.</string>
+    <string name="google_no_credentials_available">No Google account credential found. Please add a Google account on this device and try again.</string>
+    <string name="google_signin_failed_try_again">Google sign-in failed. Please try again.</string>
 
     <!-- List item placeholders (design time; adapters usually overwrite) -->
     <string name="sample_meal_name">Chicken Curry</string>

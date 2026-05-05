@@ -12,6 +12,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityRegisterBinding
@@ -117,8 +118,10 @@ class RegisterActivity : AppCompatActivity() {
                     showError("Unsupported credential type")
                 }
 
+            } catch (e: NoCredentialException) {
+                showError(getString(R.string.google_no_credentials_available))
             } catch (e: GetCredentialException) {
-                showError("Google sign-up failed: ${e.message}")
+                showError(getString(R.string.google_signin_failed_try_again))
             }
         }
     }

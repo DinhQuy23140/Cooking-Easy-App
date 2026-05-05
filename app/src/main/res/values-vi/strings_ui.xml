@@ -250,6 +250,9 @@
     <string name="other_user_tab_recipes">Công thức</string>
     <string name="other_user_tab_saved">Đã lưu</string>
     <string name="other_user_no_recipes">Chưa có công thức</string>
+    <string name="other_user_profile_unavailable">Công thức này không gắn hồ sơ đầu bếp.</string>
+    <string name="google_no_credentials_available">Không tìm thấy tài khoản Google trên thiết bị. Vui lòng thêm tài khoản rồi thử lại.</string>
+    <string name="google_signin_failed_try_again">Đăng nhập Google thất bại. Vui lòng thử lại.</string>
 
     <string name="sample_meal_name">Cà ri gà</string>
     <string name="sample_meal_subtitle">Châu Á • Tối</string>

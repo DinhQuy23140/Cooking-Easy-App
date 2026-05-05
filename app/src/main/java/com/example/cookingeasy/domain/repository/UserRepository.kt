@@ -24,4 +24,5 @@ interface UserRepository {
     suspend fun getListHistorySearch(userId: String): List<HistorySearch>
     suspend fun deleteHistorySearch(userId: String, docId: String)
     suspend fun clearHistorySearch(userId: String)
+    fun getUid(): String
 }

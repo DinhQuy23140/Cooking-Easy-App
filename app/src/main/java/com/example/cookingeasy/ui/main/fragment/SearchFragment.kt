@@ -2,6 +2,7 @@ package com.example.cookingeasy.ui.main.fragment
 
 import android.os.Bundle
 import android.text.Editable
+import android.widget.Toast
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -70,9 +71,20 @@ class SearchFragment : Fragment() {
             }
 
             override fun onClickInf(recipe: Recipe) {
+                if (recipe.userUid.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.other_user_profile_unavailable,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
                 parentFragmentManager.beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.container, OtherUserProfileFragment())
+                    .replace(
+                        R.id.container,
+                        OtherUserProfileFragment.newInstance(recipe.userUid)
+                    )
                     .commit()
             }
         })

@@ -77,4 +77,8 @@ class MyProfileViewModel(
     fun resetState() {
         _profileState.value = ProfileState.Idle
     }
+
+    fun getUid(): String {
+        return _userRepository.getUid()
+    }
 }

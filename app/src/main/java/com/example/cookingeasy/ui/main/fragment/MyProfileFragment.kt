@@ -164,16 +164,23 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun bindUserInfo(user: Map<String, Any>) {
-        binding.txtName.text = user.get("fullName") as String
-        binding.txtEmail.text = user.get("email") as String
-        var imgUrl = user.get("avatarUrl").toString()
-        if (!imgUrl.isEmpty()) {
+        val fullName = (user["fullName"] as? String).orEmpty()
+            .ifEmpty { (user["nickname"] as? String).orEmpty() }
+        val email = (user["email"] as? String).orEmpty()
+        val avatarUrl = (user["avatarUrl"] as? String).orEmpty()
+
+        binding.txtName.text = fullName.ifEmpty { getString(R.string.profile_name_placeholder) }
+        binding.txtEmail.text = email.ifEmpty { getString(R.string.profile_email_placeholder) }
+
+        if (avatarUrl.isNotEmpty()) {
             Glide.with(binding.imgAvatar)
-                .load(user.get("avatarUrl").toString())
+                .load(avatarUrl)
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
                 .into(binding.imgAvatar)
         } else {
             Glide.with(binding.imgAvatar)
-                .load(com.example.cookingeasy.R.drawable.ic_person)
+                .load(R.drawable.ic_person)
                 .into(binding.imgAvatar)
         }
     }
@@ -232,7 +239,12 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun navigateToProfile() {
-        parentFragmentManager.beginTransaction().replace(R.id.container, OtherUserProfileFragment()).addToBackStack(null).commit()
+        val uid = viewModel.getUid()
+        if (uid.isEmpty()) return
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.container, OtherUserProfileFragment.newInstance(uid))
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun navigateToFavoriteRecipes() {

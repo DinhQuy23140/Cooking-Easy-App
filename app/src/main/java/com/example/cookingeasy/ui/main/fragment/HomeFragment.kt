@@ -2,6 +2,7 @@ package com.example.cookingeasy.ui.main.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -122,12 +123,23 @@ class HomeFragment : Fragment() {
             }
 
             override fun onClickInf(recipe: Recipe) {
+                if (recipe.userUid.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.other_user_profile_unavailable,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
                 val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
                 fragmentTransaction.setCustomAnimations(
                     R.anim.slide_in_right, R.anim.slide_out_left,
                     R.anim.slide_in_left, R.anim.slide_out_right
                 )
-                fragmentTransaction.replace(R.id.container, OtherUserProfileFragment())
+                fragmentTransaction.replace(
+                    R.id.container,
+                    OtherUserProfileFragment.newInstance(recipe.userUid)
+                )
                 fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.commit()
             }

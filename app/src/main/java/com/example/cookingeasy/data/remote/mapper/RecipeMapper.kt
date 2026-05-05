@@ -62,7 +62,8 @@ object RecipeMapper {
             strSource = data.strSource ?: "",
             strImageSource = data.strImageSource ?: "",
             strCreativeCommonsConfirmed = data.strCreativeCommonsConfirmed ?: "",
-            dateModified = data.dateModified ?: ""
+            dateModified = data.dateModified ?: "",
+            userUid = ""
         )
     }
 
@@ -145,7 +146,10 @@ object RecipeMapper {
             strSource = upload.videoUrl,
             strImageSource = upload.mealImageUrl,
             strCreativeCommonsConfirmed = "",
-            dateModified = upload.updatedAt.toString()
+            dateModified = upload.updatedAt.toString(),
+            userName = upload.userName,
+            userImg = upload.userImage,
+            userUid = upload.uid
         )
     }
 }

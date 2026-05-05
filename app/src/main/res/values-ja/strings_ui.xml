@@ -250,6 +250,9 @@
     <string name="other_user_tab_recipes">レシピ</string>
     <string name="other_user_tab_saved">保存</string>
     <string name="other_user_no_recipes">まだレシピがありません</string>
+    <string name="other_user_profile_unavailable">このレシピには調理師プロフィールがリンクされていません。</string>
+    <string name="google_no_credentials_available">この端末で利用可能な Google アカウントが見つかりません。アカウントを追加して再試行してください。</string>
+    <string name="google_signin_failed_try_again">Google ログインに失敗しました。もう一度お試しください。</string>
 
     <string name="sample_meal_name">チキンカレー</string>
     <string name="sample_meal_subtitle">アジア • 夕食</string>

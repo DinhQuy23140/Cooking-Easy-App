@@ -20,6 +20,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityLoginBinding
@@ -90,9 +91,9 @@ class LoginActivity : AppCompatActivity() {
                     is LoginState.Success -> {
                         showLoading(false)
                         if (state.isNewUser) {
-                            navigateToEnterName()   // → EnterName → PickAvatar → Main
+                            navigateToEnterName()
                         } else {
-                            navigateToMain()        // → Main trực tiếp
+                            navigateToMain()
                         }
                     }
                     is LoginState.ResetSuccess -> {
@@ -173,8 +174,17 @@ class LoginActivity : AppCompatActivity() {
                 showError("Unsupported credential type")
                 false
             }
+        } catch (e: NoCredentialException) {
+            if (filterByAuthorizedAccounts) {
+                Log.i("GoogleSignIn", "No authorized account, trying all accounts")
+            } else {
+                showError(getString(R.string.google_no_credentials_available))
+                Log.i("GoogleSignIn", "No Google credential available on device")
+            }
+            false
         } catch (e: GetCredentialException) {
             Log.e("GoogleSignIn", "filterByAuthorized=$filterByAuthorizedAccounts | ${e.message}")
+            showError(getString(R.string.google_signin_failed_try_again))
             false
         }
     }
@@ -206,8 +216,6 @@ class LoginActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // ─── Navigation ──────────────────────────────────────────────────
-
     private fun navigateToMain() {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -217,8 +225,6 @@ class LoginActivity : AppCompatActivity() {
     private fun navigateToRegister() {
         startActivity(Intent(this, RegisterActivity::class.java))
     }
-
-    // ─── UI Helpers ──────────────────────────────────────────────────
 
     private fun showLoading(isLoading: Boolean) {
         binding.btnLogin.isEnabled  = !isLoading

@@ -1,6 +1,7 @@
 package com.example.cookingeasy.data.repository
 
 import com.example.cookingeasy.domain.model.HistorySearch
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -13,6 +14,7 @@ import java.util.Locale
 class UserRepositoryImp() : UserRepository {
 
     private val db = FirebaseFirestore.getInstance()
+    private val firebaseAuth = FirebaseAuth.getInstance()
     private val usersCollection = db.collection("users")
 
 
@@ -181,6 +183,10 @@ class UserRepositoryImp() : UserRepository {
         for (doc in snapshot.documents) {
             doc.reference.delete().await()
         }
+    }
+
+    override fun getUid(): String {
+        return firebaseAuth.currentUser?.uid ?: ""
     }
 
     private fun DocumentSnapshot.toHistorySearch(userId: String): HistorySearch {
