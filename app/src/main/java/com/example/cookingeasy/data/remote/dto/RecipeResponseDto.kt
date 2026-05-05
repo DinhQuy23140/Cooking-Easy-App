@@ -1,11 +1,11 @@
 package com.example.cookingeasy.data.remote.dto
 
 data class RecipeResponseDto(
-    val meals: MutableList<RecipeDto>
+    val meals: List<RecipeDto>? = null
 )
 
 data class RecipeDto(
-    val idMeal: Int,
+    val idMeal: String,
     val strMeal: String,
     val strMealAlternate: Boolean,
     val strCategory: String,

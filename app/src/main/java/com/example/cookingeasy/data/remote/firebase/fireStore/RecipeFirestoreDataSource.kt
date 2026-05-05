@@ -1,26 +1,23 @@
-package com.example.cookingeasy.data.remote.firebase
+package com.example.cookingeasy.data.remote.firebase.fireStore
 
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.model.RecipeUpload
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class RecipeFirestoreDataSource {
 
     private val db = FirebaseFirestore.getInstance()
     private val recipesCollection = db.collection("recipes")
 
-    // ─── Save recipe ─────────────────────────────────────────────────
-
     suspend fun saveRecipe(recipe: RecipeUpload): String {
         val docRef = recipesCollection.document()
         val recipeMap = hashMapOf(
             "recipeId"     to docRef.id,
             "uid"          to recipe.uid,
+            "userName"     to recipe.userName,
+            "userImg"      to recipe.userImage,
             "mealName"     to recipe.mealName,
             "category"     to recipe.category,
             "area"         to recipe.area,
@@ -40,14 +37,19 @@ class RecipeFirestoreDataSource {
 
     // ─── Get recipes by uid ──────────────────────────────────────────
 
+    private fun mapDocToRecipeUpload(doc: DocumentSnapshot): RecipeUpload? {
+        val parsed = doc.toObject(RecipeUpload::class.java) ?: return null
+        val id = doc.getString("recipeId").orEmpty().ifEmpty { doc.id }
+        return if (parsed.recipeId.isEmpty() || parsed.recipeId != id) parsed.copy(recipeId = id) else parsed
+    }
+
     suspend fun getRecipesByUid(uid: String): List<RecipeUpload> {
         val snapshot = recipesCollection
             .whereEqualTo("uid", uid)
             .get()
             .await()
-        return snapshot.documents.mapNotNull {
-            it.toObject(RecipeUpload::class.java)
-        }
+        return snapshot.documents.mapNotNull { mapDocToRecipeUpload(it) }
+            .sortedByDescending { it.createdAt }
     }
 
     // ─── Delete recipe ───────────────────────────────────────────────
@@ -73,15 +75,24 @@ class RecipeFirestoreDataSource {
             .await()
     }
 
+    /** Không dùng orderBy trên Firestore (tránh bắt buộc composite index); sắp xếp sau khi đọc. */
     suspend fun getRecipesByUserUUID(uid: String): List<RecipeUpload> {
         val snapshot = recipesCollection
-            .whereEqualTo("uid", uid)  // ← filter theo uid người đăng
-            .orderBy("createdAt", Query.Direction.DESCENDING) // ← mới nhất trước
+            .whereEqualTo("uid", uid)
+            .get()
+            .await()
+        return snapshot.documents.mapNotNull { mapDocToRecipeUpload(it) }
+            .sortedByDescending { it.createdAt }
+    }
+
+    suspend fun getPublishedRecipes(): List<RecipeUpload> {
+        val snapshot = recipesCollection
+            .whereEqualTo("status", "published")
             .get()
             .await()
         return snapshot.documents.mapNotNull {
             it.toObject(RecipeUpload::class.java)
-        }
+        }.sortedByDescending { it.createdAt }
     }
 
     fun getFavoritesCollection(uid: String) =
@@ -105,7 +116,7 @@ class RecipeFirestoreDataSource {
     }
 
     suspend fun addFavorite(uid: String, recipe: Recipe) {
-        val doc = getFavoritesCollection(uid).document(recipe.idMeal.toString())
+        val doc = getFavoritesCollection(uid).document(recipe.idMeal)
 
         val data = hashMapOf(
             "idMeal" to recipe.idMeal.toString(),

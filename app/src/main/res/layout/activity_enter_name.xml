@@ -44,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="What's your name?"
+            android:text="@string/enter_name_title"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:fontFamily="sans-serif-medium"/>
@@ -57,7 +57,7 @@
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
             android:gravity="center"
-            android:text="This is how other chefs will know you in the app"
+            android:text="@string/enter_name_subtitle"
             android:textColor="#99FFFFFF"
             android:textSize="13sp"
             android:fontFamily="sans-serif"/>
@@ -90,7 +90,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter your name"
+                android:text="@string/enter_name_section"
                 android:textColor="#1B5E20"
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-medium"
@@ -100,7 +100,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="FULL NAME"
+                android:text="@string/auth_label_full_name"
                 android:textColor="#888888"
                 android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
@@ -131,7 +131,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="e.g. Dinh Quy"
+                    android:hint="@string/enter_name_hint_example"
                     android:textSize="14sp"
                     android:textColor="#2E5E2E"
                     android:inputType="textPersonName|textCapWords"
@@ -144,7 +144,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Min 2 characters"
+                android:text="@string/enter_name_min_hint"
                 android:textColor="#AAAAAA"
                 android:textSize="11sp"
                 android:layout_marginBottom="18dp"/>
@@ -153,7 +153,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NICKNAME  (optional)"
+                android:text="@string/enter_name_nickname_label"
                 android:textColor="#888888"
                 android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
@@ -184,7 +184,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="e.g. Chef Quy"
+                    android:hint="@string/enter_name_nickname_hint_example"
                     android:textSize="14sp"
                     android:textColor="#2E5E2E"
                     android:inputType="textPersonName|textCapWords"
@@ -200,7 +200,7 @@
                 android:layout_height="52dp"
                 android:background="@drawable/shape_btn_primary"
                 android:gravity="center"
-                android:text="Continue"
+                android:text="@string/action_continue"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:fontFamily="sans-serif-medium"
@@ -213,7 +213,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Skip for now"
+                android:text="@string/action_skip_for_now"
                 android:textColor="#AAAAAA"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"/>

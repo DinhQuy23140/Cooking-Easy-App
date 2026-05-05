@@ -1,19 +1,29 @@
 package com.example.cookingeasy.ui.main.fragment
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import com.example.cookingeasy.R
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.cookingeasy.data.remote.firebase.AuthDataSource
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.Lifecycle
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
 import com.example.cookingeasy.databinding.FragmentMyProfileBinding
 import com.example.cookingeasy.ui.auth.LoginActivity
 import com.example.cookingeasy.ui.main.viewmodel.MyProfileViewModel
+import com.example.cookingeasy.ui.viewmodel.MyRecipesViewModel
 import kotlinx.coroutines.launch
 
 class MyProfileFragment : Fragment() {
@@ -22,8 +32,17 @@ class MyProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MyProfileViewModel by viewModels()
+    private val myRecipesViewModel: MyRecipesViewModel by activityViewModels {
+        MyRecipesViewModel.Factory(requireContext().contentResolver)
+    }
 
-    // ─── Lifecycle ───────────────────────────────────────────────────
+    private var selectedImageUri: Uri? = null
+
+    private val galleryLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { setAvatarImage(it) }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +57,12 @@ class MyProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupClickListeners()
         observeState()
+        observeRecipeStats()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        myRecipesViewModel.loadMyRecipes()
     }
 
     override fun onDestroyView() {
@@ -45,9 +70,12 @@ class MyProfileFragment : Fragment() {
         _binding = null
     }
 
-    // ─── Setup ───────────────────────────────────────────────────────
 
     private fun setupClickListeners() {
+        binding.imgAvatar.setOnClickListener {
+            openGallery()
+        }
+
         binding.btnLogout.setOnClickListener {
             showLogoutDialog()
         }
@@ -56,8 +84,8 @@ class MyProfileFragment : Fragment() {
             navigateToEditProfile()
         }
 
-        binding.rowDraft.setOnClickListener {
-            navigateToDraftRecipes()
+        binding.rowProfile.setOnClickListener {
+            navigateToProfile()
         }
 
         binding.rowFavorite.setOnClickListener {
@@ -72,7 +100,7 @@ class MyProfileFragment : Fragment() {
             toggleDarkMode(isChecked)
         }
 
-        binding.statMyRecipes.setOnClickListener {
+        binding.quickMyRecipes.setOnClickListener {
             navigateToMyRecipes()
         }
 
@@ -80,7 +108,19 @@ class MyProfileFragment : Fragment() {
             navigateToFavoriteRecipes()
         }
 
+        binding.statMyRecipes.setOnClickListener {
+            navigateToMyRecipes()
+        }
+
         binding.statUpload.setOnClickListener {
+            navigateToUpload()
+        }
+
+        binding.quickSaved.setOnClickListener {
+            navigateToFavoriteRecipes()
+        }
+
+        binding.quickUpload.setOnClickListener {
             navigateToUpload()
         }
     }
@@ -94,8 +134,7 @@ class MyProfileFragment : Fragment() {
                     is MyProfileViewModel.ProfileState.UserLoaded -> {
                         showLoading(false)
                         bindUserInfo(
-                            name  = state.user.displayName ?: "Chef",
-                            email = state.user.email ?: ""
+                            state.user
                         )
                     }
                     is MyProfileViewModel.ProfileState.LoggedOut  -> {
@@ -112,11 +151,31 @@ class MyProfileFragment : Fragment() {
         }
     }
 
-    // ─── UI ──────────────────────────────────────────────────────────
+    private fun observeRecipeStats() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                myRecipesViewModel.stats.collect { s ->
+                    binding.tvMyRecipesCount.text = s.total.toString()
+                    binding.tvSavedCount.text = s.savedFavorites.toString()
+                    binding.tvUploadCount.text = s.published.toString()
+                }
+            }
+        }
+    }
 
-    private fun bindUserInfo(name: String, email: String) {
-        binding.txtName.text = name
-        binding.txtEmail.text = email
+    private fun bindUserInfo(user: Map<String, Any>) {
+        binding.txtName.text = user.get("fullName") as String
+        binding.txtEmail.text = user.get("email") as String
+        var imgUrl = user.get("avatarUrl").toString()
+        if (!imgUrl.isEmpty()) {
+            Glide.with(binding.imgAvatar)
+                .load(user.get("avatarUrl").toString())
+                .into(binding.imgAvatar)
+        } else {
+            Glide.with(binding.imgAvatar)
+                .load(com.example.cookingeasy.R.drawable.ic_person)
+                .into(binding.imgAvatar)
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -125,12 +184,12 @@ class MyProfileFragment : Fragment() {
 
     private fun showLogoutDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Logout")
-            .setMessage("Are you sure you want to logout?")
-            .setPositiveButton("Logout") { _, _ ->
+            .setTitle(getString(R.string.logout_confirm_title))
+            .setMessage(getString(R.string.logout_confirm_message))
+            .setPositiveButton(getString(R.string.action_logout)) { _, _ ->
                 viewModel.logout()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.action_cancel), null)
             .show()
     }
 
@@ -147,35 +206,76 @@ class MyProfileFragment : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    // ─── Navigation ──────────────────────────────────────────────────
-
     private fun navigateToLogin() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
 
-    private fun navigateToEditProfile() {
-        // TODO: navigate to EditProfileActivity
+    private fun openGallery() {
+        galleryLauncher.launch("image/*")
     }
 
-    private fun navigateToDraftRecipes() {
-        // TODO: navigate to DraftRecipesFragment
+    private fun setAvatarImage(uri: Uri) {
+        selectedImageUri = uri
+
+        Glide.with(this)
+            .load(uri)
+            .transform(CircleCrop())
+            .placeholder(com.example.cookingeasy.R.drawable.ic_person)
+            .error(com.example.cookingeasy.R.drawable.ic_person)
+            .into(binding.imgAvatar)
+    }
+
+    private fun navigateToEditProfile() {
+
+    }
+
+    private fun navigateToProfile() {
+        parentFragmentManager.beginTransaction().replace(R.id.container, OtherUserProfileFragment()).addToBackStack(null).commit()
     }
 
     private fun navigateToFavoriteRecipes() {
-        // TODO: navigate to FavoriteRecipesFragment
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
+                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
+            )
+            .replace(com.example.cookingeasy.R.id.container, FavoriteFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun navigateToLanguageSettings() {
-        // TODO: navigate to LanguageSettingsActivity
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
+                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
+            )
+            .replace(com.example.cookingeasy.R.id.container, LanguageFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun navigateToMyRecipes() {
-        // TODO: navigate to ManageMyRecipeFragment
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
+                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
+            )
+            .replace(com.example.cookingeasy.R.id.container, ManageMyRecipeFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun navigateToUpload() {
-        // TODO: navigate to AddRecipeFragment
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
+                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
+            )
+            .replace(com.example.cookingeasy.R.id.container, AddRecipeFragment())
+            .addToBackStack(null)
+            .commit()
     }
 }

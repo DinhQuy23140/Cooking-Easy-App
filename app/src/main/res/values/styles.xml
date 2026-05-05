@@ -21,4 +21,32 @@
         <item name="android:textSize">13sp</item>
         <item name="android:background">@drawable/bg_chip</item>
     </style>
+
+    <style name="Widget.CookingEasy.Chip" parent="Widget.Material3.Chip.Filter">
+
+        <!-- Text -->
+        <item name="android:textColor">@color/textPrimary</item>
+
+        <!-- Background -->
+        <item name="chipBackgroundColor">@color/chip_bg_selector</item>
+
+        <!-- Stroke -->
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipStrokeColor">@color/chip_stroke_selector</item>
+
+        <!-- Shape -->
+        <item name="shapeAppearance">@style/Shape.Chip</item>
+
+        <!-- Behavior -->
+        <item name="checkedIconVisible">false</item>
+
+    </style>
+
+    <style name="Shape.Chip">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+    <style name="Shape">
+        <item name="android:shape">rectangle</item>
+    </style>
 </resources>

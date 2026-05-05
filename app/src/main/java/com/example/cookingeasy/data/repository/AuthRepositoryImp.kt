@@ -1,7 +1,7 @@
 package com.example.cookingeasy.data.repository
 
 import android.util.Log
-import com.example.cookingeasy.data.remote.firebase.AuthDataSource
+import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore

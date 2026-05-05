@@ -1,5 +1,6 @@
 package com.example.cookingeasy.ui.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cookingeasy.data.repository.AuthRepositoryImp
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import java.util.stream.Collector
 import java.util.stream.Collectors
+import kotlin.ranges.contains
 
 class ExploreViewModel(): ViewModel() {
     private val _recipeRepository = RecipeRepositoryImp()
@@ -29,12 +31,16 @@ class ExploreViewModel(): ViewModel() {
     val trendingRecipes: StateFlow<List<Recipe>> = _trendingRecipes
 
     fun getRandomRecipe() {
-        viewModelScope.launch {
-            try {
-                _randomRecipe?.value = _recipeRepository.getRandomRecipe()!!
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        viewModelScope.launch { loadRandomRecipe() }
+    }
+
+    /** Dùng khi UI cần chờ xong (ví dụ nút refresh + progress chồng icon). */
+    suspend fun loadRandomRecipe() {
+        try {
+            val r = _recipeRepository.getRandomRecipe() ?: return
+            _randomRecipe.value = r
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -79,6 +85,14 @@ class ExploreViewModel(): ViewModel() {
 
     suspend fun getFavoriteRecipesIds(): List<String> {
         return _recipeRepository.getFavRecipeIds()
+    }
+
+    fun caculatorColumn(context: Context): Int {
+        val disPlayMetrics = context.resources.displayMetrics
+        val screenDisplay = disPlayMetrics.widthPixels / disPlayMetrics.density
+        return if (screenDisplay < 500) 2
+        else if (screenDisplay in 500.0..<700.0) 3
+        else 4
     }
 
 }

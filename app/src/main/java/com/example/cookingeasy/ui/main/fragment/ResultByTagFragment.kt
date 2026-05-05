@@ -124,7 +124,7 @@ class ResultByTagFragment : Fragment() {
         else resultByTagViewModel.recipeByArea.value.filter {
             it.strMeal.contains(string, ignoreCase = true)
         }.size
-        binding.txtResultCount.text = "$count recipes found"
+        binding.txtResultCount.text = getString(R.string.recipes_found_count, count)
         binding.layoutEmpty.isVisible = count == 0
         binding.rvRecipesByTag.isVisible = count > 0
     }
@@ -141,6 +141,7 @@ class ResultByTagFragment : Fragment() {
                     TODO("Not yet implemented")
                 }
 
+                override fun onClickInf(recipe: Recipe) = Unit
             })
             adapter = mealSimpleAdapter
         }
@@ -152,7 +153,7 @@ class ResultByTagFragment : Fragment() {
     }
 
     fun loadData() {
-        binding.tvAreaName.text = "Area: " + area
+        binding.tvAreaName.text = getString(R.string.area_label, area)
         resultByTagViewModel.getRecipesByArea(area)
     }
 
@@ -163,7 +164,7 @@ class ResultByTagFragment : Fragment() {
                     Log.d("Data area: ", it.size.toString())
                     mealSimpleAdapter.updateData(it)
                     listRecipe = it
-                    binding.txtResultCount.text = it.size.toString() + " recipes found"
+                    binding.txtResultCount.text = getString(R.string.recipes_found_count, it.size)
                 }
             }
         }

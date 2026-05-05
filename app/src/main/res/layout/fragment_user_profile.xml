@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:text="Chef Quy"
+                android:text="@string/profile_name_placeholder"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="4dp"
-                android:text="Love cooking &amp; sharing recipes 🍳"
+                android:text="@string/user_profile_bio_placeholder"
                 android:textColor="#666"
                 android:textSize="14sp" />
 
@@ -75,14 +75,14 @@
                         android:id="@+id/txtRecipeCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24"
+                        android:text="@string/user_profile_sample_recipes_count"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Recipes"
+                        android:text="@string/home_stat_recipes_label"
                         android:textColor="#777"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -99,14 +99,14 @@
                         android:id="@+id/txtLikeCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="120"
+                        android:text="@string/stat_sample_120"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Likes"
+                        android:text="@string/user_profile_stat_likes"
                         android:textColor="#777"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -123,14 +123,14 @@
                         android:id="@+id/txtSavedCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="15"
+                        android:text="@string/user_profile_sample_saved_count"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Saved"
+                        android:text="@string/profile_stat_saved"
                         android:textColor="#777"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -144,7 +144,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_button_outline"
-                android:text="Edit Profile" />
+                android:text="@string/user_profile_edit" />
 
         </LinearLayout>
 

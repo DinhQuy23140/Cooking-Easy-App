@@ -16,7 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
-import com.example.cookingeasy.data.remote.firebase.AuthDataSource
+import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
 import com.example.cookingeasy.data.repository.AuthRepositoryImp
 import com.example.cookingeasy.data.repository.RecipeUploadRepositoryImp
 import com.example.cookingeasy.databinding.FragmentAddRecipeBinding
@@ -107,6 +107,7 @@ class AddRecipeFragment : Fragment() {
         }
 
         binding.btnSaveDraft.setOnClickListener {
+            showLoading(true)
             collectIngredients()
             viewModel.saveDraft(
                 mealImg = mealImg,
@@ -120,6 +121,7 @@ class AddRecipeFragment : Fragment() {
         }
 
         binding.btnPublish.setOnClickListener {
+            showLoading(true)
             collectIngredients()
             viewModel.publish(
                 mealImg = mealImg,
@@ -254,7 +256,11 @@ class AddRecipeFragment : Fragment() {
 
     private fun updateIngredientCountFromViews() {
         val count = binding.layoutIngredients.childCount
-        binding.tvIngredientCount.text = "$count ${if (count == 1) "item" else "items"}"
+        binding.tvIngredientCount.text = resources.getQuantityString(
+            R.plurals.ingredient_count,
+            count,
+            count
+        )
     }
 
     // ─── Instructions ─────────────────────────────────────────────────
@@ -297,7 +303,11 @@ class AddRecipeFragment : Fragment() {
 
     private fun updateStepCount() {
         val count = binding.layoutInstructions.childCount
-        binding.tvStepCount.text = "$count ${if (count == 1) "step" else "steps"}"
+        binding.tvStepCount.text = resources.getQuantityString(
+            R.plurals.step_count,
+            count,
+            count
+        )
     }
 
     // ─── File helpers ─────────────────────────────────────────────────
@@ -327,8 +337,10 @@ class AddRecipeFragment : Fragment() {
     // ─── UI Helpers ──────────────────────────────────────────────────
 
     private fun showLoading(isLoading: Boolean) {
+        binding.progressBarAddRecipe.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.btnPublish.isEnabled   = !isLoading
         binding.btnSaveDraft.isEnabled = !isLoading
+        binding.btnClose.isEnabled = !isLoading
     }
 
     private fun showError(message: String) {

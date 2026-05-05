@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="74dp"
     android:paddingVertical="12dp"
     android:paddingStart="4dp"
     android:orientation="horizontal">
@@ -11,27 +12,30 @@
     <LinearLayout
         android:layout_width="40dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal|top"
+        android:minHeight="50dp"
+        android:orientation="vertical">
 
         <!-- Circle -->
         <TextView
             android:id="@+id/tvStep"
             android:layout_width="28dp"
             android:layout_height="28dp"
+            android:background="@drawable/bg_step_circle"
             android:gravity="center"
-            android:text="1"
+            android:text="@string/sample_step_index"
             android:textColor="#FFFFFF"
-            android:textStyle="bold"
             android:textSize="12sp"
-            android:background="@drawable/bg_step_circle"/>
+            android:textStyle="bold" />
 
         <!-- Line -->
         <View
             android:id="@+id/viewLine"
             android:layout_width="2dp"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginTop="4dp"
+            android:minHeight="18dp"
             android:background="#A2CB8B"/>
 
     </LinearLayout>

@@ -45,7 +45,7 @@
                         android:id="@+id/txtName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chef Quy"
+                        android:text="@string/profile_name_placeholder"
                         android:textColor="#222"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -55,7 +55,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="quy@gmail.com"
+                        android:text="@string/profile_email_placeholder"
                         android:textColor="#777"
                         android:textSize="13sp" />
 
@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="My Recipes"
+                    android:text="@string/manage_my_recipes_title"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -125,7 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Saved"
+                    android:text="@string/profile_stat_saved"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -150,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Upload"
+                    android:text="@string/profile_quick_upload"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -164,7 +164,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
-            android:text="Manage"
+            android:text="@string/test_manage"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -197,7 +197,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:text="Draft Recipes"
+                        android:text="@string/profile_draft_recipes"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -225,7 +225,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:text="Favorite Recipes"
+                        android:text="@string/favorite_title"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -246,7 +246,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
-            android:text="Settings"
+            android:text="@string/test_settings"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -279,7 +279,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:text="Language"
+                        android:text="@string/profile_row_language"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -307,7 +307,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:text="Dark Mode"
+                        android:text="@string/profile_row_dark_mode"
                         android:textSize="15sp" />
 
                     <Switch
@@ -329,7 +329,7 @@
             android:layout_marginTop="28dp"
             android:gravity="center"
             android:padding="18dp"
-            android:text="Logout"
+            android:text="@string/action_logout"
             android:textColor="#D32F2F"
             android:textStyle="bold" />
 

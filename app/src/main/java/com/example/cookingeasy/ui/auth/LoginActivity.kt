@@ -29,6 +29,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.isVisible
 
 class LoginActivity : AppCompatActivity() {
 
@@ -222,6 +223,8 @@ class LoginActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         binding.btnLogin.isEnabled  = !isLoading
         binding.btnGoogle.isEnabled = !isLoading
+        binding.lnNav.isVisible = !isLoading
+        binding.prbLoading.isVisible = isLoading
     }
 
     private fun showError(message: String) {
@@ -233,6 +236,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToEnterName() {
+        binding.lnNav.isVisible = true
+        binding.prbLoading.isVisible = false
         startActivity(Intent(this, EnterNameActivity::class.java))
         finish()
     }

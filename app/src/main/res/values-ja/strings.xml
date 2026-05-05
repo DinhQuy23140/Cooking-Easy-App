@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cooking Easy</string>
+
+    <string name="cd_favorite_toggle">お気に入りを追加または解除</string>
+    <string name="cd_open_youtube">動画を開く</string>
+    <string name="cd_recipe_photo">レシピの写真</string>
+    <string name="cd_user_avatar">プロフィール写真</string>
+
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">キャンセル</string>
+    <string name="action_delete">削除</string>
+    <string name="action_publish">公開</string>
+    <string name="action_logout">ログアウト</string>
+
+    <string name="error_title">エラー</string>
+    <string name="category_not_found">カテゴリが見つかりません</string>
+    <string name="url_not_found">URLが見つかりません</string>
+    <string name="loading">読み込み中…</string>
+
+    <string name="greeting_template">%1$s</string>
+    <string name="day_period_morning">おはようございます</string>
+    <string name="day_period_afternoon">こんにちは</string>
+    <string name="day_period_evening">こんばんは</string>
+    <string name="day_period_night">おやすみなさい</string>
+
+    <string name="stats_count_plus">%1$d+</string>
+
+    <string name="publish_recipe_title">レシピを公開</string>
+    <string name="publish_recipe_message">「%1$s」を公開しますか？\n全員に表示されます。</string>
+    <string name="delete_recipe_title">レシピを削除</string>
+    <string name="delete_recipe_message">「%1$s」を削除しますか？\n元に戻せません。</string>
+
+    <string name="logout_confirm_title">ログアウト</string>
+    <string name="logout_confirm_message">ログアウトしてもよろしいですか？</string>
+
+    <string name="area_label">地域：%1$s</string>
+    <string name="recipes_found_count">%1$d件のレシピが見つかりました</string>
+
+    <string name="hello_blank_fragment">こんにちは</string>
+
+    <string name="cd_navigate_back">戻る</string>
+    <string name="language_screen_title">言語</string>
+    <string name="language_screen_subtitle">アプリの表示言語</string>
+    <string name="language_option_system">システムの既定</string>
+    <string name="language_option_system_sub">端末の設定に合わせる</string>
+    <string name="language_option_english">英語</string>
+    <string name="language_option_vietnamese">ベトナム語</string>
+    <string name="language_option_japanese">日本語</string>
+</resources>

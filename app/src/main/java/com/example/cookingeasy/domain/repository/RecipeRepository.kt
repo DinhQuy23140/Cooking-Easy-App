@@ -34,5 +34,7 @@ interface RecipeRepository {
 
     suspend fun getFavRecipeFirebase(): List<Recipe>
 
+    suspend fun getAllRecipesFirebase(): List<Recipe>
+
     suspend fun getFavRecipeIds(): List<String>
 }

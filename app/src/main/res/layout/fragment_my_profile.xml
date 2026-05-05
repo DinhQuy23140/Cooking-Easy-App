@@ -35,7 +35,7 @@
                 android:layout_weight="1"
                 android:fontFamily="sans-serif"
                 android:letterSpacing="0.08"
-                android:text="MY PROFILE"
+                android:text="@string/profile_screen_title"
                 android:textColor="#80FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -44,10 +44,11 @@
                 android:id="@+id/btnEditProfile"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:background="@drawable/shape_circle_glass"
+                android:contentDescription="@string/cd_edit_profile"
                 android:padding="10dp"
-                android:src="@drawable/ic_edit"
-                android:contentDescription="Edit profile"/>
+                android:src="@drawable/ic_edit" />
 
         </LinearLayout>
 
@@ -79,7 +80,7 @@
                     android:id="@+id/txtName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chef Quy"
+                    android:text="@string/profile_name_placeholder"
                     android:textColor="#FFFFFF"
                     android:textSize="22sp"
                     android:fontFamily="sans-serif-medium"/>
@@ -89,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="quy@gmail.com"
+                    android:text="@string/profile_email_placeholder"
                     android:textColor="#80FFFFFF"
                     android:textSize="13sp"
                     android:fontFamily="sans-serif"/>
@@ -119,7 +120,7 @@
                     android:id="@+id/tvMyRecipesCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12"
+                    android:text="@string/profile_sample_recipes_count"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:fontFamily="sans-serif-medium"/>
@@ -128,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Recipes"
+                    android:text="@string/home_stat_recipes_label"
                     android:textColor="#80FFFFFF"
                     android:textSize="11sp"/>
 
@@ -152,7 +153,7 @@
                     android:id="@+id/tvSavedCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="48"
+                    android:text="@string/profile_sample_saved_count"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:fontFamily="sans-serif-medium"/>
@@ -161,7 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Saved"
+                    android:text="@string/profile_stat_saved"
                     android:textColor="#80FFFFFF"
                     android:textSize="11sp"/>
 
@@ -185,7 +186,7 @@
                     android:id="@+id/tvUploadCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5"
+                    android:text="@string/profile_sample_uploads_count"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:fontFamily="sans-serif-medium"/>
@@ -194,7 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Uploads"
+                    android:text="@string/profile_stat_uploads"
                     android:textColor="#80FFFFFF"
                     android:textSize="11sp"/>
 
@@ -251,7 +252,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="My Recipes"
+                        android:text="@string/manage_my_recipes_title"
                         android:textColor="#2E5E2E"
                         android:textSize="11sp"
                         android:fontFamily="sans-serif-medium"/>
@@ -282,7 +283,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Saved"
+                        android:text="@string/profile_draft_recipes"
                         android:textColor="#2E5E2E"
                         android:textSize="11sp"
                         android:fontFamily="sans-serif-medium"/>
@@ -312,7 +313,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Upload"
+                        android:text="@string/profile_quick_upload"
                         android:textColor="#2E5E2E"
                         android:textSize="11sp"
                         android:fontFamily="sans-serif-medium"/>
@@ -341,7 +342,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MANAGE"
+                    android:text="@string/profile_section_manage"
                     android:textColor="#2E5E2E"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif-medium"
@@ -366,7 +367,7 @@
 
                     <!-- Draft Recipes row -->
                     <LinearLayout
-                        android:id="@+id/rowDraft"
+                        android:id="@+id/row_profile"
                         android:layout_width="match_parent"
                         android:layout_height="58dp"
                         android:gravity="center_vertical"
@@ -382,7 +383,7 @@
                             <ImageView
                                 android:layout_width="18dp"
                                 android:layout_height="18dp"
-                                android:src="@drawable/ic_cooking"/>
+                                android:src="@drawable/ic_person"/>
 
                         </LinearLayout>
 
@@ -391,7 +392,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
-                            android:text="Draft Recipes"
+                            android:text="@string/nav_profile"
                             android:textColor="#222222"
                             android:textSize="14sp"
                             android:fontFamily="sans-serif"/>
@@ -438,7 +439,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
-                            android:text="Favorite Recipes"
+                            android:text="@string/favorite_title"
                             android:textColor="#222222"
                             android:textSize="14sp"
                             android:fontFamily="sans-serif"/>
@@ -475,7 +476,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SETTINGS"
+                    android:text="@string/profile_section_settings"
                     android:textColor="#2E5E2E"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif-medium"
@@ -525,7 +526,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
-                            android:text="Language"
+                            android:text="@string/profile_row_language"
                             android:textColor="#222222"
                             android:textSize="14sp"
                             android:fontFamily="sans-serif"/>
@@ -571,7 +572,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
-                            android:text="Dark Mode"
+                            android:text="@string/profile_row_dark_mode"
                             android:textColor="#222222"
                             android:textSize="14sp"
                             android:fontFamily="sans-serif"/>
@@ -609,7 +610,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ACCOUNT"
+                    android:text="@string/profile_section_account"
                     android:textColor="#2E5E2E"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif-medium"
@@ -653,7 +654,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="14dp"
                         android:layout_weight="1"
-                        android:text="Logout"
+                        android:text="@string/action_logout"
                         android:textColor="#D32F2F"
                         android:textSize="14sp"
                         android:fontFamily="sans-serif-medium"/>

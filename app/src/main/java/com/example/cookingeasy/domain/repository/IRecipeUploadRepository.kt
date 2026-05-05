@@ -34,6 +34,7 @@ interface IRecipeUploadRepository {
     ): Result<String>
 
     suspend fun getMyRecipes(uid: String): Result<List<RecipeUpload>>
+    suspend fun getFavoriteCount(uid: String): Result<Int>
     suspend fun deleteRecipe(recipeId: String): Result<Unit>
     suspend fun getRecipesByUserUUID(uid: String): Result<List<RecipeUpload>>
     suspend fun updateStatus(recipeId: String, status: String): Result<Unit>

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -95,6 +96,16 @@ class ResultByCategoryFragment : Fragment() {
                     viewModel.toggleFavorite(recipe)
                 }
 
+                override fun onClickInf(recipe: Recipe) {
+                    val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+                    fragmentTransaction.setCustomAnimations(
+                        R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_left, R.anim.slide_out_right
+                    )
+                    fragmentTransaction.replace(R.id.container, OtherUserProfileFragment())
+                    fragmentTransaction.addToBackStack(null)
+                    fragmentTransaction.commit()
+                }
             }
         )
 
@@ -108,7 +119,7 @@ class ResultByCategoryFragment : Fragment() {
 
     private fun loadData() {
         if (strCategory.isEmpty()) {
-            Toast.makeText(requireContext(), "Not found category", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.category_not_found), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -116,7 +127,7 @@ class ResultByCategoryFragment : Fragment() {
 
         binding.tvCategoryName.text = category.strCategory
         binding.tvDescription.text = category.strCategoryDescription
-        binding.tvRecipeCount.text = "Loading..."
+        binding.tvRecipeCount.text = getString(R.string.loading)
 
         Glide.with(requireContext())
             .load(category.strCategoryThumb)
@@ -135,7 +146,11 @@ class ResultByCategoryFragment : Fragment() {
                 launch {
                     viewModel.recipesByCategory.collect { recipes ->
                         mealSimpleAdapter.updateData(recipes)
-                        binding.tvRecipeCount.text = "${recipes.size} recipes"
+                        binding.tvRecipeCount.text = resources.getQuantityString(
+                            R.plurals.recipe_count,
+                            recipes.size,
+                            recipes.size
+                        )
                         binding.layoutEmpty.isVisible = recipes.isEmpty()
                         binding.rvRecipes.isVisible = recipes.isNotEmpty()
                         listRecipeService = recipes
@@ -238,7 +253,11 @@ class ResultByCategoryFragment : Fragment() {
                 it.strMeal.contains(keyword, ignoreCase = true)
             }
 
-        binding.tvRecipeCount.text = "$count recipes"
+        binding.tvRecipeCount.text = resources.getQuantityString(
+            R.plurals.recipe_count,
+            count,
+            count
+        )
         binding.layoutEmpty.isVisible = count == 0
         binding.rvRecipes.isVisible = count > 0
     }

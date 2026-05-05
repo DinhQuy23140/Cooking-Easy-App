@@ -1,2 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">Cooking Easy</string>
+
+    <string name="cd_favorite_toggle">Thêm hoặc bỏ yêu thích</string>
+    <string name="cd_open_youtube">Mở video</string>
+    <string name="cd_recipe_photo">Ảnh món ăn</string>
+    <string name="cd_user_avatar">Ảnh đại diện</string>
+
+    <string name="action_ok">Đồng ý</string>
+    <string name="action_cancel">Hủy</string>
+    <string name="action_delete">Xóa</string>
+    <string name="action_publish">Xuất bản</string>
+    <string name="action_logout">Đăng xuất</string>
+
+    <string name="error_title">Lỗi</string>
+    <string name="category_not_found">Không tìm thấy danh mục</string>
+    <string name="url_not_found">Không tìm thấy URL</string>
+    <string name="loading">Đang tải…</string>
+
+    <string name="greeting_template">Chào buổi %1$s</string>
+    <string name="day_period_morning">sáng</string>
+    <string name="day_period_afternoon">chiều</string>
+    <string name="day_period_evening">tối</string>
+    <string name="day_period_night">đêm</string>
+
+    <string name="stats_count_plus">%1$d+</string>
+
+    <string name="publish_recipe_title">Xuất bản công thức</string>
+    <string name="publish_recipe_message">Xuất bản \"%1$s\"? Mọi người sẽ thấy món này.</string>
+    <string name="delete_recipe_title">Xóa công thức</string>
+    <string name="delete_recipe_message">Xóa \"%1$s\"? Thao tác này không hoàn tác.</string>
+
+    <string name="logout_confirm_title">Đăng xuất</string>
+    <string name="logout_confirm_message">Bạn có chắc muốn đăng xuất?</string>
+
+    <string name="area_label">Khu vực: %1$s</string>
+    <string name="recipes_found_count">%1$d công thức tìm được</string>
+
+    <string name="hello_blank_fragment">Xin chào</string>
+
+    <string name="cd_navigate_back">Quay lại</string>
+    <string name="language_screen_title">Ngôn ngữ</string>
+    <string name="language_screen_subtitle">Ngôn ngữ hiển thị trong ứng dụng</string>
+    <string name="language_option_system">Theo hệ thống</string>
+    <string name="language_option_system_sub">Giống cài đặt trên thiết bị</string>
+    <string name="language_option_english">Tiếng Anh</string>
+    <string name="language_option_vietnamese">Tiếng Việt</string>
+    <string name="language_option_japanese">Tiếng Nhật</string>
+</resources>

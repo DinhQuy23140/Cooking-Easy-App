@@ -16,7 +16,7 @@
         android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:text="Vietnamese"
+        android:text="@string/sample_area_name"
         android:textColor="#333333"
         android:textSize="14sp"
         android:textStyle="bold" />

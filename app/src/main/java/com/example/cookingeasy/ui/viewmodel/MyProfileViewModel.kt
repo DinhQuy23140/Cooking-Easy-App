@@ -3,8 +3,9 @@ package com.example.cookingeasy.ui.main.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cookingeasy.data.repository.AuthRepositoryImp
+import com.example.cookingeasy.data.repository.UserRepository
+import com.example.cookingeasy.data.repository.UserRepositoryImp
 import com.example.cookingeasy.domain.repository.AuthRepository
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,43 +13,52 @@ import kotlinx.coroutines.launch
 
 class MyProfileViewModel(
 ) : ViewModel() {
-    private val authRepository: AuthRepository = AuthRepositoryImp()
-//    private val userRepository: UserRepository = UserRepository()
-
-    // ─── UI State ────────────────────────────────────────────────────
+    private val _authRepository: AuthRepository = AuthRepositoryImp()
+    private val _userRepository: UserRepository = UserRepositoryImp()
+    private val _userName = MutableStateFlow<String>("")
+    private val _imgUrl = MutableStateFlow<String>("")
+    val userName: StateFlow<String> = _userName
+    val imgUrl: StateFlow<String> = _imgUrl
 
     sealed class ProfileState {
         object Idle : ProfileState()
         object Loading : ProfileState()
         object LoggedOut : ProfileState()
-        data class UserLoaded(val user: FirebaseUser) : ProfileState()
+        data class UserLoaded(val user: Map<String, Any>) : ProfileState()
         data class Error(val message: String) : ProfileState()
     }
 
     private val _profileState = MutableStateFlow<ProfileState>(ProfileState.Idle)
     val profileState: StateFlow<ProfileState> = _profileState.asStateFlow()
 
-    // ─── Init ────────────────────────────────────────────────────────
 
     init {
         loadCurrentUser()
     }
 
-    // ─── Actions ─────────────────────────────────────────────────────
 
     private fun loadCurrentUser() {
-        val user = authRepository.getCurrentUser()
-        if (user != null) {
-            _profileState.value = ProfileState.UserLoaded(user)
-        } else {
-            _profileState.value = ProfileState.Error("User not found")
+        val uid = _authRepository.getCurrentUser()?.uid
+        if (uid.isNullOrEmpty()) {
+            _profileState.value = ProfileState.LoggedOut
+            return
+        }
+        viewModelScope.launch {
+            _profileState.value = ProfileState.Loading
+            _userRepository.getUserProfile(uid)
+                .onSuccess {
+                    _profileState.value = ProfileState.UserLoaded(it)
+                }
+                .onFailure {
+                    _profileState.value = ProfileState.Error(it.message ?: "User not found")
+                }
         }
     }
 
     fun logout() {
         viewModelScope.launch {
             _profileState.value = ProfileState.Loading
-            authRepository.logout()
+            _authRepository.logout()
             _profileState.value = ProfileState.LoggedOut
         }
     }
@@ -56,7 +66,7 @@ class MyProfileViewModel(
     fun deleteAccount() {
         viewModelScope.launch {
             _profileState.value = ProfileState.Loading
-            val result = authRepository.deleteAccount()
+            val result = _authRepository.deleteAccount()
             _profileState.value = result.fold(
                 onSuccess = { ProfileState.LoggedOut },
                 onFailure = { e -> ProfileState.Error(e.message ?: "Delete account failed") }

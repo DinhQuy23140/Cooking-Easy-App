@@ -11,9 +11,9 @@ import com.example.cookingeasy.R
 import com.example.cookingeasy.data.preferences.ShareprefConstants
 import com.example.cookingeasy.databinding.ActivityMainBinding
 import com.example.cookingeasy.ui.main.fragment.AIChatFragment
-import com.example.cookingeasy.ui.main.fragment.ManageMyRecipeFragment
 import com.example.cookingeasy.ui.main.fragment.ExploreFragment
 import com.example.cookingeasy.ui.main.fragment.HomeFragment
+import com.example.cookingeasy.ui.main.fragment.ListChatFragment
 import com.example.cookingeasy.ui.main.fragment.MyProfileFragment
 
 class MainActivity : AppCompatActivity() {
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             val fragment = when(item.itemId) {
                 R.id.bottom_home -> HomeFragment()
                 R.id.bottom_explore -> ExploreFragment()
-                R.id.bottom_add_recipe -> ManageMyRecipeFragment()
+                R.id.bottom_add_recipe -> ListChatFragment()
                 R.id.bottom_ai -> AIChatFragment()
                 R.id.bottom_person -> MyProfileFragment()
                 else -> null

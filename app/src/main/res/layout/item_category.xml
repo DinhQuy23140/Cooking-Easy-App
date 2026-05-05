@@ -48,7 +48,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="Dessert"
+            android:text="@string/sample_category_name"
             android:textColor="#1E2F23"
             android:textSize="14sp" />
 

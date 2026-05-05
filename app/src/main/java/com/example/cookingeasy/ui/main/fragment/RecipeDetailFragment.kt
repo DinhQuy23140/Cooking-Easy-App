@@ -5,8 +5,10 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -63,7 +65,6 @@ class RecipeDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentRecipeDetailBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -75,15 +76,6 @@ class RecipeDetailFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RecipeDetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             RecipeDetailFragment().apply {
@@ -106,11 +98,30 @@ class RecipeDetailFragment : Fragment() {
     }
 
     fun loadData(recipe: Recipe) {
-        Glide.with(requireActivity())
-            .load(recipe.strMealThumb)
-            .placeholder(R.drawable.ic_cooking)
-            .error(R.drawable.ic_delete)
-            .into(binding.imgRecipe)
+        val thumb = recipe.strMealThumb?.trim().orEmpty()
+        if (thumb.startsWith("http://", ignoreCase = true) || thumb.startsWith("https://", ignoreCase = true)) {
+            Glide.with(requireActivity())
+                .load(thumb)
+                .placeholder(R.drawable.ic_cooking)
+                .error(R.drawable.ic_delete)
+                .into(binding.imgRecipe)
+        } else if (thumb.isNotBlank()) {
+            runCatching {
+                val base64Payload = thumb.substringAfter("base64,", thumb)
+                val decodedBytes = Base64.decode(base64Payload, Base64.DEFAULT)
+                BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+            }.onSuccess { bitmap ->
+                if (bitmap != null) {
+                    binding.imgRecipe.setImageBitmap(bitmap)
+                } else {
+                    binding.imgRecipe.setImageResource(R.drawable.ic_delete)
+                }
+            }.onFailure {
+                binding.imgRecipe.setImageResource(R.drawable.ic_delete)
+            }
+        } else {
+            binding.imgRecipe.setImageResource(R.drawable.ic_delete)
+        }
 
         if (recipe.isFavorote) binding.btnFavorite.setImageResource(R.drawable.ic_heart_filled)
         else binding.btnFavorite.setImageResource(R.drawable.ic_heart_outline)
@@ -202,7 +213,7 @@ class RecipeDetailFragment : Fragment() {
                 context.startActivity(intent)
             }
         } else {
-            Toast.makeText(requireContext(), "Url not found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.url_not_found), Toast.LENGTH_SHORT).show()
         }
     }
 

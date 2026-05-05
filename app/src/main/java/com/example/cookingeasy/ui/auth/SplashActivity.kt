@@ -9,7 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.cookingeasy.R
-import com.example.cookingeasy.data.remote.firebase.AuthDataSource
+import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
 import com.example.cookingeasy.data.repository.UserRepository
 import com.example.cookingeasy.databinding.ActivitySplashBinding
 import com.example.cookingeasy.ui.auth.SplashViewModel.SplashState

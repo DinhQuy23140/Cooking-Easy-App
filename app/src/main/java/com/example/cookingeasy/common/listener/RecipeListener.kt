@@ -5,4 +5,6 @@ import com.example.cookingeasy.domain.model.Recipe
 interface RecipeListener {
     fun OnClickItem(recipe: Recipe)
     fun OnFavoriteClick(recipe: Recipe)
+
+    fun onClickInf(recipe: Recipe)
 }

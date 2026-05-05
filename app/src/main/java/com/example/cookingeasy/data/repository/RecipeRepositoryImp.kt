@@ -5,10 +5,11 @@ import com.example.cookingeasy.data.remote.api.ApiServiceProvider
 import com.example.cookingeasy.data.remote.dto.AreaResponseDto
 import com.example.cookingeasy.data.remote.dto.CategoryResponseDto
 import com.example.cookingeasy.data.remote.dto.RecipeResponseDto
-import com.example.cookingeasy.data.remote.firebase.RecipeFirestoreDataSource
+import com.example.cookingeasy.data.remote.firebase.fireStore.RecipeFirestoreDataSource
 import com.example.cookingeasy.data.remote.mapper.AreaMapper
 import com.example.cookingeasy.data.remote.mapper.CategoryMapper
 import com.example.cookingeasy.data.remote.mapper.RecipeMapper
+import com.example.cookingeasy.domain.mapper.toRecipe
 import com.example.cookingeasy.domain.model.Area
 import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
@@ -72,12 +73,12 @@ class RecipeRepositoryImp : RecipeRepository{
 
     override suspend fun filterRecipesByArea(are: String): List<Recipe> {
         val response: RecipeResponseDto = recipeService.filterRecipesByArea(are)
-        return RecipeMapper.toRecipeList(response.meals)
+        return RecipeMapper.toRecipeList(response.meals ?: emptyList())
     }
 
     override suspend fun filterRecipesByCategory(category: String): List<Recipe> {
         val response: RecipeResponseDto = recipeService.filterRecipesByCategory(category)
-        return RecipeMapper.toRecipeList(response.meals)
+        return RecipeMapper.toRecipeList(response.meals ?: emptyList())
     }
 
     override suspend fun filterRecipesByIngredient(ingredient: String): List<Recipe> {
@@ -100,8 +101,8 @@ class RecipeRepositoryImp : RecipeRepository{
         for (index in 1 .. 10) {
             try {
                 val response = recipeService.getRandomRecipe()
-                response.meals?.let {
-                    trendingRecipes.add(RecipeMapper.toRecipe(response.meals.first()))
+                response.meals?.let { meals ->
+                    trendingRecipes.add(RecipeMapper.toRecipe(meals.first()))
                     emit(trendingRecipes.toList())
                 }
             } catch (e: Exception) {
@@ -147,6 +148,10 @@ class RecipeRepositoryImp : RecipeRepository{
     override suspend fun getFavRecipeFirebase(): List<Recipe> {
         val uid = auth.uid.toString()
         return remote.getFavorites(uid)
+    }
+
+    override suspend fun getAllRecipesFirebase(): List<Recipe> {
+        return remote.getPublishedRecipes().map { it.toRecipe() }
     }
 
     override suspend fun getFavRecipeIds(): List<String> {

@@ -1,136 +1,455 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient_bottom">
+    android:background="@drawable/bg_gradient_bottom"
+    android:orientation="vertical"
+    tools:context=".ui.main.fragment.OtherUserProfileFragment">
 
-<!--    &lt;!&ndash; ================= APP BAR ================= &ndash;&gt;-->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="320dp"-->
-<!--        android:fitsSystemWindows="true">-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="28dp">
 
-<!--        <com.google.android.material.appbar.CollapsingToolbarLayout-->
-<!--            android:id="@+id/collapsingToolbar"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:fitsSystemWindows="true"-->
-<!--            app:layout_scrollFlags="scroll|exitUntilCollapsed"-->
-<!--            app:titleEnabled="false">-->
+            <!-- Banner cover (social-style header) -->
 
-<!--            &lt;!&ndash; HERO IMAGE &ndash;&gt;-->
+            <!-- Avatar overlaps cover bottom (Instagram / X style) -->
 
-<!--            <ImageView-->
-<!--                android:id="@+id/imgHero"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:scaleType="centerCrop"-->
-<!--                android:src="@drawable/bg_profile_hero"-->
-<!--                app:layout_collapseMode="parallax"-->
-<!--                app:layout_collapseParallaxMultiplier="0.7"/>-->
+            <View
+                android:id="@+id/viewCover"
+                android:layout_width="0dp"
+                android:layout_height="184dp"
+                android:background="@drawable/shape_profile_social_cover"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-<!--            &lt;!&ndash; OVERLAY &ndash;&gt;-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="25dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-<!--            <View-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:background="@drawable/bg_gradient_overlay"/>-->
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:background="@drawable/shape_circle_glass"
+                    android:contentDescription="@string/cd_navigate_back"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_back"
+                    app:tint="@android:color/white" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:letterSpacing="0.12"
+                    android:text="@string/nav_profile"
+                    android:textAllCaps="true"
+                    android:textColor="#99FFFFFF"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-<!--            &lt;!&ndash; PROFILE CONTENT &ndash;&gt;-->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardAvatar"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="-52dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="52dp"
+                app:cardElevation="6dp"
+                app:layout_constraintBottom_toBottomOf="@id/viewCover"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@android:color/white"
+                app:strokeWidth="0dp">
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical"-->
-<!--                android:gravity="center_horizontal"-->
-<!--                android:layout_gravity="bottom"-->
-<!--                android:paddingBottom="20dp"-->
-<!--                app:layout_collapseMode="parallax">-->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="4dp">
 
-<!--                &lt;!&ndash; Avatar &ndash;&gt;-->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/shape_avatar_ring"
+                        android:padding="3dp">
 
-<!--                <de.hdodenhof.circleimageview.CircleImageView-->
-<!--                    android:id="@+id/imgAvatar"-->
-<!--                    android:layout_width="96dp"-->
-<!--                    android:layout_height="96dp"-->
-<!--                    android:src="@drawable/ic_person_black"-->
-<!--                    app:civ_border_width="3dp"-->
-<!--                    app:civ_border_color="@android:color/white"/>-->
+                        <ImageView
+                            android:id="@+id/imgAvatar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/cd_chat_row_avatar"
+                            android:scaleType="center"
+                            android:src="@drawable/ic_person" />
+                    </FrameLayout>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-<!--                &lt;!&ndash; Name &ndash;&gt;-->
+            <ImageView
+                android:id="@+id/imgVerifiedBadge"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="@null"
+                android:elevation="10dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_verified"
+                app:layout_constraintBottom_toBottomOf="@id/cardAvatar"
+                app:layout_constraintEnd_toEndOf="@id/cardAvatar" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tvUserName"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Nguyễn Minh Tâm"-->
-<!--                    android:textSize="22sp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:textColor="@android:color/white"-->
-<!--                    android:layout_marginTop="10dp"/>-->
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/other_user_name_placeholder"
+                android:textColor="#1A1A1A"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardAvatar" />
 
-<!--                &lt;!&ndash; Handle &ndash;&gt;-->
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/other_user_handle_placeholder"
+                android:textColor="#6B7280"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvName" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tvHandle"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@chef.minhtam · Hà Nội"-->
-<!--                    android:textSize="13sp"-->
-<!--                    android:textColor="#DDFFFFFF"/>-->
+            <TextView
+                android:id="@+id/tvBio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:lineSpacingExtra="2dp"
+                android:text="@string/other_user_bio_placeholder"
+                android:textColor="#4B5563"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvUsername" />
 
-<!--            </LinearLayout>-->
+            <!-- Stats row: posts / followers / following -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardStats"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvBio"
+                app:strokeColor="#E8EDE8"
+                app:strokeWidth="1dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp">
 
-<!--            &lt;!&ndash; TOOLBAR &ndash;&gt;-->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-<!--            <androidx.appcompat.widget.Toolbar-->
-<!--                android:id="@+id/toolbar"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="?attr/actionBarSize"-->
-<!--                app:layout_collapseMode="pin">-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/other_user_sample_recipes_count"
+                            android:textColor="#111827"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-<!--                <ImageButton-->
-<!--                    android:id="@+id/btnBack"-->
-<!--                    android:layout_width="40dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:background="@drawable/bg_circle_white_alpha"-->
-<!--                    android:src="@drawable/ic_arrow_back"-->
-<!--                    android:padding="10dp"/>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/home_stat_recipes_label"
+                            android:textColor="#9CA3AF"
+                            android:textSize="12sp" />
+                    </LinearLayout>
 
-<!--                <Space-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:layout_weight="1"/>-->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="36dp"
+                        android:background="#E5E7EB" />
 
-<!--                <ImageButton-->
-<!--                    android:id="@+id/btnMore"-->
-<!--                    android:layout_width="40dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:background="@drawable/bg_circle_white_alpha"-->
-<!--                    android:src="@drawable/ic_more_vert"-->
-<!--                    android:padding="10dp"/>-->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-<!--            </androidx.appcompat.widget.Toolbar>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/other_user_sample_followers_count"
+                            android:textColor="#111827"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-<!--        </com.google.android.material.appbar.CollapsingToolbarLayout>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/other_user_label_followers"
+                            android:textColor="#9CA3AF"
+                            android:textSize="12sp" />
+                    </LinearLayout>
 
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="36dp"
+                        android:background="#E5E7EB" />
 
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-<!--    &lt;!&ndash; ================= CONTENT ================= &ndash;&gt;-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/other_user_sample_following_count"
+                            android:textColor="#111827"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/rvProfile"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:clipToPadding="false"-->
-<!--        android:paddingBottom="24dp"-->
-<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/other_user_label_following"
+                            android:textColor="#9CA3AF"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <!-- Primary actions -->
+            <LinearLayout
+                android:id="@+id/layoutActions"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardStats">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFollow"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/other_user_follow"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp"
+                    app:backgroundTint="#2E7D32"
+                    app:cornerRadius="26dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnMessage"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:text="@string/other_user_message"
+                    android:textAllCaps="false"
+                    android:textColor="#2E5E2E"
+                    android:textSize="15sp"
+                    app:cornerRadius="26dp"
+                    app:strokeColor="#C5E1A5"
+                    app:strokeWidth="1.5dp" />
+            </LinearLayout>
+
+            <!-- Interest / tags -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardInterests"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layoutActions"
+                app:strokeColor="#E8EDE8"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:letterSpacing="0.04"
+                        android:text="@string/explore_popular_categories"
+                        android:textColor="#374151"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:chipSpacingHorizontal="8dp"
+                        app:chipSpacingVertical="6dp">
+
+                        <com.google.android.material.chip.Chip
+                            style="@style/Widget.CookingEasy.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/other_user_tag_healthy" />
+
+                        <com.google.android.material.chip.Chip
+                            style="@style/Widget.CookingEasy.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/other_user_tag_vegan" />
+
+                        <com.google.android.material.chip.Chip
+                            style="@style/Widget.CookingEasy.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sample_category_name" />
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Recipe grid / tabs -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardInterests"
+                app:strokeColor="#E8EDE8"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@android:color/transparent"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        app:tabIndicatorColor="#2E7D32"
+                        app:tabIndicatorFullWidth="false"
+                        app:tabIndicatorHeight="3dp"
+                        app:tabMode="fixed"
+                        app:tabRippleColor="#332E7D32"
+                        app:tabSelectedTextColor="#1B5E20"
+                        app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Button"
+                        app:tabTextColor="#9CA3AF">
+
+                        <com.google.android.material.tabs.TabItem
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/other_user_tab_recipes" />
+
+                        <com.google.android.material.tabs.TabItem
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/other_user_tab_saved" />
+                    </com.google.android.material.tabs.TabLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvRecipes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        android:padding="10dp" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutEmpty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_empty_recipe" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/manage_empty_title"
+                            android:textColor="#9CA3AF" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

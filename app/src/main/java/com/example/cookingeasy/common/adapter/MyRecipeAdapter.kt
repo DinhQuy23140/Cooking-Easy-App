@@ -7,14 +7,17 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
+import com.example.cookingeasy.common.listener.RecipeListener
+import com.example.cookingeasy.common.listener.UploadRecipeListener
 import com.example.cookingeasy.domain.model.RecipeUpload
 
-class MyRecipeAdapter(private val listRecipe: MutableList<RecipeUpload>): RecyclerView.Adapter<MyRecipeAdapter.MyRecipeViewHolder>() {
+class MyRecipeAdapter(private val listRecipe: MutableList<RecipeUpload>, private val recipeListener: UploadRecipeListener): RecyclerView.Adapter<MyRecipeAdapter.MyRecipeViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -33,6 +36,18 @@ class MyRecipeAdapter(private val listRecipe: MutableList<RecipeUpload>): Recycl
         Glide.with(holder.itemView)
             .load(loadBase64Image(myRecipe.mealImageUrl))
             .into(holder.imgRecipe)
+
+        holder.itemView.setOnClickListener {
+            recipeListener.onItemClick(myRecipe)
+        }
+
+        holder.btnEdit.setOnClickListener {
+            recipeListener.onEdit(myRecipe)
+        }
+
+        holder.btnDelete.setOnClickListener {
+            recipeListener.onDelete(myRecipe)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -49,6 +64,10 @@ class MyRecipeAdapter(private val listRecipe: MutableList<RecipeUpload>): Recycl
         val imgRecipe: ImageView = itemView.findViewById(R.id.imgRecipe)
         val txtRecipeName: TextView = itemView.findViewById(R.id.tvRecipeTitle)
         val tvRecipeTag: TextView = itemView.findViewById(R.id.tvRecipeTag)
+
+        val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete)
+
+        val btnEdit: ImageView = itemView.findViewById(R.id.btnEdit)
     }
 
     fun loadBase64Image(base64: String): Bitmap {

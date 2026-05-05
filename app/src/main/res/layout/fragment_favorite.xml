@@ -38,7 +38,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="COOKING"
+                    android:text="@string/brand_cooking"
                     android:textColor="#80FFFFFF"
                     android:textSize="11sp"
                     android:letterSpacing="0.12"/>
@@ -46,7 +46,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Favorite Recipes"
+                    android:text="@string/favorite_title"
                     android:textColor="#FFFFFF"
                     android:textSize="22sp"
                     android:layout_marginTop="2dp"
@@ -88,7 +88,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:hint="Search favorite recipes..."
+                android:hint="@string/hint_search_favorites"
                 android:textColor="#FFFFFF"
                 android:textSize="13sp"
                 android:imeOptions="actionSearch"
@@ -127,7 +127,7 @@
                     android:gravity="center"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:text="All"
+                    android:text="@string/tab_all"
                     android:textColor="#FFFFFF"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif-medium"/>
@@ -141,7 +141,7 @@
                     android:gravity="center"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:text="Recently Added"
+                    android:text="@string/favorite_tab_recent"
                     android:textColor="#CCFFFFFF"
                     android:textSize="12sp"/>
 
@@ -153,7 +153,7 @@
                     android:gravity="center"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:text="Most Liked"
+                    android:text="@string/favorite_tab_liked"
                     android:textColor="#CCFFFFFF"
                     android:textSize="12sp"/>
 
@@ -208,7 +208,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:text="No favorite recipes"
+            android:text="@string/favorite_empty_title"
             android:textColor="#2E5E2E"
             android:textSize="18sp"
             android:fontFamily="sans-serif-medium"/>
@@ -217,7 +217,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Tap the heart icon to save recipes"
+            android:text="@string/favorite_empty_subtitle"
             android:textColor="#80A2CB8B"
             android:textSize="13sp"/>
 

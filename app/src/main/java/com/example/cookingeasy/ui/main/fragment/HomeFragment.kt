@@ -1,10 +1,12 @@
 package com.example.cookingeasy.ui.main.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
@@ -14,11 +16,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.AreaAdapter
 import com.example.cookingeasy.common.adapter.CategoryAdapter
 import com.example.cookingeasy.common.adapter.RecipeAdapter
-import com.example.cookingeasy.common.adapter.RecipeAdapterV2
 import com.example.cookingeasy.common.listener.AreaListener
 import com.example.cookingeasy.common.listener.CategoryListener
 import com.example.cookingeasy.common.listener.RecipeListener
@@ -43,6 +45,11 @@ class HomeFragment : Fragment() {
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var areaAdapter: AreaAdapter
     private lateinit var recipeAdapter: RecipeAdapter
+    private var listCategory = mutableListOf<Category>()
+    private var shortListCategory = mutableListOf<Category>()
+
+    private var listArea = mutableListOf<Area>()
+    private var shortListArea = mutableListOf<Area>()
 
     private var isLoadingMore = false
 
@@ -113,6 +120,17 @@ class HomeFragment : Fragment() {
             override fun OnFavoriteClick(recipe: Recipe) {
                 homeViewModel.toggleFavorite(recipe)
             }
+
+            override fun onClickInf(recipe: Recipe) {
+                val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+                fragmentTransaction.setCustomAnimations(
+                    R.anim.slide_in_right, R.anim.slide_out_left,
+                    R.anim.slide_in_left, R.anim.slide_out_right
+                )
+                fragmentTransaction.replace(R.id.container, OtherUserProfileFragment())
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+            }
         })
 
         binding.rvCategories.apply {
@@ -140,6 +158,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun event() {
         binding.edtSearch.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -177,6 +196,30 @@ class HomeFragment : Fragment() {
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
+
+        binding.tvSeeAllCategories.setOnClickListener {
+            categoryAdapter.updateData(listCategory)
+            binding.tvHide.isVisible = true
+            binding.tvSeeAllCategories.isVisible = false
+        }
+
+        binding.tvHide.setOnClickListener {
+            categoryAdapter.updateData(shortListCategory)
+            binding.tvHide.isVisible = false
+            binding.tvSeeAllCategories.isVisible = true
+        }
+
+        binding.tvSeeAllAreas.setOnClickListener {
+            areaAdapter.updateData(listArea)
+            binding.tvSeeAllAreas.isVisible = false
+            binding.tvHideAreas.isVisible = true
+        }
+
+        binding.tvHideAreas.setOnClickListener {
+            areaAdapter.updateData(shortListArea)
+            binding.tvSeeAllAreas.isVisible = true
+            binding.tvHideAreas.isVisible = false
+        }
     }
 
 
@@ -184,6 +227,21 @@ class HomeFragment : Fragment() {
         homeViewModel.getListCategory()
         homeViewModel.getListArea()
         homeViewModel.loadFavorites()
+        homeViewModel.getInfUser()
+        setUpMessageTime()
+    }
+
+    fun setUpMessageTime() {
+        val periodRes = when (homeViewModel.getDayPeriod()) {
+            HomeViewModel.DayPeriod.MORNING -> R.string.day_period_morning
+            HomeViewModel.DayPeriod.AFTERNOON -> R.string.day_period_afternoon
+            HomeViewModel.DayPeriod.EVENING -> R.string.day_period_evening
+            HomeViewModel.DayPeriod.NIGHT -> R.string.day_period_night
+        }
+        binding.txtGreeting.text = getString(
+            R.string.greeting_template,
+            getString(periodRes)
+        )
     }
 
     private fun observeData() {
@@ -194,8 +252,10 @@ class HomeFragment : Fragment() {
                     homeViewModel.lisCategory
                         .filter { it.isNotEmpty() }
                         .collect { data ->
-                            categoryAdapter.updateData(data)
-                            binding.tvCategoryCount.text = "${data.size}+"
+                            listCategory = data as MutableList<Category>
+                            shortListCategory.addAll(listCategory.subList(0, 8))
+                            categoryAdapter.updateData(shortListCategory)
+                            binding.tvCategoryCount.text = getString(R.string.stats_count_plus, data.size)
                         }
                 }
 
@@ -203,8 +263,10 @@ class HomeFragment : Fragment() {
                     homeViewModel.listArea
                         .filter { it.isNotEmpty() }
                         .collect { data ->
-                            areaAdapter.updateData(data)
-                            binding.tvCuisneCount.text = "${data.size}+"
+                            listArea = data as MutableList<Area>
+                            shortListArea.addAll(listArea.subList(0, 8))
+                            areaAdapter.updateData(shortListArea)
+                            binding.tvCuisneCount.text = getString(R.string.stats_count_plus, data.size)
                         }
                 }
 
@@ -214,8 +276,16 @@ class HomeFragment : Fragment() {
                         .distinctUntilChanged()
                         .collect { data ->
                             recipeAdapter.updateData(data)
-                            binding.tvRecipeCount.text = "${data.size}+"
+                            binding.tvRecipeCount.text = getString(R.string.stats_count_plus, data.size)
                         }
+                }
+                launch {
+                    homeViewModel.userName.collect { binding.txtUserName.text = it }
+                    homeViewModel.imgUrl.collect {
+                        Glide.with(binding.imgAvatar)
+                            .load(it)
+                            .into(binding.imgAvatar)
+                    }
                 }
             }
         }

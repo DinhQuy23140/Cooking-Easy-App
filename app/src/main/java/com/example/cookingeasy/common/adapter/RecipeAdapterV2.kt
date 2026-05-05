@@ -1,17 +1,17 @@
 package com.example.cookingeasy.common.adapter
 
-import android.text.Layout
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
-import com.example.cookingeasy.common.adapter.RecipeAdapter.RecipeDiffCallback
-import com.example.cookingeasy.common.adapter.RecipeAdapter.RecipeViewHolder
 import com.example.cookingeasy.common.listener.RecipeListener
 import com.example.cookingeasy.domain.model.Recipe
 
@@ -41,8 +41,33 @@ class RecipeAdapterV2(private val listRecipe: MutableList<Recipe>, private val r
             .into(holder.ivImgRecipe)
 
         holder.tvRecipeName.text = recipe.strMeal
-        holder.tvRecipeArea.text = "${recipe.strCategory} • ${recipe.strArea}"
-        holder.tvRecipeTag.text = recipe.strTags ?: ""
+        val meta = RecipeAdapter.buildRecipeMetaLine(recipe)
+        val showMeta = meta.isNotEmpty()
+        holder.tvRecipeMeta.text = if (showMeta) meta else ""
+        holder.iconMeta.visibility = if (showMeta) View.VISIBLE else View.INVISIBLE
+        holder.tvRecipeMeta.visibility = if (showMeta) View.VISIBLE else View.INVISIBLE
+
+        holder.tvRecipeAuthor.text = recipe.userName
+        val u = recipe.userImg.trim()
+        if (u.startsWith("http://", ignoreCase = true) || u.startsWith("https://", ignoreCase = true)) {
+            Glide.with(holder.ivAuthorImg).load(u).circleCrop()
+                .placeholder(R.drawable.ic_person).error(R.drawable.ic_person).into(holder.ivAuthorImg)
+        } else {
+            Glide.with(holder.ivAuthorImg).clear(holder.ivAuthorImg)
+            holder.ivAuthorImg.setImageResource(R.drawable.ic_person)
+        }
+
+        val yt = recipe.strYoutube?.trim().orEmpty()
+        holder.ivYoutube.isVisible = yt.isNotEmpty()
+        holder.ivYoutube.setOnClickListener {
+            if (yt.isNotEmpty()) {
+                runCatching {
+                    holder.itemView.context.startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse(yt))
+                    )
+                }
+            }
+        }
 
         holder.ivFavorite.setImageResource(
             if (recipe.isFavorote) R.drawable.ic_heart_filled
@@ -74,7 +99,7 @@ class RecipeAdapterV2(private val listRecipe: MutableList<Recipe>, private val r
         val firstPage = listRecipe.take(pageSize)
         currentPage = 1
 
-        val diffResult = DiffUtil.calculateDiff(RecipeDiffCallback(displayList, firstPage))
+        val diffResult = DiffUtil.calculateDiff(RecipeAdapter.RecipeDiffCallback(displayList, firstPage))
         displayList.clear()
         displayList.addAll(firstPage)
         diffResult.dispatchUpdatesTo(this)
@@ -94,25 +119,13 @@ class RecipeAdapterV2(private val listRecipe: MutableList<Recipe>, private val r
 
     fun hasMoreData(): Boolean = currentPage * pageSize < listRecipe.size
 
-    class RecipeDiffCallback(
-        private val oldList: List<Recipe>,
-        private val newList: List<Recipe>
-    ) : DiffUtil.Callback() {
-        override fun getOldListSize() = oldList.size
-        override fun getNewListSize() = newList.size
-        override fun areItemsTheSame(oldPos: Int, newPos: Int) =
-            oldList[oldPos].idMeal == newList[newPos].idMeal
-        override fun areContentsTheSame(oldPos: Int, newPos: Int) =
-            oldList[oldPos] == newList[newPos]
-    }
-
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ivFavorite: ImageView = itemView.findViewById(R.id.btnFavorite)
         val ivImgRecipe: ImageView = itemView.findViewById(R.id.imgMeal)
         val ivYoutube: ImageView = itemView.findViewById(R.id.btnYoutube)
         val tvRecipeName: TextView = itemView.findViewById(R.id.txtMealName)
-        val tvRecipeArea: TextView = itemView.findViewById(R.id.txtCategoryArea)
-        val tvRecipeTag: TextView = itemView.findViewById(R.id.txtTags)
+        val iconMeta: ImageView = itemView.findViewById(R.id.iconMeta)
+        val tvRecipeMeta: TextView = itemView.findViewById(R.id.txtRecipeMeta)
         val tvRecipeAuthor: TextView = itemView.findViewById(R.id.txtUserName)
         val ivAuthorImg: ImageView = itemView.findViewById(R.id.imgUser)
     }
