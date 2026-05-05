@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,16 +18,8 @@ import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.RecipeAdapter
 import com.example.cookingeasy.common.listener.RecipeListener
-import com.example.cookingeasy.data.repository.AuthRepositoryImp
-import com.example.cookingeasy.data.repository.RecipeRepositoryImp
-import com.example.cookingeasy.data.repository.UserRepository
-import com.example.cookingeasy.data.repository.UserRepositoryImp
 import com.example.cookingeasy.databinding.FragmentOtherUserProfileBinding
-import com.example.cookingeasy.domain.mapper.toRecipe
 import com.example.cookingeasy.domain.model.Recipe
-import com.example.cookingeasy.domain.model.RecipeUpload
-import com.example.cookingeasy.domain.repository.AuthRepository
-import com.example.cookingeasy.domain.repository.RecipeRepository
 import com.example.cookingeasy.ui.viewmodel.OtherUserProfileViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
@@ -46,18 +39,14 @@ class OtherUserProfileFragment : Fragment() {
     }
 
     private val recipeShare: RecipeShareViewmodel by activityViewModels()
-
-    private val authRepository: AuthRepository = AuthRepositoryImp()
-    private val recipeRepository: RecipeRepository = RecipeRepositoryImp()
-    private val userRepository: UserRepository = UserRepositoryImp()
-
     private lateinit var recipeAdapter: RecipeAdapter
-    private var allRecipes: List<RecipeUpload> = emptyList()
     private var tabsHooked = false
+    private var chatTargetName: String = ""
+    private var chatTargetAvatar: String = ""
 
     private val tabListener = object : TabLayout.OnTabSelectedListener {
         override fun onTabSelected(tab: TabLayout.Tab?) {
-            applyRecipeList(tab?.position ?: 0)
+            viewModel.onTabSelected(tab?.position ?: 0)
         }
 
         override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -98,10 +87,7 @@ class OtherUserProfileFragment : Fragment() {
             }
 
             override fun OnFavoriteClick(recipe: Recipe) {
-                val uidAuth = authRepository.getCurrentUser()?.uid ?: return
-                viewLifecycleOwner.lifecycleScope.launch {
-                    recipeRepository.toggleFavorite(uidAuth, recipe)
-                }
+                viewModel.toggleFavorite(recipe)
             }
 
             override fun onClickInf(recipe: Recipe) {
@@ -137,6 +123,16 @@ class OtherUserProfileFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+
+        binding.btnMessage.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("userUid", arguments?.getString(ARG_UID).orEmpty())
+            bundle.putString("userName", chatTargetName)
+            bundle.putString("userAvatar", chatTargetAvatar)
+            val fragment = ChatDetailFragment()
+            fragment.arguments = bundle
+            parentFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
+        }
     }
 
     private fun observeUiState() {
@@ -150,7 +146,7 @@ class OtherUserProfileFragment : Fragment() {
                         }
                         is OtherUserProfileViewModel.UiState.Success -> {
                             binding.progressLoad.isVisible = false
-                            bindProfile(state)
+                            renderSuccess(state)
                         }
                         is OtherUserProfileViewModel.UiState.Error -> {
                             binding.progressLoad.isVisible = false
@@ -162,85 +158,55 @@ class OtherUserProfileFragment : Fragment() {
         }
     }
 
-    private fun bindProfile(state: OtherUserProfileViewModel.UiState.Success) {
-        val profile = state.profile
-        val publishedRecipeCount = state.publishedRecipeCount
-        val profileUid = arguments?.getString(ARG_UID).orEmpty()
-        val isOwnProfile =
-            profileUid.isNotEmpty() && profileUid == userRepository.getUid()
+    private fun renderSuccess(state: OtherUserProfileViewModel.UiState.Success) {
+        binding.layoutActions.isVisible = !state.isOwnProfile
+        binding.tabProfile.isVisible = state.isOwnProfile
 
-        binding.layoutActions.isVisible = !isOwnProfile
-        binding.tabProfile.isVisible = isOwnProfile
-
-        if (isOwnProfile) {
+        if (state.isOwnProfile) {
             binding.tabProfile.getTabAt(0)?.text = getString(R.string.manage_tab_published)
             binding.tabProfile.getTabAt(1)?.text = getString(R.string.manage_tab_draft)
             if (!tabsHooked) {
                 binding.tabProfile.addOnTabSelectedListener(tabListener)
                 tabsHooked = true
             }
+            val current = binding.tabProfile.selectedTabPosition
+            if (current != state.selectedTab) {
+                binding.tabProfile.getTabAt(state.selectedTab)?.select()
+            }
+        } else if (tabsHooked) {
+            binding.tabProfile.removeOnTabSelectedListener(tabListener)
+            tabsHooked = false
         }
 
-        val fullName = (profile["fullName"] as? String).orEmpty()
-            .ifEmpty { (profile["nickname"] as? String).orEmpty() }
-        val nickname = (profile["nickname"] as? String).orEmpty()
-        val email = (profile["email"] as? String).orEmpty()
-        val avatarUrl = (profile["avatarUrl"] as? String).orEmpty()
-        val bio = (profile["bio"] as? String).orEmpty()
-        val verified = profile["verified"] as? Boolean == true
-
-        binding.tvName.text = fullName.ifEmpty { getString(R.string.profile_name_placeholder) }
-        binding.tvUsername.text = when {
-            nickname.isNotEmpty() -> "@$nickname"
-            email.isNotEmpty() -> email
-            else -> ""
+        binding.tvName.text = state.profile.fullName.ifEmpty {
+            getString(R.string.profile_name_placeholder)
         }
-        if (bio.isNotEmpty()) {
-            binding.tvBio.text = bio
-            binding.tvBio.isVisible = true
-        } else {
-            binding.tvBio.isVisible = false
+        chatTargetName = state.profile.fullName.ifEmpty {
+            getString(R.string.profile_name_placeholder)
         }
+        chatTargetAvatar = state.profile.avatarUrl
+        binding.tvUsername.text = state.profile.usernameOrEmail
+        binding.tvBio.text = state.profile.bio
+        binding.tvBio.isVisible = state.profile.bio.isNotEmpty()
+        binding.imgVerifiedBadge.isVisible = state.profile.verified
 
-        binding.imgVerifiedBadge.isVisible = verified
-
-        if (avatarUrl.isNotEmpty()) {
+        if (state.profile.avatarUrl.isNotEmpty()) {
             Glide.with(binding.imgAvatar)
-                .load(avatarUrl)
+                .load(state.profile.avatarUrl)
                 .circleCrop()
                 .placeholder(R.drawable.ic_person)
                 .error(R.drawable.ic_person)
                 .into(binding.imgAvatar)
         } else {
-            Glide.with(binding.imgAvatar)
-                .load(R.drawable.ic_person)
-                .into(binding.imgAvatar)
+            Glide.with(binding.imgAvatar).load(R.drawable.ic_person).into(binding.imgAvatar)
         }
 
-        binding.tvStatRecipes.text = publishedRecipeCount.toString()
+        binding.tvStatRecipes.text = state.publishedRecipeCount.toString()
         binding.tvStatFollowers.text = "0"
         binding.tvStatFollowing.text = "0"
-
-        allRecipes = state.recipes
-        val tabPos = if (isOwnProfile) binding.tabProfile.selectedTabPosition else 0
-        applyRecipeList(tabPos)
-    }
-
-    private fun applyRecipeList(tabPosition: Int) {
-        val profileUid = arguments?.getString(ARG_UID).orEmpty()
-        val isOwnProfile =
-            profileUid.isNotEmpty() && profileUid == userRepository.getUid()
-
-        val filtered = when {
-            !isOwnProfile -> allRecipes.filter { it.status == "published" }
-            tabPosition == 0 -> allRecipes.filter { it.status == "published" }
-            else -> allRecipes.filter { it.status == "draft" }
-        }
-
-        val mapped = filtered.map { it.toRecipe() }
-        recipeAdapter.submitList(mapped)
-        binding.layoutEmpty.isVisible = filtered.isEmpty()
-        binding.rvRecipes.isVisible = filtered.isNotEmpty()
+        recipeAdapter.submitList(state.recipes)
+        binding.layoutEmpty.isVisible = state.recipes.isEmpty()
+        binding.rvRecipes.isVisible = state.recipes.isNotEmpty()
     }
 
     private fun openRecipeDetail() {

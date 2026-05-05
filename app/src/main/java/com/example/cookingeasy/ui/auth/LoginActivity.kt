@@ -1,9 +1,9 @@
 package com.example.cookingeasy.ui.auth
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,7 +12,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -134,13 +133,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Google Sign-In (Credential Manager) ─────────────────────────
-
     private fun startGoogleSignIn() {
         lifecycleScope.launch {
-            // Thử authorized accounts trước (accounts đã dùng app)
             val success = tryGoogleSignIn(filterByAuthorizedAccounts = true)
-            // Nếu không có → fallback hiện tất cả accounts
             if (!success) {
                 tryGoogleSignIn(filterByAuthorizedAccounts = false)
             }
@@ -174,7 +169,7 @@ class LoginActivity : AppCompatActivity() {
                 showError("Unsupported credential type")
                 false
             }
-        } catch (e: NoCredentialException) {
+        } catch (_: NoCredentialException) {
             if (filterByAuthorizedAccounts) {
                 Log.i("GoogleSignIn", "No authorized account, trying all accounts")
             } else {
@@ -189,8 +184,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Forgot Password Dialog ───────────────────────────────────────
-
+    @SuppressLint("InflateParams")
     private fun showForgotPasswordDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_forgot_password, null)
         val edtEmail = dialogView.findViewById<EditText>(R.id.edtEmail)

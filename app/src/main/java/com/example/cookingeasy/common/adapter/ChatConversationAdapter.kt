@@ -11,6 +11,7 @@ import com.example.cookingeasy.R
 
 data class ChatConversation(
     val id: String,
+    val peerUid: String = "",
     val displayName: String,
     val snippet: String,
     val timeLabel: String,

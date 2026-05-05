@@ -4,11 +4,17 @@ import android.content.ContentResolver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.cookingeasy.data.repository.AuthRepositoryImp
+import com.example.cookingeasy.data.repository.RecipeRepositoryImp
 import com.example.cookingeasy.data.repository.RecipeUploadRepositoryImp
 import com.example.cookingeasy.data.repository.UserRepository
 import com.example.cookingeasy.data.repository.UserRepositoryImp
+import com.example.cookingeasy.domain.mapper.toRecipe
+import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.model.RecipeUpload
+import com.example.cookingeasy.domain.repository.AuthRepository
 import com.example.cookingeasy.domain.repository.IRecipeUploadRepository
+import com.example.cookingeasy.domain.repository.RecipeRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,10 +22,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
+data class OtherUserProfileUi(
+    val fullName: String = "",
+    val usernameOrEmail: String = "",
+    val bio: String = "",
+    val avatarUrl: String = "",
+    val verified: Boolean = false
+)
+
 class OtherUserProfileViewModel(
     private val uid: String,
     private val userRepository: UserRepository,
-    private val recipeUploadRepository: IRecipeUploadRepository
+    private val recipeUploadRepository: IRecipeUploadRepository,
+    private val authRepository: AuthRepository,
+    private val recipeRepository: RecipeRepository
 ) : ViewModel() {
 
     class Factory(
@@ -31,7 +47,9 @@ class OtherUserProfileViewModel(
             return OtherUserProfileViewModel(
                 uid = uid,
                 userRepository = UserRepositoryImp(),
-                recipeUploadRepository = RecipeUploadRepositoryImp(contentResolver)
+                recipeUploadRepository = RecipeUploadRepositoryImp(contentResolver),
+                authRepository = AuthRepositoryImp(),
+                recipeRepository = RecipeRepositoryImp()
             ) as T
         }
     }
@@ -40,15 +58,25 @@ class OtherUserProfileViewModel(
         data object Idle : UiState()
         data object Loading : UiState()
         data class Success(
-            val profile: Map<String, Any>,
+            val profile: OtherUserProfileUi,
+            val isOwnProfile: Boolean,
+            val selectedTab: Int,
             val publishedRecipeCount: Int,
-            val recipes: List<RecipeUpload>
+            val recipes: List<Recipe>
         ) : UiState()
+
         data class Error(val message: String) : UiState()
     }
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    private var allUploads: List<RecipeUpload> = emptyList()
+    private var profileUi: OtherUserProfileUi = OtherUserProfileUi()
+    private var selectedTab = 0
+
+    private val isOwnProfile: Boolean
+        get() = uid.isNotEmpty() && uid == userRepository.getUid()
 
     fun loadProfile() {
         if (uid.isBlank()) {
@@ -63,21 +91,64 @@ class OtherUserProfileViewModel(
                 val recipesDeferred = async { recipeUploadRepository.getRecipesByUserUUID(uid) }
 
                 val profileResult = profileDeferred.await()
-                val recipes = recipesDeferred.await().getOrElse { emptyList() }
-                val publishedCount = recipes.count { it.status == "published" }
+                allUploads = recipesDeferred.await().getOrElse { emptyList() }
+                selectedTab = 0
 
                 profileResult
                     .onSuccess { map ->
-                        _uiState.value = UiState.Success(
-                            profile = map,
-                            publishedRecipeCount = publishedCount,
-                            recipes = recipes
-                        )
+                        profileUi = mapProfile(map)
+                        emitSuccess()
                     }
                     .onFailure { e ->
                         _uiState.value = UiState.Error(e.message ?: "Failed to load profile")
                     }
             }
         }
+    }
+
+    fun onTabSelected(position: Int) {
+        selectedTab = position
+        emitSuccess()
+    }
+
+    fun toggleFavorite(recipe: Recipe) {
+        val authUid = authRepository.getCurrentUser()?.uid ?: return
+        viewModelScope.launch {
+            runCatching { recipeRepository.toggleFavorite(authUid, recipe) }
+        }
+    }
+
+    private fun emitSuccess() {
+        val filteredUploads = when {
+            !isOwnProfile -> allUploads.filter { it.status == "published" }
+            selectedTab == 0 -> allUploads.filter { it.status == "published" }
+            else -> allUploads.filter { it.status == "draft" }
+        }
+
+        _uiState.value = UiState.Success(
+            profile = profileUi,
+            isOwnProfile = isOwnProfile,
+            selectedTab = selectedTab,
+            publishedRecipeCount = allUploads.count { it.status == "published" },
+            recipes = filteredUploads.map { it.toRecipe() }
+        )
+    }
+
+    private fun mapProfile(profile: Map<String, Any>): OtherUserProfileUi {
+        val fullName = (profile["fullName"] as? String).orEmpty()
+            .ifEmpty { (profile["nickname"] as? String).orEmpty() }
+        val nickname = (profile["nickname"] as? String).orEmpty()
+        val email = (profile["email"] as? String).orEmpty()
+        return OtherUserProfileUi(
+            fullName = fullName,
+            usernameOrEmail = when {
+                nickname.isNotEmpty() -> "@$nickname"
+                email.isNotEmpty() -> email
+                else -> ""
+            },
+            bio = (profile["bio"] as? String).orEmpty(),
+            avatarUrl = (profile["avatarUrl"] as? String).orEmpty(),
+            verified = profile["verified"] as? Boolean == true
+        )
     }
 }

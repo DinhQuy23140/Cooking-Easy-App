@@ -9,19 +9,28 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
+import com.example.cookingeasy.common.adapter.ActiveUserAdapter
 import com.example.cookingeasy.common.adapter.ChatConversation
 import com.example.cookingeasy.common.adapter.ChatConversationAdapter
 import com.example.cookingeasy.databinding.FragmentListChatBinding
+import com.example.cookingeasy.ui.viewmodel.ListChatViewModel
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.launch
 
 class ListChatFragment : Fragment() {
 
     private var _binding: FragmentListChatBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel: ListChatViewModel by viewModels()
     private lateinit var adapter: ChatConversationAdapter
+    private lateinit var activeUserAdapter: ActiveUserAdapter
     private val allConversations = mutableListOf<ChatConversation>()
 
     override fun onCreateView(
@@ -35,20 +44,36 @@ class ListChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        seedDemoConversations()
         adapter = ChatConversationAdapter { conv ->
+            val bundle = Bundle().apply {
+                putString("userUid", conv.peerUid)
+                putString("userName", conv.displayName)
+                putString("userAvatar", conv.avatarUrl.orEmpty())
+            }
+            val fragment = ChatDetailFragment().apply { arguments = bundle }
             parentFragmentManager.beginTransaction()
                 .setCustomAnimations(
                     R.anim.slide_in_right, R.anim.slide_out_left,
                     com.example.cookingeasy.R.anim.slide_in_left, R.anim.slide_out_right
                 )
-                .replace(com.example.cookingeasy.R.id.container, ChatDetailFragment())
+                .replace(com.example.cookingeasy.R.id.container, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+        activeUserAdapter = ActiveUserAdapter { active ->
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.container, OtherUserProfileFragment.newInstance(active.uid))
                 .addToBackStack(null)
                 .commit()
         }
         binding.rvChats.layoutManager = LinearLayoutManager(requireContext())
         binding.rvChats.adapter = adapter
-        applyFilter()
+        binding.rvActiveUsers.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvActiveUsers.adapter = activeUserAdapter
+        observeConversations()
+        observeActiveUsers()
+        viewModel.start()
 
         binding.edtSearchChats.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
@@ -64,10 +89,8 @@ class ListChatFragment : Fragment() {
 
         binding.swipeRefreshChats.setColorSchemeResources(R.color.success, R.color.primary)
         binding.swipeRefreshChats.setOnRefreshListener {
-            binding.root.postDelayed({
-                binding.swipeRefreshChats.isRefreshing = false
-                applyFilter()
-            }, 600)
+            applyFilter()
+            binding.swipeRefreshChats.isRefreshing = false
         }
 
         binding.fabCompose.setOnClickListener {
@@ -84,39 +107,27 @@ class ListChatFragment : Fragment() {
         _binding = null
     }
 
-    private fun seedDemoConversations() {
-        if (allConversations.isNotEmpty()) return
-        allConversations.addAll(
-            listOf(
-                ChatConversation(
-                    id = "1",
-                    displayName = "Chef Minh",
-                    snippet = "You: Great recipe — thanks for the tips!",
-                    timeLabel = "2:34 PM",
-                    unreadCount = 2,
-                    isOnline = true,
-                    isGroup = false
-                ),
-                ChatConversation(
-                    id = "2",
-                    displayName = "Cooking Club",
-                    snippet = "Anna: Who's bringing dessert?",
-                    timeLabel = "Yesterday",
-                    unreadCount = 0,
-                    isOnline = false,
-                    isGroup = true
-                ),
-                ChatConversation(
-                    id = "3",
-                    displayName = "Dinh Quy",
-                    snippet = "Sent a photo.",
-                    timeLabel = "Mon",
-                    unreadCount = 5,
-                    isOnline = true,
-                    isGroup = false
-                )
-            )
-        )
+    private fun observeConversations() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.conversations.collect {
+                    allConversations.clear()
+                    allConversations.addAll(it)
+                    applyFilter()
+                }
+            }
+        }
+    }
+
+    private fun observeActiveUsers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.activeUsers.collect { users ->
+                    activeUserAdapter.submitList(users)
+                    binding.rvActiveUsers.isVisible = users.isNotEmpty()
+                }
+            }
+        }
     }
 
     private fun applyFilter() {

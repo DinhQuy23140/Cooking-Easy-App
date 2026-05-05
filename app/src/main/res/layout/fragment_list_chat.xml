@@ -164,41 +164,17 @@
                 android:textColor="#2E5E2E"
                 android:textSize="12sp" />
 
-            <HorizontalScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvActiveUsers"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="72dp"
                 android:layout_marginTop="8dp"
                 android:clipToPadding="false"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:id="@+id/rowActiveNow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <!-- Placeholder rings; có thể gắn RecyclerView sau -->
-                    <include layout="@layout/include_chat_active_avatar" />
-
-                    <include
-                        layout="@layout/include_chat_active_avatar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp" />
-
-                    <include
-                        layout="@layout/include_chat_active_avatar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp" />
-
-                    <include
-                        layout="@layout/include_chat_active_avatar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp" />
-                </LinearLayout>
-            </HorizontalScrollView>
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingEnd="8dp"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_active_user" />
         </LinearLayout>
 
         <View

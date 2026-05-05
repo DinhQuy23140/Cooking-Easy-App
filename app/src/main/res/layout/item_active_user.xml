@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:layout_marginEnd="12dp">
+
+    <ImageView
+        android:id="@+id/imgActiveAvatar"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_avatar_ring"
+        android:contentDescription="@string/cd_chat_active_avatar"
+        android:padding="3dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_person" />
+
+    <View
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/shape_online_dot" />
+
+</FrameLayout>

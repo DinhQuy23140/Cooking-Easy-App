@@ -2,6 +2,7 @@ package com.example.cookingeasy.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.example.cookingeasy.databinding.ActivitySplashBinding
 import com.example.cookingeasy.ui.auth.SplashViewModel.SplashState
 import com.example.cookingeasy.ui.main.MainActivity
 import com.example.cookingeasy.ui.main.activity.EnterNameActivity
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
@@ -37,6 +39,7 @@ class SplashActivity : AppCompatActivity() {
         }
 
         observeState()
+        setupFcmStartupDebug()
         viewModel.checkLoginStatus()
     }
 
@@ -70,5 +73,15 @@ class SplashActivity : AppCompatActivity() {
         }
         startActivity(intent)
         finish()
+    }
+
+    private fun setupFcmStartupDebug() {
+        FirebaseMessaging.getInstance().token
+            .addOnSuccessListener { token -> Log.e(TAG, "Splash token: $token") }
+            .addOnFailureListener { e -> Log.e(TAG, "Splash get token failed", e) }
+    }
+
+    companion object {
+        private const val TAG = "ChatFCM"
     }
 }

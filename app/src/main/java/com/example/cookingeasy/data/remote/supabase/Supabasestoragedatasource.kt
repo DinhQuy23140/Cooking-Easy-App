@@ -29,6 +29,54 @@ class SupabaseStorageDataSource(
         defaultMime = "image/jpeg"
     )
 
+    suspend fun uploadChatImage(
+        uri: Uri,
+        remoteFolder: String = "chat-images",
+        fileName: String? = null
+    ): Result<String> = uploadToBucket(
+        uri = uri,
+        bucket = Buckets.DOCUMENT,
+        remoteFolder = remoteFolder,
+        fileName = fileName,
+        defaultMime = "image/jpeg"
+    )
+
+    suspend fun uploadChatAttachment(
+        uri: Uri,
+        remoteFolder: String = "chat-attachments",
+        fileName: String? = null
+    ): Result<String> = uploadToBucket(
+        uri = uri,
+        bucket = Buckets.DOCUMENT,
+        remoteFolder = remoteFolder,
+        fileName = fileName,
+        defaultMime = "application/octet-stream"
+    )
+
+    suspend fun uploadChatVideo(
+        uri: Uri,
+        remoteFolder: String = "chat-videos",
+        fileName: String? = null
+    ): Result<String> = uploadToBucket(
+        uri = uri,
+        bucket = Buckets.DOCUMENT,
+        remoteFolder = remoteFolder,
+        fileName = fileName,
+        defaultMime = "video/mp4"
+    )
+
+    suspend fun uploadChatVoice(
+        uri: Uri,
+        remoteFolder: String = "chat-voices",
+        fileName: String? = null
+    ): Result<String> = uploadToBucket(
+        uri = uri,
+        bucket = Buckets.DOCUMENT,
+        remoteFolder = remoteFolder,
+        fileName = fileName,
+        defaultMime = "audio/m4a"
+    )
+
     suspend fun uploadRecipeVideo(
         uri: Uri,
         remoteFolder: String = "uploads",
@@ -113,6 +161,7 @@ class SupabaseStorageDataSource(
     }
 
     object Buckets {
+        const val DOCUMENT = "document"
         const val RECIPE_IMAGES = "recipe-images"
         const val RECIPE_VIDEOS = "recipe-videos"
     }
