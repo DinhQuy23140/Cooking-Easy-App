@@ -51,8 +51,6 @@ class ExploreFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var isOpenCategory = false
-    private var isOpenArea = false
     private lateinit var binding: FragmentExploreBinding
     private val viewmodel: ExploreViewModel by viewModels()
     private lateinit var recipe: Recipe
@@ -229,27 +227,40 @@ class ExploreFragment : Fragment() {
 
         binding.tvSeeAllCategory.setOnClickListener {
             binding.rvCategory.apply {
-                if (!isOpenCategory) {
-                    layoutManager = GridLayoutManager(context, 4)
-                    addItemDecoration(GridSpacingItemDecoration(4, 3))
-                } else {
-                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-                }
+                layoutManager = GridLayoutManager(context, 4)
+                addItemDecoration(GridSpacingItemDecoration(4, 3))
                 setHasFixedSize(true)
-                isOpenCategory = !isOpenCategory
+                binding.tvSeeAllCategory.visibility = View.GONE
+                binding.tvPopularHide.visibility = View.VISIBLE
+            }
+        }
+
+        binding.tvPopularHide.setOnClickListener {
+            binding.rvCategory.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                setHasFixedSize(true)
+                binding.tvSeeAllCategory.visibility = View.VISIBLE
+                binding.tvPopularHide.visibility = View.GONE
             }
         }
 
         binding.tvSeeAllArea.setOnClickListener {
             binding.rvArea.apply {
-                if (!isOpenArea) {
-                    val column = viewmodel.caculatorColumn(context)
-                    layoutManager = GridLayoutManager(context, column)
-                    addItemDecoration(GridSpacingItemDecoration(column, 3))
-                } else {
-                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                }
-                isOpenArea = !isOpenArea
+                val column = viewmodel.caculatorColumn(context)
+                layoutManager = GridLayoutManager(context, column)
+                addItemDecoration(GridSpacingItemDecoration(column, 3))
+                setHasFixedSize(true)
+                binding.tvSeeAllArea.visibility = View.GONE
+                binding.tvExploreHide.visibility = View.VISIBLE
+            }
+        }
+
+        binding.tvExploreHide.setOnClickListener {
+            binding.rvArea.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                setHasFixedSize(true)
+                binding.tvSeeAllArea.visibility = View.VISIBLE
+                binding.tvExploreHide.visibility = View.GONE
             }
         }
     }

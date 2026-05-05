@@ -324,6 +324,16 @@
                     android:textSize="12sp"
                     android:fontFamily="sans-serif-medium"/>
 
+                <TextView
+                    android:id="@+id/tv_popular_hide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/home_hide"
+                    android:textColor="#43A047"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -372,6 +382,16 @@
                     android:textColor="#43A047"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:id="@+id/tv_explore_hide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/home_hide"
+                    android:textColor="#43A047"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

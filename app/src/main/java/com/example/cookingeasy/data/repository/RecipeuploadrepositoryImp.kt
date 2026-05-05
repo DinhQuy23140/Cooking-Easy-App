@@ -101,6 +101,12 @@ class RecipeUploadRepositoryImp(
         }
     }
 
+    override suspend fun getFavoriteCount(uid: String): Result<Int> {
+        return runCatching {
+            firestoreDataSource.getFavoriteIds(uid).size
+        }
+    }
+
     override suspend fun deleteRecipe(recipeId: String): Result<Unit> {
         return runCatching {
             firestoreDataSource.deleteRecipe(recipeId)

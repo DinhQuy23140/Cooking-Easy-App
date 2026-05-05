@@ -1,8 +1,10 @@
 package com.example.cookingeasy.common.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,6 +31,21 @@ class RecipeAdapter(
 
     companion object {
         private const val PAYLOAD_FAVORITE = "payload_favorite"
+
+        fun buildRecipeMetaLine(recipe: Recipe): String {
+            val parts = mutableListOf<String>()
+            val cat = recipe.strCategory.trim()
+            val area = recipe.strArea.trim()
+            if (cat.isNotEmpty()) parts.add(cat)
+            if (area.isNotEmpty()) parts.add(area)
+            val base = parts.joinToString(" • ")
+            val tags = recipe.strTags?.trim().orEmpty()
+            return when {
+                tags.isNotEmpty() && base.isNotEmpty() -> "$base · $tags"
+                tags.isNotEmpty() -> tags
+                else -> base
+            }
+        }
     }
 
     /**
@@ -56,6 +74,21 @@ class RecipeAdapter(
         }
     }
 
+    private fun bindAuthorThumb(imageView: ImageView, userImg: String?) {
+        val u = userImg?.trim().orEmpty()
+        if (u.startsWith("http://", ignoreCase = true) || u.startsWith("https://", ignoreCase = true)) {
+            Glide.with(imageView)
+                .load(u)
+                .circleCrop()
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .into(imageView)
+        } else {
+            Glide.with(imageView).clear(imageView)
+            imageView.setImageResource(R.drawable.ic_person)
+        }
+    }
+
     private fun decodeBase64ToBitmap(encoded: String): Bitmap? =
         runCatching {
             val payload = encoded.substringAfter("base64,", encoded.trim())
@@ -76,9 +109,26 @@ class RecipeAdapter(
         bindRecipeThumb(holder.ivImgRecipe, recipe.strMealThumb)
 
         holder.tvRecipeName.text = recipe.strMeal
-        holder.tvRecipeArea.text = "${recipe.strCategory} • ${recipe.strArea}"
-        holder.tvRecipeTag.text = recipe.strTags ?: ""
+        val meta = buildRecipeMetaLine(recipe)
+        val showMeta = meta.isNotEmpty()
+        holder.tvRecipeMeta.text = if (showMeta) meta else ""
+        holder.iconMeta.visibility = if (showMeta) View.VISIBLE else View.INVISIBLE
+        holder.tvRecipeMeta.visibility = if (showMeta) View.VISIBLE else View.INVISIBLE
+
         holder.tvRecipeAuthor.text = recipe.userName
+        bindAuthorThumb(holder.ivAuthorImg, recipe.userImg)
+
+        val yt = recipe.strYoutube?.trim().orEmpty()
+        holder.ivYoutube.isVisible = yt.isNotEmpty()
+        holder.ivYoutube.setOnClickListener {
+            if (yt.isNotEmpty()) {
+                runCatching {
+                    holder.itemView.context.startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse(yt))
+                    )
+                }
+            }
+        }
 
         holder.ivFavorite.setImageResource(
             if (recipe.isFavorote) R.drawable.ic_heart_filled
@@ -148,8 +198,8 @@ class RecipeAdapter(
         val ivImgRecipe: ImageView = itemView.findViewById(R.id.imgMeal)
         val ivYoutube: ImageView = itemView.findViewById(R.id.btnYoutube)
         val tvRecipeName: TextView = itemView.findViewById(R.id.txtMealName)
-        val tvRecipeArea: TextView = itemView.findViewById(R.id.txtCategoryArea)
-        val tvRecipeTag: TextView = itemView.findViewById(R.id.txtTags)
+        val iconMeta: ImageView = itemView.findViewById(R.id.iconMeta)
+        val tvRecipeMeta: TextView = itemView.findViewById(R.id.txtRecipeMeta)
         val tvRecipeAuthor: TextView = itemView.findViewById(R.id.txtUserName)
         val ivAuthorImg: ImageView = itemView.findViewById(R.id.imgUser)
         val layoutInfChef: LinearLayout = itemView.findViewById(R.id.layout_inf_chef)

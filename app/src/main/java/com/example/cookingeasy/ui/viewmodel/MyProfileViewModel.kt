@@ -38,14 +38,19 @@ class MyProfileViewModel(
 
 
     private fun loadCurrentUser() {
-        val uid = _authRepository.getCurrentUser()?.uid as String
+        val uid = _authRepository.getCurrentUser()?.uid
+        if (uid.isNullOrEmpty()) {
+            _profileState.value = ProfileState.LoggedOut
+            return
+        }
         viewModelScope.launch {
+            _profileState.value = ProfileState.Loading
             _userRepository.getUserProfile(uid)
                 .onSuccess {
                     _profileState.value = ProfileState.UserLoaded(it)
                 }
                 .onFailure {
-                    _profileState.value = ProfileState.Error("User not found")
+                    _profileState.value = ProfileState.Error(it.message ?: "User not found")
                 }
         }
     }

@@ -2,8 +2,8 @@ package com.example.cookingeasy.data.remote.firebase.fireStore
 
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.model.RecipeUpload
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 
 class RecipeFirestoreDataSource {
@@ -37,14 +37,19 @@ class RecipeFirestoreDataSource {
 
     // ─── Get recipes by uid ──────────────────────────────────────────
 
+    private fun mapDocToRecipeUpload(doc: DocumentSnapshot): RecipeUpload? {
+        val parsed = doc.toObject(RecipeUpload::class.java) ?: return null
+        val id = doc.getString("recipeId").orEmpty().ifEmpty { doc.id }
+        return if (parsed.recipeId.isEmpty() || parsed.recipeId != id) parsed.copy(recipeId = id) else parsed
+    }
+
     suspend fun getRecipesByUid(uid: String): List<RecipeUpload> {
         val snapshot = recipesCollection
             .whereEqualTo("uid", uid)
             .get()
             .await()
-        return snapshot.documents.mapNotNull {
-            it.toObject(RecipeUpload::class.java)
-        }
+        return snapshot.documents.mapNotNull { mapDocToRecipeUpload(it) }
+            .sortedByDescending { it.createdAt }
     }
 
     // ─── Delete recipe ───────────────────────────────────────────────
@@ -70,15 +75,14 @@ class RecipeFirestoreDataSource {
             .await()
     }
 
+    /** Không dùng orderBy trên Firestore (tránh bắt buộc composite index); sắp xếp sau khi đọc. */
     suspend fun getRecipesByUserUUID(uid: String): List<RecipeUpload> {
         val snapshot = recipesCollection
-            .whereEqualTo("uid", uid)  // ← filter theo uid người đăng
-            .orderBy("createdAt", Query.Direction.DESCENDING) // ← mới nhất trước
+            .whereEqualTo("uid", uid)
             .get()
             .await()
-        return snapshot.documents.mapNotNull {
-            it.toObject(RecipeUpload::class.java)
-        }
+        return snapshot.documents.mapNotNull { mapDocToRecipeUpload(it) }
+            .sortedByDescending { it.createdAt }
     }
 
     suspend fun getPublishedRecipes(): List<RecipeUpload> {
