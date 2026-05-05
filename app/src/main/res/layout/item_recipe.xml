@@ -18,55 +18,57 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipChildren="false">
+        android:clipChildren="true">
 
-        <!-- Ảnh món -->
-        <ImageView
-            android:id="@+id/imgMeal"
+        <!-- Khối ảnh cố định chiều cao: tránh ảnh/overlay tràn xuống che tiêu đề -->
+        <FrameLayout
+            android:id="@+id/frameRecipeImage"
             android:layout_width="0dp"
             android:layout_height="136dp"
-            android:contentDescription="@string/cd_recipe_photo"
-            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/sample_food" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="76dp"
-            android:background="@drawable/gradient_hero_bottom"
-            app:layout_constraintBottom_toBottomOf="@id/imgMeal"
-            app:layout_constraintEnd_toEndOf="@id/imgMeal"
-            app:layout_constraintStart_toStartOf="@id/imgMeal" />
+            <ImageView
+                android:id="@+id/imgMeal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/cd_recipe_photo"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_reciper" />
 
-        <ImageButton
-            android:id="@+id/btnFavorite"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/shape_tag_red"
-            android:contentDescription="@string/cd_favorite_toggle"
-            android:padding="7dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_favorite"
-            app:layout_constraintEnd_toEndOf="@id/imgMeal"
-            app:layout_constraintTop_toTopOf="@id/imgMeal" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="76dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/gradient_hero_bottom" />
 
-        <ImageButton
-            android:id="@+id/btnYoutube"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/shape_circle_glass"
-            android:contentDescription="@string/cd_open_youtube"
-            android:padding="7dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_youtobe"
-            app:layout_constraintBottom_toBottomOf="@id/imgMeal"
-            app:layout_constraintEnd_toEndOf="@id/imgMeal" />
+            <ImageButton
+                android:id="@+id/btnFavorite"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_tag_red"
+                android:contentDescription="@string/cd_favorite_toggle"
+                android:padding="7dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_favorite" />
+
+            <ImageButton
+                android:id="@+id/btnYoutube"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/shape_circle_glass"
+                android:contentDescription="@string/cd_open_youtube"
+                android:padding="7dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_youtobe" />
+        </FrameLayout>
 
         <!-- Tiêu đề -->
         <TextView
@@ -84,7 +86,7 @@
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgMeal"
+            app:layout_constraintTop_toBottomOf="@id/frameRecipeImage"
             tools:text="Jerk chicken with rice &amp; peas" />
 
         <!-- Hàng: loại / vùng -->

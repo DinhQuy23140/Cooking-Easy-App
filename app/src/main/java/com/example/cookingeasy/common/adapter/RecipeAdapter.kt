@@ -1,6 +1,9 @@
 package com.example.cookingeasy.common.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +30,39 @@ class RecipeAdapter(
         private const val PAYLOAD_FAVORITE = "payload_favorite"
     }
 
+    /**
+     * [thumb] URL https/http → Glide. Ngược lại coi là chuỗi base64 (có hoặc không có tiền tố data-uri).
+     */
+    private fun bindRecipeThumb(imageView: ImageView, thumb: String?) {
+        val t = thumb?.trim().orEmpty()
+        if (t.startsWith("http://", ignoreCase = true) || t.startsWith("https://", ignoreCase = true)) {
+            Glide.with(imageView)
+                .load(t)
+                .placeholder(R.drawable.ic_cooking)
+                .error(R.drawable.ic_reciper)
+                .into(imageView)
+            return
+        }
+        Glide.with(imageView).clear(imageView)
+        if (t.isBlank()) {
+            imageView.setImageResource(R.drawable.ic_reciper)
+            return
+        }
+        val bitmap = decodeBase64ToBitmap(t)
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap)
+        } else {
+            imageView.setImageResource(R.drawable.ic_reciper)
+        }
+    }
+
+    private fun decodeBase64ToBitmap(encoded: String): Bitmap? =
+        runCatching {
+            val payload = encoded.substringAfter("base64,", encoded.trim())
+            val decodedBytes = Base64.decode(payload, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        }.getOrNull()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_recipe, parent, false)
@@ -37,11 +73,7 @@ class RecipeAdapter(
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
         val recipe = displayList[position]
 
-        Glide.with(holder.itemView)
-            .load(recipe.strMealThumb)
-            .placeholder(R.drawable.ic_cooking)
-            .error(R.drawable.ic_reciper)
-            .into(holder.ivImgRecipe)
+        bindRecipeThumb(holder.ivImgRecipe, recipe.strMealThumb)
 
         holder.tvRecipeName.text = recipe.strMeal
         holder.tvRecipeArea.text = "${recipe.strCategory} • ${recipe.strArea}"

@@ -8,9 +8,6 @@
     android:orientation="vertical"
     tools:context=".ui.main.fragment.ExploreFragment">
 
-    <!-- ═══════════════════════════════
-         HERO HEADER (đồng bộ HomeFragment)
-         ═══════════════════════════════ -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,6 +54,16 @@
             </LinearLayout>
 
             <ImageButton
+                android:id="@+id/btnAddRecipe"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_icon_pill_green"
+                android:contentDescription="@string/nav_add_recipe"
+                android:padding="10dp"
+                android:src="@drawable/ic_add_white"/>
+
+            <ImageButton
                 android:id="@+id/btnNotification"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -73,14 +80,7 @@
             android:background="@drawable/shape_search_hero"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="16dp"
             android:paddingEnd="8dp">
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:alpha="0.6"
-                android:src="@drawable/ic_search"/>
 
             <EditText
                 android:id="@+id/edtSearch"
@@ -91,11 +91,13 @@
                 android:background="@android:color/transparent"
                 android:focusable="false"
                 android:hint="@string/hint_search_recipes"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
-                android:singleLine="true"/>
+                android:paddingStart="10dp"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textColorHint="@color/white"
+                android:textSize="14sp" />
 
             <ImageButton
                 android:id="@+id/btnSearch"
@@ -104,15 +106,12 @@
                 android:layout_marginEnd="4dp"
                 android:background="@drawable/shape_calories_badge"
                 android:padding="9dp"
-                android:src="@drawable/ic_search"/>
+                android:src="@drawable/ic_search" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <!-- ═══════════════════════════════
-         SCROLL CONTENT
-         ═══════════════════════════════ -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScroll"
         android:layout_width="match_parent"
@@ -152,13 +151,28 @@
                     android:fontFamily="sans-serif-medium"
                     android:letterSpacing="0.1"/>
 
-                <ImageButton
-                    android:id="@+id/btnRefreshFeatured"
+                <FrameLayout
                     android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:background="@drawable/shape_circle_glass"
-                    android:padding="6dp"
-                    android:src="@drawable/ic_refresh"/>
+                    android:layout_height="28dp">
+
+                    <ImageButton
+                        android:id="@+id/btnRefreshFeatured"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/shape_circle_glass"
+                        android:contentDescription="@string/explore_refresh_featured"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_refresh"/>
+
+                    <ProgressBar
+                        android:id="@+id/progressRefreshFeatured"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="#2E5E2E"
+                        android:visibility="gone"/>
+
+                </FrameLayout>
 
             </LinearLayout>
 
@@ -275,7 +289,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- ─── POPULAR CATEGORIES ─── -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

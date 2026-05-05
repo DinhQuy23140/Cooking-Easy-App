@@ -85,6 +85,7 @@
     <string name="explore_discover">発見</string>
     <string name="explore_title">レシピを探す</string>
     <string name="explore_featured_today">本日のおすすめ</string>
+    <string name="explore_refresh_featured">おすすめを更新</string>
     <string name="explore_cook_now">今すぐ作る →</string>
     <string name="explore_popular_categories">人気カテゴリ</string>
     <string name="explore_explore_by_area">地域から探す</string>

@@ -1,10 +1,8 @@
 package com.example.cookingeasy.common.adapter
 
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -31,12 +29,17 @@ class HistorySearchAdapter(private var historySearchs: MutableList<HistorySearch
         holder.btnDelete.setOnClickListener {
             onClick.onClick(historySearch)
         }
+
+        holder.itemView.setOnClickListener {
+            onClick.onClick(historySearch)
+        }
     }
 
     override fun getItemCount(): Int = historySearchs.size
 
-    fun updateData(data: MutableList<HistorySearch>){
+    fun updateData(data: MutableList<HistorySearch>) {
         historySearchs = data
+        notifyDataSetChanged()
     }
 
     class HistorySearchViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

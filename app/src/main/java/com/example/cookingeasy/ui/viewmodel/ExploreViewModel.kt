@@ -31,12 +31,16 @@ class ExploreViewModel(): ViewModel() {
     val trendingRecipes: StateFlow<List<Recipe>> = _trendingRecipes
 
     fun getRandomRecipe() {
-        viewModelScope.launch {
-            try {
-                _randomRecipe?.value = _recipeRepository.getRandomRecipe()!!
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        viewModelScope.launch { loadRandomRecipe() }
+    }
+
+    /** Dùng khi UI cần chờ xong (ví dụ nút refresh + progress chồng icon). */
+    suspend fun loadRandomRecipe() {
+        try {
+            val r = _recipeRepository.getRandomRecipe() ?: return
+            _randomRecipe.value = r
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

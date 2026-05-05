@@ -73,12 +73,12 @@ class RecipeRepositoryImp : RecipeRepository{
 
     override suspend fun filterRecipesByArea(are: String): List<Recipe> {
         val response: RecipeResponseDto = recipeService.filterRecipesByArea(are)
-        return RecipeMapper.toRecipeList(response.meals)
+        return RecipeMapper.toRecipeList(response.meals ?: emptyList())
     }
 
     override suspend fun filterRecipesByCategory(category: String): List<Recipe> {
         val response: RecipeResponseDto = recipeService.filterRecipesByCategory(category)
-        return RecipeMapper.toRecipeList(response.meals)
+        return RecipeMapper.toRecipeList(response.meals ?: emptyList())
     }
 
     override suspend fun filterRecipesByIngredient(ingredient: String): List<Recipe> {
@@ -101,8 +101,8 @@ class RecipeRepositoryImp : RecipeRepository{
         for (index in 1 .. 10) {
             try {
                 val response = recipeService.getRandomRecipe()
-                response.meals?.let {
-                    trendingRecipes.add(RecipeMapper.toRecipe(response.meals.first()))
+                response.meals?.let { meals ->
+                    trendingRecipes.add(RecipeMapper.toRecipe(meals.first()))
                     emit(trendingRecipes.toList())
                 }
             } catch (e: Exception) {

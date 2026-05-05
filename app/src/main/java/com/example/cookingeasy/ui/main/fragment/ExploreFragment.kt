@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -32,6 +33,7 @@ import com.example.cookingeasy.ui.viewmodel.ExploreViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.gson.Gson
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.ranges.contains
 
@@ -185,6 +187,36 @@ class ExploreFragment : Fragment() {
             fragmentTransaction.commit()
         }
 
+        binding.btnAddRecipe.setOnClickListener {
+            if (!isAdded || parentFragmentManager.isStateSaved) return@setOnClickListener
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_right,
+                    R.anim.slide_out_left,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+                .replace(R.id.container, AddRecipeFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.btnRefreshFeatured.setOnClickListener {
+            if (binding.progressRefreshFeatured.isVisible) return@setOnClickListener
+            binding.btnRefreshFeatured.isVisible = false
+            binding.progressRefreshFeatured.isVisible = true
+            viewLifecycleOwner.lifecycleScope.launch {
+                try {
+                    delay(REFRESH_FEATURED_DELAY_MS)
+                    viewmodel.loadRandomRecipe()
+                } finally {
+                    if (!isAdded) return@launch
+                    binding.btnRefreshFeatured.isVisible = true
+                    binding.progressRefreshFeatured.isVisible = false
+                }
+            }
+        }
+
         binding.btnCookNow.setOnClickListener {
             recipe.let {
                 recipeShareViewModel.selectedRecipe(recipe)
@@ -223,6 +255,8 @@ class ExploreFragment : Fragment() {
     }
 
     companion object {
+        private const val REFRESH_FEATURED_DELAY_MS = 300L
+
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

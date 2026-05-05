@@ -44,9 +44,6 @@ class HomeViewModel : ViewModel() {
     val userName: StateFlow<String> = _userName
     val imgUrl: StateFlow<String> = _imgUrl
 
-    // ─────────────────────────────────────────────
-    // Load data
-    // ─────────────────────────────────────────────
 
     fun getListCategory() {
         viewModelScope.launch {
@@ -68,9 +65,6 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    // ─────────────────────────────────────────────
-    // Favorites
-    // ─────────────────────────────────────────────
 
     fun loadFavorites() {
         viewModelScope.launch {

@@ -94,6 +94,7 @@
     <string name="explore_discover">DISCOVER</string>
     <string name="explore_title">Explore Recipes</string>
     <string name="explore_featured_today">FEATURED TODAY</string>
+    <string name="explore_refresh_featured">Refresh featured recipe</string>
     <string name="explore_cook_now">Cook Now →</string>
     <string name="explore_popular_categories">POPULAR CATEGORIES</string>
     <string name="explore_explore_by_area">EXPLORE BY AREA</string>
@@ -262,7 +263,10 @@
     <!-- Other user profile -->
     <string name="other_user_sample_recipes_count">120</string>
     <string name="other_user_sample_followers_count">2.5K</string>
+    <string name="other_user_sample_following_count">128</string>
     <string name="other_user_label_followers">Followers</string>
+    <string name="other_user_label_following">Following</string>
+    <string name="other_user_handle_placeholder">\@chefanna</string>
 
     <string name="other_user_name_placeholder">Chef Anna</string>
     <string name="other_user_bio_placeholder">Healthy recipes &amp; meal prep 🥗</string>

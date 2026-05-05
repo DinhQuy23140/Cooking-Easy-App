@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
-import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,10 +24,12 @@ import com.example.cookingeasy.common.listener.RecipeListener
 import com.example.cookingeasy.databinding.FragmentSearchBinding
 import com.example.cookingeasy.domain.model.HistorySearch
 import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.ui.viewmodel.SearchViewModel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 
@@ -35,6 +37,7 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModels()
+    private val recipeShare: RecipeShareViewmodel by activityViewModels()
     private lateinit var recipeAdapter: RecipeAdapter
     private var isLoadingMore = false
     private var searchJob: Job? = null
@@ -51,6 +54,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        viewModel.getListHistory()
         setupEvents()
         observeViewModel()
     }
@@ -58,18 +62,25 @@ class SearchFragment : Fragment() {
     private fun setupRecyclerView() {
         recipeAdapter = RecipeAdapter(mutableListOf(), object : RecipeListener {
             override fun OnClickItem(recipe: Recipe) {
-                // navigate to detail
+                recipeShare.selectedRecipe(recipe)
+                openRecipeDetail()
             }
             override fun OnFavoriteClick(recipe: Recipe) {
-                // handle favorite
+                viewModel.toggleFavorite(recipe)
             }
 
-            override fun onClickInf(recipe: Recipe) = Unit
+            override fun onClickInf(recipe: Recipe) {
+                parentFragmentManager.beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.container, OtherUserProfileFragment())
+                    .commit()
+            }
         })
 
         historySearchAdapter = HistorySearchAdapter(mutableListOf(), object : HistorySearchListener{
             override fun onClick(historySearch: HistorySearch) {
                 binding.edtSearchRecipe.setText(historySearch.keyword)
+                viewModel.searchRecipes(historySearch.keyword)
             }
 
         })
@@ -94,42 +105,82 @@ class SearchFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.searchResult.collect { result ->
-                        val hasKeyword = binding.edtSearchRecipe.text?.isNotEmpty() == true
-                        binding.layoutLoading.isVisible = false
-                        binding.layoutInitial.isVisible = !hasKeyword
-                        binding.layoutResult.isVisible = result.isNotEmpty()
-                        binding.layoutEmpty.isVisible = result.isEmpty() && hasKeyword
-                        binding.txtResult.text = getString(R.string.format_results_found, result.size)
-                        if (result.isNotEmpty()) recipeAdapter.updateData(result)
-                    }
-                }
-
-                launch {
-                    viewModel.isLoading.collect { isLoading ->
-                        if (isLoading) {
-                            binding.layoutLoading.isVisible = true
-                            binding.layoutResult.isVisible = false
-                            binding.layoutEmpty.isVisible = false
-                            binding.layoutInitial.isVisible = false
+                    combine(
+                        viewModel.searchResult,
+                        viewModel.isLoading
+                    ) { results, loading -> results to loading }
+                        .collect { (results, loading) ->
+                            renderSearchContent(results, loading)
                         }
-                    }
                 }
 
                 launch {
-                    if (viewModel.mockHistory.isEmpty()){
-                        binding.layoutInitial.isVisible = true
-                        binding.rvRecentSearch.isVisible = false
-                    } else {
-                        binding.layoutInitial.isVisible = false
-                        binding.rvRecentSearch.isVisible = true
-                        historySearchAdapter.updateData(viewModel.mockHistory)
+                    viewModel.historyList.collect { history ->
+                        historySearchAdapter.updateData(history.toMutableList())
+                        if (!hasSearchKeyword()) {
+                            applyIdleVisibility()
+                        }
                     }
                 }
             }
         }
+    }
+    private fun renderSearchContent(results: List<Recipe>, loading: Boolean) {
+        val hasKeyword = hasSearchKeyword()
+        if (!hasKeyword) {
+            applyIdleVisibility()
+            recipeAdapter.updateData(results)
+            return
+        }
 
-        historySearchAdapter.updateData(viewModel.mockHistory)
+        binding.layoutLoading.isVisible = loading
+        hideRecentSection()
+        binding.layoutInitial.isVisible = false
+
+        if (loading) {
+            binding.layoutResult.isVisible = false
+            binding.layoutEmpty.isVisible = false
+            return
+        }
+
+        binding.layoutResult.isVisible = results.isNotEmpty()
+        binding.layoutEmpty.isVisible = results.isEmpty()
+        binding.txtResult.text = getString(R.string.format_results_found, results.size)
+        recipeAdapter.updateData(results)
+    }
+
+    private fun hasSearchKeyword(): Boolean =
+        binding.edtSearchRecipe.text?.trim()?.isNotEmpty() == true
+
+    private fun applyIdleVisibility() {
+        val hasHistory = viewModel.historySnapshot().isNotEmpty()
+        binding.layoutRecent.isVisible = hasHistory
+        binding.rvRecentSearch.isVisible = hasHistory
+        binding.layoutInitial.isVisible = !hasHistory
+        binding.layoutResult.isVisible = false
+        binding.layoutEmpty.isVisible = false
+        binding.layoutLoading.isVisible = false
+    }
+
+    private fun hideRecentSection() {
+        binding.layoutRecent.isVisible = false
+        binding.rvRecentSearch.isVisible = false
+    }
+
+    private fun openRecipeDetail() {
+        if (!isAdded) return
+        val fm = parentFragmentManager
+        if (fm.isStateSaved) return
+        fm.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+            .replace(R.id.container, RecipeDetailFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setupEvents() {
@@ -162,19 +213,15 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val keyword = s.toString().trim()
                 binding.btnClear.isVisible = keyword.isNotEmpty()
-
                 if (keyword.isEmpty()) {
                     resetToInitialState()
                     return
                 }
 
-                // Debounce 300ms — chờ user ngừng gõ mới gọi API
                 searchJob?.cancel()
                 searchJob = viewLifecycleOwner.lifecycleScope.launch {
-                    delay(300)
-                    binding.layoutLoading.isVisible = true
-                    binding.layoutInitial.isVisible = false
-                    binding.layoutEmpty.isVisible = false
+                    delay(DEBOUNCE_MS)
+                    hideRecentSection()
                     viewModel.searchRecipes(keyword)
                 }
             }
@@ -200,14 +247,13 @@ class SearchFragment : Fragment() {
 
     private fun resetToInitialState() {
         searchJob?.cancel()
-        binding.layoutInitial.isVisible = true
-        binding.layoutResult.isVisible = false
-        binding.layoutLoading.isVisible = false
-        binding.layoutEmpty.isVisible = false
         binding.btnClear.isVisible = false
+        viewModel.searchRecipes("")
     }
 
     companion object {
+        private const val DEBOUNCE_MS = 300L
+
         fun newInstance() = SearchFragment()
     }
 }
