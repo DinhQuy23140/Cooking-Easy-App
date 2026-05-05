@@ -19,6 +19,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.example.cookingeasy.data.preferences.ThemeModePreference
 import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
 import com.example.cookingeasy.databinding.FragmentMyProfileBinding
 import com.example.cookingeasy.ui.auth.LoginActivity
@@ -72,6 +73,7 @@ class MyProfileFragment : Fragment() {
 
 
     private fun setupClickListeners() {
+        binding.switchDarkMode.isChecked = ThemeModePreference.isDarkMode(requireContext())
         binding.imgAvatar.setOnClickListener {
             openGallery()
         }
@@ -201,12 +203,8 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun toggleDarkMode(isEnabled: Boolean) {
-        val mode = if (isEnabled) {
-            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-        } else {
-            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-        }
-        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(mode)
+        ThemeModePreference.setDarkMode(requireContext(), isEnabled)
+        ThemeModePreference.apply(requireContext())
     }
 
     private fun showError(message: String) {

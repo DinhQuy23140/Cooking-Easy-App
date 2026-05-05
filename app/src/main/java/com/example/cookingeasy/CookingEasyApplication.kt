@@ -3,6 +3,7 @@ package com.example.cookingeasy
 import android.app.Activity
 import android.app.Application
 import android.content.ComponentCallbacks2
+import com.example.cookingeasy.data.preferences.ThemeModePreference
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,6 +15,7 @@ class CookingEasyApplication : Application(), Application.ActivityLifecycleCallb
 
     override fun onCreate() {
         super<Application>.onCreate()
+        ThemeModePreference.apply(this)
         registerActivityLifecycleCallbacks(this)
     }
 

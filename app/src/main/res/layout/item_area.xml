@@ -6,7 +6,7 @@
     android:layout_margin="2dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="2dp"
-    app:strokeColor="#E0E0E0"
+    app:strokeColor="@color/area_item_stroke"
     app:strokeWidth="1dp">
 
     <TextView
@@ -17,7 +17,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="@string/sample_area_name"
-        android:textColor="#333333"
+        android:textColor="@color/area_item_text"
         android:textSize="14sp"
         android:textStyle="bold" />
 

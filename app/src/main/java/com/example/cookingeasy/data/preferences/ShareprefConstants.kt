@@ -2,6 +2,8 @@ package com.example.cookingeasy.data.preferences
 
 object ShareprefConstants {
     const val KEY_PREFERENCE_NAME: String = "bookVersePreference"
+    const val KEY_THEME_PREFERENCE_NAME: String = "themePreference"
+    const val KEY_DARK_MODE: String = "dark_mode"
     const val KEY_EMAIL: String = "email"
     const val KEY_PASSWORD: String = "password"
     const val KEY_NAME: String = "name"

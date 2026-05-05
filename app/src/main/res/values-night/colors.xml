@@ -1,2 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <!-- Cooking Easy semantic palette (dark) -->
+    <color name="md_theme_primary">#86C572</color>
+    <color name="md_theme_onPrimary">#10230D</color>
+    <color name="md_theme_primaryContainer">#1F3B1A</color>
+    <color name="md_theme_onPrimaryContainer">#D4EBCB</color>
+    <color name="md_theme_secondary">#F2A55A</color>
+    <color name="md_theme_onSecondary">#2A1706</color>
+    <color name="md_theme_background">#1C2520</color>
+    <color name="md_theme_onBackground">#F2F7F0</color>
+    <color name="md_theme_surface">#24302A</color>
+    <color name="md_theme_onSurface">#F1F6EF</color>
+    <color name="md_theme_surfaceVariant">#2E3C35</color>
+    <color name="md_theme_onSurfaceVariant">#D2DFD1</color>
+    <color name="md_theme_outline">#9CB09F</color>
+
+    <!-- Shared drawable tokens -->
+    <color name="chat_input_bg">#2B3932</color>
+    <color name="chat_input_stroke">#4F6A58</color>
+    <color name="chat_bubble_received_bg">#2A3731</color>
+    <color name="chat_bubble_received_stroke">#4B6554</color>
+    <color name="chat_bubble_sent_bg">#5CA85A</color>
+    <color name="hero_gradient_start">#3B7A4A</color>
+    <color name="hero_gradient_center">#4B9360</color>
+    <color name="hero_gradient_end">#61A774</color>
+    <color name="screen_gradient_start">#24312A</color>
+    <color name="screen_gradient_center">#2B3A32</color>
+    <color name="screen_gradient_end">#33433A</color>
+    <color name="chat_title_text">#FFFFFF</color>
+    <color name="chat_subtitle_text">#EAF4EA</color>
+    <color name="chat_chip_text">#F1F7F0</color>
+    <color name="chat_chip_text_unselected">#D6E3D6</color>
+    <color name="chat_active_label_text">#ECF6EB</color>
+    <color name="chat_empty_title_text">#F1F8F0</color>
+    <color name="chat_empty_subtitle_text">#D9E6D8</color>
+    <color name="chat_list_name_text">#F4F8F3</color>
+    <color name="chat_list_time_text">#CFDDCF</color>
+    <color name="chat_list_snippet_text">#D7E4D6</color>
+    <color name="chat_section_bg">#2A3731</color>
+    <color name="chat_divider">#475E50</color>
+    <color name="area_item_text">#EEF6ED</color>
+    <color name="area_item_stroke">#5A7364</color>
+</resources>
