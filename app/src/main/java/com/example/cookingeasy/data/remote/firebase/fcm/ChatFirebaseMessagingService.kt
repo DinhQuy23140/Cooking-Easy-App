@@ -7,6 +7,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -14,8 +16,13 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.example.cookingeasy.R
 import com.example.cookingeasy.ui.main.MainActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import java.net.URL
 import kotlin.random.Random
 
 class ChatFirebaseMessagingService : FirebaseMessagingService() {
@@ -37,7 +44,8 @@ class ChatFirebaseMessagingService : FirebaseMessagingService() {
         )
 
         val data = message.data
-        val title = data["title"] ?: message.notification?.title ?: getString(R.string.chat_notification_title_default)
+        val fallbackTitle = message.notification?.title ?: getString(R.string.chat_notification_title_default)
+        val title = data["otherName"]?.takeIf { it.isNotBlank() } ?: data["title"] ?: fallbackTitle
         val body = data["body"] ?: message.notification?.body ?: getString(R.string.chat_notification_body_default)
         val otherUid = data["otherUid"].orEmpty()
         val otherName = data["otherName"].orEmpty()
@@ -55,7 +63,7 @@ class ChatFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.e(TAG, "FCM new token: $token")
-        // TODO: send token to your backend / Firestore for targeted push.
+        syncFcmToken(token)
     }
 
     private fun showChatNotification(
@@ -66,12 +74,20 @@ class ChatFirebaseMessagingService : FirebaseMessagingService() {
         otherAvatar: String
     ) {
         ensureChannel()
+        val managerCompat = NotificationManagerCompat.from(this)
+        if (!managerCompat.areNotificationsEnabled()) {
+            Log.e(TAG, "Notification blocked: app notifications disabled in system settings")
+            return
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val granted = ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
-            if (!granted) return
+            if (!granted) {
+                Log.e(TAG, "Notification blocked: POST_NOTIFICATIONS not granted")
+                return
+            }
         }
 
         val intent = Intent(this, MainActivity::class.java).apply {
@@ -92,19 +108,30 @@ class ChatFirebaseMessagingService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.ic_person)
             .setContentTitle(title)
             .setContentText(body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
 
-        NotificationManagerCompat.from(this).notify(Random.nextInt(), notification)
+        loadAvatarBitmap(otherAvatar)?.let { bitmap ->
+            notification.largeIcon = bitmap
+        }
+
+        val notificationId = Random.nextInt()
+        managerCompat.notify(notificationId, notification)
+        Log.e(TAG, "Notification posted: id=$notificationId, title=$title, otherUid=$otherUid")
     }
 
     private fun ensureChannel() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val existing = manager.getNotificationChannel(CHANNEL_ID)
-        if (existing != null) return
+        if (existing != null) {
+            Log.e(TAG, "Notification channel existing: id=$CHANNEL_ID, importance=${existing.importance}")
+            return
+        }
         val channel = NotificationChannel(
             CHANNEL_ID,
             getString(R.string.chat_notification_channel_name),
@@ -113,6 +140,36 @@ class ChatFirebaseMessagingService : FirebaseMessagingService() {
             description = getString(R.string.chat_notification_channel_desc)
         }
         manager.createNotificationChannel(channel)
+    }
+
+    private fun syncFcmToken(token: String) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
+        if (uid.isBlank() || token.isBlank()) return
+
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(uid)
+            .set(
+                mapOf(
+                    "fcmToken" to token,
+                    "fcm_tokens" to FieldValue.arrayUnion(token)
+                ),
+                SetOptions.merge()
+            )
+            .addOnSuccessListener { Log.e(TAG, "Service synced fcm token for uid=$uid") }
+            .addOnFailureListener { e -> Log.e(TAG, "Service failed to sync fcm token", e) }
+    }
+
+    private fun loadAvatarBitmap(url: String): Bitmap? {
+        if (url.isBlank()) return null
+
+        return runCatching {
+            URL(url).openStream().use { stream ->
+                BitmapFactory.decodeStream(stream)
+            }
+        }.onFailure { e ->
+            Log.e(TAG, "Failed to load avatar for notification", e)
+        }.getOrNull()
     }
 
     companion object {

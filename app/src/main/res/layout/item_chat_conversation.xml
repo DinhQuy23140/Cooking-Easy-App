@@ -27,7 +27,7 @@
                 android:background="@drawable/shape_avatar_ring"
                 android:contentDescription="@string/cd_chat_row_avatar"
                 android:padding="3dp"
-                android:scaleType="center"
+                android:scaleType="centerCrop"
                 tools:src="@drawable/ic_person" />
 
             <View

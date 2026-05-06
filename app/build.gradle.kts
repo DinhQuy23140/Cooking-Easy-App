@@ -38,6 +38,11 @@ android {
             "SUPABASE_ANON_KEY",
             "\"${localProps.getProperty("SUPABASE_ANON_KEY") ?: ""}\""
         )
+        buildConfigField(
+            "String",
+            "LARAVEL_BASE_URL",
+            "\"${localProps.getProperty("LARAVEL_BASE_URL") ?: ""}\""
+        )
 
         applicationId = "com.example.cookingeasy"
         minSdk = 28

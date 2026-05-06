@@ -1,5 +1,7 @@
 package com.example.cookingeasy.data.repository
 
+import com.example.cookingeasy.data.remote.api.LaravelClient
+import com.example.cookingeasy.data.remote.api.SendMessageRequest
 import com.example.cookingeasy.domain.model.ConversationSummary
 import com.example.cookingeasy.domain.model.DirectMessage
 import com.example.cookingeasy.domain.model.UserPresence
@@ -7,6 +9,7 @@ import com.example.cookingeasy.domain.repository.DirectChatRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import java.time.Instant
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -27,22 +30,32 @@ class DirectChatRepositoryImp : DirectChatRepository {
         val registration = db.collection(COLLECTION_CONVERSATIONS)
             .document(conversationId)
             .collection(COLLECTION_MESSAGES)
-            .orderBy(KEY_CREATED_AT)
             .addSnapshotListener { snapshot, _ ->
                 val list = snapshot?.documents.orEmpty().map { doc ->
+                    val senderId = doc.getString(KEY_SENDER_ID).orEmpty().ifEmpty {
+                        doc.getString("sender_id").orEmpty()
+                    }
+                    val receiverId = doc.getString(KEY_RECEIVER_ID).orEmpty().ifEmpty {
+                        doc.getString("receiver_id").orEmpty()
+                    }
+                    val text = doc.getString(KEY_TEXT).orEmpty().ifEmpty {
+                        doc.getString("content").orEmpty()
+                    }
+                    val createdAtRaw = doc.get(KEY_CREATED_AT) ?: doc.get("created_at")
+
                     DirectMessage(
                         id = doc.id,
-                        senderId = doc.getString(KEY_SENDER_ID).orEmpty(),
-                        receiverId = doc.getString(KEY_RECEIVER_ID).orEmpty(),
+                        senderId = senderId,
+                        receiverId = receiverId,
                         type = doc.getString(KEY_TYPE).orEmpty().ifEmpty { TYPE_TEXT },
-                        text = doc.getString(KEY_TEXT).orEmpty(),
+                        text = text,
                         imageUrl = doc.getString(KEY_IMAGE_URL).orEmpty(),
                         attachmentUrl = doc.getString(KEY_ATTACHMENT_URL).orEmpty(),
                         attachmentName = doc.getString(KEY_ATTACHMENT_NAME).orEmpty(),
                         attachmentSize = doc.getString(KEY_ATTACHMENT_SIZE).orEmpty(),
-                        createdAt = toMillis(doc.get(KEY_CREATED_AT))
+                        createdAt = toMillis(createdAtRaw)
                     )
-                }
+                }.sortedWith(compareBy<DirectMessage> { it.createdAt }.thenBy { it.id })
                 trySend(list)
             }
         awaitClose { registration.remove() }
@@ -72,6 +85,13 @@ class DirectChatRepositoryImp : DirectChatRepository {
                             key to (v as? String).orEmpty()
                         }?.toMap().orEmpty()
                     val seenBy = (doc.get(KEY_SEEN_BY) as? List<*>)?.filterIsInstance<String>().orEmpty()
+                    val unreadMap = (doc.get(KEY_UNREAD_COUNT) as? Map<*, *>)
+                        ?.mapNotNull { (k, v) ->
+                            val key = k as? String ?: return@mapNotNull null
+                            val value = (v as? Number)?.toInt() ?: 0
+                            key to value
+                        }?.toMap().orEmpty()
+                    val unreadCount = unreadMap[me] ?: if (seenBy.contains(me)) 0 else 1
                     ConversationSummary(
                         conversationId = doc.id,
                         otherUserId = otherUid,
@@ -80,7 +100,7 @@ class DirectChatRepositoryImp : DirectChatRepository {
                         lastMessage = doc.getString(KEY_LAST_MESSAGE).orEmpty(),
                         lastSenderId = doc.getString(KEY_LAST_SENDER_ID).orEmpty(),
                         updatedAt = toMillis(doc.get(KEY_UPDATED_AT)),
-                        unreadCount = if (seenBy.contains(me)) 0 else 1,
+                        unreadCount = unreadCount,
                         isSeenByMe = seenBy.contains(me)
                     )
                 }.sortedByDescending { it.updatedAt }
@@ -231,50 +251,27 @@ class DirectChatRepositoryImp : DirectChatRepository {
         attachmentSize: String
     ) {
         val me = auth.currentUser?.uid ?: error("Not logged in")
-        val conversationId = buildConversationId(me, otherUid)
-        val meProfile = db.collection(COLLECTION_USERS).document(me).get().await()
-        val otherProfile = db.collection(COLLECTION_USERS).document(otherUid).get().await()
-        val myName = meProfile.getString("fullName").orEmpty().ifEmpty { meProfile.getString("nickname").orEmpty() }
-        val myAvatar = meProfile.getString("avatarUrl").orEmpty()
-        val otherName = otherProfile.getString("fullName").orEmpty().ifEmpty { otherProfile.getString("nickname").orEmpty() }
-        val otherAvatar = otherProfile.getString("avatarUrl").orEmpty()
+        check(LaravelClient.isConfigured()) {
+            "LARAVEL_BASE_URL is missing. Please set it in local.properties."
+        }
 
-        db.collection(COLLECTION_CONVERSATIONS)
-            .document(conversationId)
-            .collection(COLLECTION_MESSAGES)
-            .add(
-                mapOf(
-                    KEY_SENDER_ID to me,
-                    KEY_RECEIVER_ID to otherUid,
-                    KEY_TEXT to text,
-                    KEY_TYPE to type,
-                    KEY_IMAGE_URL to imageUrl,
-                    KEY_ATTACHMENT_URL to attachmentUrl,
-                    KEY_ATTACHMENT_NAME to attachmentName,
-                    KEY_ATTACHMENT_SIZE to attachmentSize,
-                    KEY_CREATED_AT to FieldValue.serverTimestamp()
-                )
-            ).await()
+        // Client no longer writes chat messages directly to Firestore.
+        // Laravel API is now the single write path: API -> Firestore + FCM.
+        val content = when (type) {
+            TYPE_IMAGE -> "[Image]"
+            TYPE_ATTACHMENT -> "[Attachment]"
+            TYPE_VIDEO -> "[Video]"
+            TYPE_VOICE -> "[Voice]"
+            else -> text
+        }
 
-        db.collection(COLLECTION_CONVERSATIONS)
-            .document(conversationId)
-            .set(
-                mapOf(
-                    KEY_PARTICIPANTS to listOf(me, otherUid),
-                    KEY_PARTICIPANT_NAMES to mapOf(me to myName, otherUid to otherName),
-                    KEY_PARTICIPANT_AVATARS to mapOf(me to myAvatar, otherUid to otherAvatar),
-                    KEY_LAST_MESSAGE to when (type) {
-                        TYPE_IMAGE -> "[Image]"
-                        TYPE_ATTACHMENT -> "[Attachment]"
-                        TYPE_VIDEO -> "[Video]"
-                        TYPE_VOICE -> "[Voice]"
-                        else -> text
-                    },
-                    KEY_LAST_SENDER_ID to me,
-                    KEY_UPDATED_AT to FieldValue.serverTimestamp(),
-                    KEY_SEEN_BY to listOf(me)
-                )
-            ).await()
+        LaravelClient.api.sendMessage(
+            SendMessageRequest(
+                sender_id = me,
+                receiver_id = otherUid,
+                content = content
+            )
+        )
     }
 
     override suspend fun markConversationSeen(otherUid: String): Result<Unit> = runCatching {
@@ -283,6 +280,10 @@ class DirectChatRepositoryImp : DirectChatRepository {
         db.collection(COLLECTION_CONVERSATIONS)
             .document(conversationId)
             .set(mapOf(KEY_SEEN_BY to FieldValue.arrayUnion(me)), com.google.firebase.firestore.SetOptions.merge())
+            .await()
+        db.collection(COLLECTION_CONVERSATIONS)
+            .document(conversationId)
+            .update("unreadCount.$me", 0)
             .await()
     }
 
@@ -295,6 +296,7 @@ class DirectChatRepositoryImp : DirectChatRepository {
             is com.google.firebase.Timestamp -> raw.toDate().time
             is Long -> raw
             is Number -> raw.toLong()
+            is String -> runCatching { Instant.parse(raw).toEpochMilli() }.getOrDefault(0L)
             else -> 0L
         }
     }
@@ -303,7 +305,6 @@ class DirectChatRepositoryImp : DirectChatRepository {
         private const val COLLECTION_USERS = "users"
         private const val COLLECTION_CONVERSATIONS = "conversations"
         private const val COLLECTION_MESSAGES = "messages"
-
         private const val KEY_PARTICIPANTS = "participants"
         private const val KEY_PARTICIPANT_NAMES = "participantNames"
         private const val KEY_PARTICIPANT_AVATARS = "participantAvatars"
@@ -311,6 +312,7 @@ class DirectChatRepositoryImp : DirectChatRepository {
         private const val KEY_LAST_SENDER_ID = "lastSenderId"
         private const val KEY_UPDATED_AT = "updatedAt"
         private const val KEY_SEEN_BY = "seenBy"
+        private const val KEY_UNREAD_COUNT = "unreadCount"
 
         private const val KEY_SENDER_ID = "senderId"
         private const val KEY_RECEIVER_ID = "receiverId"

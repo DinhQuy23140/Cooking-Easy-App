@@ -1,5 +1,6 @@
 package com.example.cookingeasy.ui.viewmodel
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -226,6 +227,7 @@ class ChatDetailViewModel(
         return if (raw.contains('/')) raw.substringAfterLast('/') else raw.ifEmpty { "file" }
     }
 
+    @SuppressLint("Recycle")
     private fun extractFileSize(uri: Uri): String {
         val size = runCatching { contentResolver.openFileDescriptor(uri, "r")?.statSize ?: -1L }.getOrDefault(-1L)
         if (size <= 0L) return ""
@@ -244,6 +246,5 @@ class ChatDetailViewModel(
         return SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(ms))
     }
 
-    companion object {
-    }
+    companion object
 }

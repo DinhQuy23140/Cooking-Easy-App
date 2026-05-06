@@ -1,10 +1,14 @@
 package com.example.cookingeasy.ui.main
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -26,6 +30,12 @@ import com.google.firebase.messaging.FirebaseMessaging
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        Log.e(TAG, "POST_NOTIFICATIONS granted=$granted")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -46,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
         handleNotificationNavigation(intent)
+        requestNotificationPermissionIfNeeded()
         setupFcmDebug()
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
@@ -122,9 +133,26 @@ class MainActivity : AppCompatActivity() {
         FirebaseFirestore.getInstance()
             .collection("users")
             .document(uid)
-            .set(mapOf("fcmToken" to token), SetOptions.merge())
-            .addOnSuccessListener { Log.e(TAG, "Synced fcmToken for uid=$uid") }
+            .set(
+                mapOf(
+                    "fcmToken" to token,
+                    "fcm_tokens" to com.google.firebase.firestore.FieldValue.arrayUnion(token)
+                ),
+                SetOptions.merge()
+            )
+            .addOnSuccessListener { Log.e(TAG, "Synced fcmToken/fcm_tokens for uid=$uid") }
             .addOnFailureListener { e -> Log.e(TAG, "Failed to sync fcmToken", e) }
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) return
+        val granted = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+        if (!granted) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ImageView.ScaleType
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
@@ -42,6 +43,7 @@ class ActiveUserAdapter(
 
         fun bind(item: ActiveUserUi, onClick: (ActiveUserUi) -> Unit) {
             if (item.avatarUrl.isNotBlank()) {
+                imgAvatar.scaleType = ScaleType.CENTER_CROP
                 Glide.with(imgAvatar)
                     .load(item.avatarUrl)
                     .centerCrop()
@@ -49,6 +51,7 @@ class ActiveUserAdapter(
                     .error(R.drawable.ic_person)
                     .into(imgAvatar)
             } else {
+                imgAvatar.scaleType = ScaleType.CENTER_INSIDE
                 Glide.with(imgAvatar).clear(imgAvatar)
                 imgAvatar.setImageResource(R.drawable.ic_person)
             }
