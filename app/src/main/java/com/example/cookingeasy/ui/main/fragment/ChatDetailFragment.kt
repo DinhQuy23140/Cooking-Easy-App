@@ -31,6 +31,8 @@ import androidx.paging.LOGGER
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
+import com.example.cookingeasy.call.InCallActivity
+import com.example.cookingeasy.call.IncomingCallActivity
 import com.example.cookingeasy.common.adapter.MessageAdapter
 import com.example.cookingeasy.common.adapter.MessageUiModel
 import com.example.cookingeasy.databinding.FragmentChatDetailBinding
@@ -92,6 +94,24 @@ class ChatDetailFragment : Fragment() {
                 Toast.makeText(requireContext(), R.string.chat_audio_permission_denied, Toast.LENGTH_SHORT).show()
             }
         }
+    private var pendingCallType: String? = null
+    private val requestCallPermissionsLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { grantResults ->
+            val audioGranted = grantResults[Manifest.permission.RECORD_AUDIO] == true
+            val type = pendingCallType ?: return@registerForActivityResult
+            if (type == "video") {
+                val cameraGranted = grantResults[Manifest.permission.CAMERA] == true
+                if (audioGranted && cameraGranted) {
+                    startCall(type)
+                } else {
+                    Toast.makeText(requireContext(), "Camera/Mic permissions required", Toast.LENGTH_SHORT).show()
+                }
+            } else if (audioGranted) {
+                startCall(type)
+            } else {
+                Toast.makeText(requireContext(), "Microphone permission required", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     private val viewModel: ChatDetailViewModel by viewModels {
         ChatDetailViewModel.Factory(
@@ -130,6 +150,12 @@ class ChatDetailFragment : Fragment() {
                 .replace(R.id.container, OtherUserProfileFragment.newInstance(uid))
                 .addToBackStack(null)
                 .commit()
+        }
+        binding.btnCall.setOnClickListener {
+            ensureCallPermissionsThenStart("audio")
+        }
+        binding.btnVideoCall.setOnClickListener {
+            ensureCallPermissionsThenStart("video")
         }
     }
 
@@ -382,6 +408,30 @@ class ChatDetailFragment : Fragment() {
                 SimpleDateFormat("dd/MM HH:mm", Locale.getDefault()).format(Date(lastActiveAt))
             )
         }
+    }
+
+    private fun ensureCallPermissionsThenStart(type: String) {
+        pendingCallType = type
+        val required = mutableListOf(Manifest.permission.RECORD_AUDIO)
+        if (type == "video") required.add(Manifest.permission.CAMERA)
+        val denied = required.filter {
+            ContextCompat.checkSelfPermission(requireContext(), it) != PackageManager.PERMISSION_GRANTED
+        }
+        if (denied.isEmpty()) {
+            startCall(type)
+            return
+        }
+        requestCallPermissionsLauncher.launch(denied.toTypedArray())
+    }
+
+    private fun startCall(type: String) {
+        val peerUid = arguments?.getString(ARG_USER_UID).orEmpty()
+        if (peerUid.isBlank()) return
+        startActivity(Intent(requireContext(), InCallActivity::class.java).apply {
+            putExtra(IncomingCallActivity.EXTRA_PEER_ID, peerUid)
+            putExtra(IncomingCallActivity.EXTRA_CALL_TYPE, type)
+            putExtra(InCallActivity.EXTRA_IS_CALLER, true)
+        })
     }
 
     companion object {

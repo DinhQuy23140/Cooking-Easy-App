@@ -168,6 +168,7 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("io.github.webrtc-sdk:android:144.7559.01")
 }
 
 tasks.register("replaceLayoutStringsFromTsv") {

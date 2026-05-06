@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.example.cookingeasy.R
+import com.example.cookingeasy.call.IncomingCallActivity
 import com.example.cookingeasy.ui.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -44,6 +45,15 @@ class ChatFirebaseMessagingService : FirebaseMessagingService() {
         )
 
         val data = message.data
+        if (data["type"] == "incoming_call") {
+            showIncomingCallNotification(data)
+            return
+        }
+        if (data["type"] == "call_status") {
+            showCallStatusNotification(data)
+            return
+        }
+
         val fallbackTitle = message.notification?.title ?: getString(R.string.chat_notification_title_default)
         val title = data["otherName"]?.takeIf { it.isNotBlank() } ?: data["title"] ?: fallbackTitle
         val body = data["body"] ?: message.notification?.body ?: getString(R.string.chat_notification_body_default)
@@ -142,6 +152,53 @@ class ChatFirebaseMessagingService : FirebaseMessagingService() {
         manager.createNotificationChannel(channel)
     }
 
+    private fun showIncomingCallNotification(data: Map<String, String>) {
+        ensureChannel()
+        val managerCompat = NotificationManagerCompat.from(this)
+        if (!managerCompat.areNotificationsEnabled()) return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val granted = ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+            if (!granted) return
+        }
+
+        val callId = data["callId"].orEmpty()
+        val callerId = data["callerId"].orEmpty()
+        val callerName = data["callerName"].orEmpty().ifBlank { "Incoming call" }
+        val callType = data["callType"].orEmpty().ifBlank { "audio" }
+
+        val fullScreenIntent = Intent(this, IncomingCallActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(IncomingCallActivity.EXTRA_CALL_ID, callId)
+            putExtra(IncomingCallActivity.EXTRA_CALLER_ID, callerId)
+            putExtra(IncomingCallActivity.EXTRA_CALLER_NAME, callerName)
+            putExtra(IncomingCallActivity.EXTRA_CALL_TYPE, callType)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            callId.hashCode(),
+            fullScreenIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_person)
+            .setContentTitle(callerName)
+            .setContentText("Incoming $callType call")
+            .setCategory(NotificationCompat.CATEGORY_CALL)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setOngoing(true)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setFullScreenIntent(pendingIntent, true)
+            .build()
+
+        managerCompat.notify(callId.hashCode(), notification)
+    }
+
     private fun syncFcmToken(token: String) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
         if (uid.isBlank() || token.isBlank()) return
@@ -158,6 +215,42 @@ class ChatFirebaseMessagingService : FirebaseMessagingService() {
             )
             .addOnSuccessListener { Log.e(TAG, "Service synced fcm token for uid=$uid") }
             .addOnFailureListener { e -> Log.e(TAG, "Service failed to sync fcm token", e) }
+    }
+
+    private fun showCallStatusNotification(data: Map<String, String>) {
+        ensureChannel()
+        val managerCompat = NotificationManagerCompat.from(this)
+        if (!managerCompat.areNotificationsEnabled()) return
+
+        val callId = data["callId"].orEmpty()
+        val status = data["status"].orEmpty().ifBlank { "updated" }
+        val text = when (status) {
+            "accepted" -> "Receiver accepted the call"
+            "rejected" -> "Receiver rejected the call"
+            "ended" -> "Call ended"
+            else -> "Call status updated"
+        }
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            callId.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_person)
+            .setContentTitle("Call")
+            .setContentText(text)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        managerCompat.notify(("call-status-$callId").hashCode(), notification)
     }
 
     private fun loadAvatarBitmap(url: String): Bitmap? {
