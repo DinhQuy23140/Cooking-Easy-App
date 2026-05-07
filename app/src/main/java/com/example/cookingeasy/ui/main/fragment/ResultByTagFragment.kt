@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val ARG_AREA = "area"
 
 /**
  * A simple [Fragment] subclass.
@@ -160,10 +161,21 @@ class ResultByTagFragment : Fragment() {
 
     fun getInstance() {
         val bundle = arguments
-        area = bundle?.getString("area") ?:  ""
+        area = bundle?.getString(ARG_AREA).orEmpty().trim()
+        if (area.isEmpty()) {
+            // Fallback for old argument style if any older path still uses param1.
+            area = bundle?.getString(ARG_PARAM1).orEmpty().trim()
+        }
+        Log.d("ResultByTagFragment", "Received area='$area'")
     }
 
     fun loadData() {
+        if (area.isEmpty()) {
+            binding.tvAreaName.text = getString(R.string.area_label, "-")
+            binding.layoutEmpty.isVisible = true
+            binding.rvRecipesByTag.isVisible = false
+            return
+        }
         binding.tvAreaName.text = getString(R.string.area_label, area)
         resultByTagViewModel.getRecipesByArea(area)
     }
@@ -176,6 +188,8 @@ class ResultByTagFragment : Fragment() {
                     mealSimpleAdapter.updateData(it)
                     listRecipe = it
                     binding.txtResultCount.text = getString(R.string.recipes_found_count, it.size)
+                    binding.layoutEmpty.isVisible = it.isEmpty()
+                    binding.rvRecipesByTag.isVisible = !it.isEmpty()
                 }
             }
         }

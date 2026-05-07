@@ -166,16 +166,18 @@ class ResultByCategoryFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.recipesByCategory.collect { recipes ->
-                        mealSimpleAdapter.updateData(recipes)
-                        binding.tvRecipeCount.text = resources.getQuantityString(
-                            R.plurals.recipe_count,
-                            recipes.size,
-                            recipes.size
-                        )
-                        binding.layoutEmpty.isVisible = recipes.isEmpty()
-                        binding.rvRecipes.isVisible = recipes.isNotEmpty()
-                        listRecipeService = recipes
-                        Log.d("ResultByCategoryFragment", "recipes: ${recipes.size}")
+                        if (!recipes.isEmpty()){
+                            mealSimpleAdapter.updateData(recipes)
+                            binding.tvRecipeCount.text = resources.getQuantityString(
+                                R.plurals.recipe_count,
+                                recipes.size,
+                                recipes.size
+                            )
+                            binding.layoutEmpty.isVisible = recipes.isEmpty()
+                            binding.rvRecipes.isVisible = recipes.isNotEmpty()
+                            listRecipeService = recipes
+                            Log.d("ResultByCategoryFragment", "recipes: ${recipes.size}")
+                        }
                     }
                 }
 

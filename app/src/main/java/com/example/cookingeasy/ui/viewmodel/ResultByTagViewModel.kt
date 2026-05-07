@@ -25,10 +25,18 @@ class ResultByTagViewModel @Inject constructor(
     val recipeByArea: StateFlow<List<Recipe>> = _recipesByArea
 
     fun getRecipesByArea(tag: String) {
+        val normalizedArea = tag.trim()
+        if (normalizedArea.isEmpty()) {
+            _recipesByArea.value = emptyList()
+            return
+        }
         viewModelScope.launch {
             try {
                 combine(
-                    flow { emit(recipeRepository.filterRecipesByArea(tag))},
+                    flow {
+                        Log.d("ResultByTagViewModel", "Request area='$normalizedArea'")
+                        emit(recipeRepository.filterRecipesByArea(normalizedArea))
+                    },
                     flow { emit(getFavRecipeIds()) }
                 ) { recipes, favorites ->
 
@@ -39,10 +47,11 @@ class ResultByTagViewModel @Inject constructor(
                     }
 
                 }.collect { updatedList ->
+                    Log.d("ResultByTagViewModel", "Result size=${updatedList.size} for area='$normalizedArea'")
                     _recipesByArea.value = updatedList
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("ResultByTagViewModel", "getRecipesByArea failed: ${e.message}", e)
             }
         }
     }
