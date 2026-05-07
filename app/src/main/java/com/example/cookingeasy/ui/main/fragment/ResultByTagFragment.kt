@@ -4,26 +4,28 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.MealSimpleAdapter
 import com.example.cookingeasy.common.listener.RecipeListener
 import com.example.cookingeasy.databinding.FragmentResultByTagBinding
-import com.example.cookingeasy.databinding.FragmentResultScanBinding
 import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.ui.viewmodel.ResultByTagViewModel
-import com.example.cookingeasy.util.GridSpacingItemDecoration
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,6 +50,7 @@ class ResultByTagFragment : Fragment() {
     private lateinit var mealSimpleAdapter: MealSimpleAdapter
     private var area: String = ""
     private val resultByTagViewModel: ResultByTagViewModel by viewModels()
+    private val recipeShareViewmodel: RecipeShareViewmodel by activityViewModels()
     private var isLoadingMore = false
     private lateinit var listRecipe: List<Recipe>
 
@@ -137,11 +140,16 @@ class ResultByTagFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             mealSimpleAdapter = MealSimpleAdapter(mutableListOf<Recipe>(), object : RecipeListener {
                 override fun OnClickItem(recipe: Recipe) {
-                    TODO("Not yet implemented")
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        resultByTagViewModel.getRecipeById(recipe.idMeal.toString())
+                            .onSuccess { fullRecipe ->
+                                showRecipePreviewDialog(fullRecipe)
+                            }
+                    }
                 }
 
                 override fun OnFavoriteClick(recipe: Recipe) {
-                    TODO("Not yet implemented")
+                    resultByTagViewModel.toggleFavorite(recipe)
                 }
 
                 override fun onClickInf(recipe: Recipe) = Unit
@@ -171,6 +179,47 @@ class ResultByTagFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showRecipePreviewDialog(recipe: Recipe) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_recipe_preview, null)
+        val imgPreview = dialogView.findViewById<ImageView>(R.id.imgRecipePreview)
+        val tvName = dialogView.findViewById<TextView>(R.id.tvRecipeNamePreview)
+        val tvMeta = dialogView.findViewById<TextView>(R.id.tvRecipeMetaPreview)
+        val tvInstruction = dialogView.findViewById<TextView>(R.id.tvInstructionPreview)
+
+        tvName.text = recipe.strMeal.ifEmpty { getString(R.string.data_not_found) }
+        tvMeta.text = getString(
+            R.string.dialog_recipe_preview_meta,
+            recipe.strCategory.ifEmpty { "-" },
+            recipe.strArea.ifEmpty { "-" }
+        )
+        tvInstruction.text = recipe.strInstructions
+            .trim()
+            .ifEmpty { getString(R.string.data_not_found) }
+            .let { if (it.length > 240) "${it.take(237)}..." else it }
+
+        Glide.with(this)
+            .load(recipe.strMealThumb)
+            .placeholder(R.drawable.ic_cooking)
+            .error(R.drawable.ic_cooking)
+            .into(imgPreview)
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .setNegativeButton(R.string.action_cancel, null)
+            .setPositiveButton(R.string.view_detail) { _, _ ->
+                recipeShareViewmodel.selectedRecipe(recipe)
+                parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_left, R.anim.slide_out_right
+                    )
+                    .replace(R.id.container, RecipeDetailFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+            .show()
     }
 
     companion object {

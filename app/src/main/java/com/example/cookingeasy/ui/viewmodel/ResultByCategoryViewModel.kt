@@ -58,6 +58,13 @@ class ResultByCategoryViewModel @Inject constructor(
         }
     }
 
+    suspend fun getRecipeById(id: String): Result<Recipe> {
+        return runCatching {
+            recipeRepository.getRecipeById(id)
+                ?: throw IllegalStateException("Recipe not found")
+        }
+    }
+
     suspend fun getFavRecipeIds(): List<String> {
         return recipeRepository.getFavRecipeIds()
     }

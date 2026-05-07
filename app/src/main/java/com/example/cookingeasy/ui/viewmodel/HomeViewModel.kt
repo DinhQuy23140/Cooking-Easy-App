@@ -78,8 +78,6 @@ class HomeViewModel @Inject constructor(
             ) { apiRecipes, favorites, firebaseRecipes ->
 
                 val favIds = favorites.map { it }.toSet()
-                Log.d("Fav recipe: ", favIds.toString())
-                Log.d("Firebase recipe: ", firebaseRecipes.toString())
                 val mergedRecipes = buildList {
                     addAll(firebaseRecipes)
                     addAll(apiRecipes)

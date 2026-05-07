@@ -42,4 +42,9 @@ interface RecipeService {
 
     @GET("random.php")
     suspend fun getRandomRecipe(): RecipeResponseDto
+
+    @GET("lookup.php")
+    suspend fun getRecipeById(
+        @Query("i") id: String
+    ): RecipeResponseDto
 }

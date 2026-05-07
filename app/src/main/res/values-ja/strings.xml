@@ -36,6 +36,12 @@
 
     <string name="area_label">地域：%1$s</string>
     <string name="recipes_found_count">%1$d件のレシピが見つかりました</string>
+    <string name="label_category">カテゴリ</string>
+    <string name="label_area">地域</string>
+    <string name="view_detail">詳細を見る</string>
+    <string name="data_not_found">データが見つかりません</string>
+    <string name="dialog_recipe_preview_instruction">クイック説明</string>
+    <string name="dialog_recipe_preview_meta">カテゴリ: %1$s  |  地域: %2$s</string>
 
     <string name="hello_blank_fragment">こんにちは</string>
 

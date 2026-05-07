@@ -98,6 +98,12 @@ class RecipeRepositoryImp @Inject constructor(
         return RecipeMapper.toRecipe(dto)
     }
 
+    override suspend fun getRecipeById(id: String): Recipe? {
+        val response = recipeService.getRecipeById(id)
+        val dto = response.meals?.firstOrNull() ?: return null
+        return RecipeMapper.toRecipe(dto)
+    }
+
     override fun getTrendingRecipe(): Flow<List<Recipe>> = flow {
         val trendingRecipes = mutableListOf<Recipe>()
         for (index in 1 .. 10) {

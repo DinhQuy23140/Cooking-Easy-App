@@ -24,6 +24,8 @@ interface RecipeRepository {
 
     suspend fun getRandomRecipe(): Recipe?
 
+    suspend fun getRecipeById(id: String): Recipe?
+
     fun getTrendingRecipe(): Flow<List<Recipe>>
 
     suspend fun getFavoriteRecipes(uid: String): List<Recipe>
