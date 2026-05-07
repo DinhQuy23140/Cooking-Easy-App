@@ -43,8 +43,6 @@ class SplashActivity : AppCompatActivity() {
         viewModel.checkLoginStatus()
     }
 
-    // ─── Observe ─────────────────────────────────────────────────────
-
     private fun observeState() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
