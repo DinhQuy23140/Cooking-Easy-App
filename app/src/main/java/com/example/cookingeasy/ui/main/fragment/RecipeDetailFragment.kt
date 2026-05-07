@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -23,6 +24,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.FragmentRecipeDetailBinding
+import com.example.cookingeasy.domain.model.RecipeComment
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.main.activity.FullscreenVideoActivity
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
@@ -32,6 +34,10 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.ui.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,6 +58,7 @@ class RecipeDetailFragment : Fragment() {
     private var player: ExoPlayer? = null
     private lateinit var recipe: Recipe
     private var isFullScreen = false
+    private var isSubmittingComment = false
     private lateinit var binding: FragmentRecipeDetailBinding
     private val recipeShareViewmodel: RecipeShareViewmodel by activityViewModels()
     private val viewModel: HomeViewModel by viewModels()
@@ -92,10 +99,29 @@ class RecipeDetailFragment : Fragment() {
     fun observe() {
         viewLifecycleOwner.lifecycleScope.launch {
             recipeShareViewmodel.selectRecipe.collect { data ->
-                if (data != null) {
-                    recipe = data
-                }
+                if (data == null) return@collect
+                recipe = data
                 loadData(recipe)
+                viewModel.loadRecipeFeedback(recipe.idMeal)
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.recipeRatingSummary.collect { summary ->
+                binding.tvRatingSummary.text = getString(
+                    R.string.recipe_rating_summary,
+                    DecimalFormat("0.0").format(summary.average),
+                    summary.total
+                )
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.myRecipeRating.collect { myRating ->
+                if (myRating > 0f) binding.ratingInput.rating = myRating
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.recipeComments.collect { comments ->
+                renderComments(comments)
             }
         }
     }
@@ -185,6 +211,37 @@ class RecipeDetailFragment : Fragment() {
         binding.btnFavorite.setOnClickListener {
             viewModel.toggleFavorite(recipe)
         }
+        binding.btnSubmitRating.setOnClickListener {
+            val rating = binding.ratingInput.rating
+            viewModel.submitRecipeRating(recipe.idMeal, rating) { success ->
+                if (!isAdded) return@submitRecipeRating
+                Toast.makeText(
+                    requireContext(),
+                    if (success) getString(R.string.recipe_rating_saved) else getString(R.string.error_title),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        binding.btnSubmitComment.setOnClickListener {
+            if (isSubmittingComment) return@setOnClickListener
+            val content = binding.edtComment.text?.toString().orEmpty()
+            if (content.isBlank()) return@setOnClickListener
+            isSubmittingComment = true
+            binding.btnSubmitComment.isEnabled = false
+            viewModel.submitRecipeComment(recipe.idMeal, content) { success ->
+                isSubmittingComment = false
+                if (!isAdded) return@submitRecipeComment
+                binding.btnSubmitComment.isEnabled = true
+                if (success) {
+                    binding.edtComment.setText("")
+                }
+                Toast.makeText(
+                    requireContext(),
+                    if (success) getString(R.string.recipe_comment_saved) else getString(R.string.error_title),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     override fun onPause() {
@@ -239,5 +296,74 @@ class RecipeDetailFragment : Fragment() {
             LinearLayoutManager(requireContext())
 
         binding.rvInstructions.adapter = adapter
+    }
+
+    private fun renderComments(comments: List<RecipeComment>) {
+        val container = binding.layoutComments
+        container.removeAllViews()
+        if (comments.isEmpty()) {
+            val emptyView = TextView(requireContext()).apply {
+                text = getString(R.string.recipe_no_comments)
+                textSize = 13f
+                setTextColor(resources.getColor(R.color.textSecondary, null))
+            }
+            container.addView(emptyView)
+            return
+        }
+        comments.take(10).forEach { comment ->
+            val item = layoutInflater.inflate(R.layout.item_recipe_comment, container, false)
+            val imgAvatar = item.findViewById<ImageView>(R.id.imgCommentAvatar)
+            val tvUserName = item.findViewById<TextView>(R.id.tvCommentUserName)
+            val tvNick = item.findViewById<TextView>(R.id.tvCommentNick)
+            val tvTime = item.findViewById<TextView>(R.id.tvCommentTime)
+            val tvContent = item.findViewById<TextView>(R.id.tvCommentContent)
+
+            val displayName = comment.userName.ifEmpty { "User" }
+            tvUserName.text = displayName
+            tvNick.text = comment.userNickname
+                .takeIf { it.isNotBlank() }
+                ?.let { "@$it" }
+                ?: "@unknown"
+            tvTime.text = formatCommentTime(comment.createdAt)
+            tvContent.text = comment.content
+
+            Glide.with(this)
+                .load(comment.userAvatarUrl)
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .circleCrop()
+                .into(imgAvatar)
+
+            val openProfile = {
+                if (comment.userId.isBlank()) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.other_user_profile_unavailable,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left,
+                            R.anim.slide_in_left,
+                            R.anim.slide_out_right
+                        )
+                        .replace(R.id.container, OtherUserProfileFragment.newInstance(comment.userId))
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
+            imgAvatar.setOnClickListener { openProfile() }
+            tvUserName.setOnClickListener { openProfile() }
+            tvNick.setOnClickListener { openProfile() }
+
+            container.addView(item)
+        }
+    }
+
+    private fun formatCommentTime(createdAt: Long): String {
+        if (createdAt <= 0L) return ""
+        return SimpleDateFormat("dd/MM HH:mm", Locale.getDefault()).format(Date(createdAt))
     }
 }

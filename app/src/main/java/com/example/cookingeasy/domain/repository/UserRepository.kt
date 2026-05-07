@@ -24,5 +24,9 @@ interface UserRepository {
     suspend fun getListHistorySearch(userId: String): List<HistorySearch>
     suspend fun deleteHistorySearch(userId: String, docId: String)
     suspend fun clearHistorySearch(userId: String)
+    suspend fun followUser(targetUid: String)
+    suspend fun unfollowUser(targetUid: String)
+    suspend fun isFollowing(targetUid: String): Boolean
+    suspend fun getFollowStats(uid: String): Pair<Int, Int>
     fun getUid(): String
 }

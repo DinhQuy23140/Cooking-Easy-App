@@ -226,8 +226,96 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="14dp">
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/shape_accent_bar"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/recipe_form_section_instructions"
+                                android:textColor="#2E5E2E"
+                                android:textSize="12sp"
+                                android:fontFamily="sans-serif-medium"
+                                android:letterSpacing="0.1"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/recipe_instruction_subtitle"
+                                android:textColor="@color/md_theme_onSurfaceVariant"
+                                android:textSize="11sp"
+                                tools:text="Follow step by step for best results" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/shape_calories_badge"
+                            android:padding="7dp"
+                            android:src="@drawable/ic_scan"
+                            app:tint="@color/md_theme_primary"/>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:cardBackgroundColor="@color/md_theme_surfaceVariant"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/md_theme_outline"
+                        app:strokeWidth="1dp">
+
+                        <!-- Instructions RecyclerView -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_instructions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            android:paddingStart="10dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="8dp"/>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="@color/md_theme_surface"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <View
                             android:layout_width="3dp"
@@ -236,25 +324,122 @@
                             android:background="@drawable/shape_accent_bar"/>
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/recipe_form_section_instructions"
+                            android:layout_weight="1"
+                            android:text="@string/recipe_feedback_title"
                             android:textColor="#2E5E2E"
                             android:textSize="12sp"
-                            android:fontFamily="sans-serif-medium"
-                            android:letterSpacing="0.1"/>
-
+                            android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- Instructions RecyclerView -->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_instructions"
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false"/>
+                        android:layout_marginTop="12dp"
+                        app:cardBackgroundColor="@color/md_theme_surfaceVariant"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/md_theme_outline"
+                        app:strokeWidth="1dp">
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/recipe_rating_section_title"
+                                android:textColor="@color/md_theme_onSurface"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvRatingSummary"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:textColor="@color/md_theme_onSurfaceVariant"
+                                android:textSize="13sp"
+                                tools:text="4.5/5 • 20 ratings" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <RatingBar
+                                    android:id="@+id/ratingInput"
+                                    style="?android:attr/ratingBarStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:numStars="5"
+                                    android:stepSize="1.0" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btnSubmitRating"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="38dp"
+                                    android:layout_gravity="end"
+                                    android:layout_marginStart="10dp"
+                                    android:text="@string/recipe_submit_rating"
+                                    android:textAllCaps="false"
+                                    android:textSize="12sp"
+                                    app:cornerRadius="10dp"
+                                    app:iconTint="@android:color/white" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/recipe_comment_section_title"
+                        android:textColor="@color/md_theme_onSurface"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtComment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/shape_input_field"
+                        android:gravity="top|start"
+                        android:hint="@string/recipe_comment_hint"
+                        android:minHeight="88dp"
+                        android:padding="10dp"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSubmitComment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/recipe_submit_comment"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        app:cornerRadius="10dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/chat_divider" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutComments"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical" />
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
             <!-- ═══════════════════════════════

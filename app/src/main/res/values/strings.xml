@@ -50,6 +50,18 @@
     <string name="data_not_found">Data not found</string>
     <string name="dialog_recipe_preview_instruction">Quick description</string>
     <string name="dialog_recipe_preview_meta">Category: %1$s  |  Area: %2$s</string>
+    <string name="other_user_following">Following</string>
+    <string name="recipe_feedback_title">Ratings &amp; comments</string>
+    <string name="recipe_instruction_subtitle">Follow each step for the best result</string>
+    <string name="recipe_rating_section_title">Rate this recipe</string>
+    <string name="recipe_comment_section_title">Comments</string>
+    <string name="recipe_submit_rating">Submit rating</string>
+    <string name="recipe_comment_hint">Share your experience with this recipe...</string>
+    <string name="recipe_submit_comment">Post comment</string>
+    <string name="recipe_rating_summary">%1$s/5 • %2$d ratings</string>
+    <string name="recipe_rating_saved">Rating saved</string>
+    <string name="recipe_comment_saved">Comment posted</string>
+    <string name="recipe_no_comments">No comments yet. Be the first!</string>
 
     <!-- Legacy / placeholder -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -3,6 +3,8 @@ package com.example.cookingeasy.domain.repository
 import com.example.cookingeasy.data.remote.dto.CategoryResponseDto
 import com.example.cookingeasy.domain.model.Area
 import com.example.cookingeasy.domain.model.Category
+import com.example.cookingeasy.domain.model.RecipeComment
+import com.example.cookingeasy.domain.model.RecipeRatingSummary
 import com.example.cookingeasy.domain.model.Recipe
 import kotlinx.coroutines.flow.Flow
 
@@ -39,4 +41,14 @@ interface RecipeRepository {
     suspend fun getAllRecipesFirebase(): List<Recipe>
 
     suspend fun getFavRecipeIds(): List<String>
+
+    suspend fun addRecipeComment(recipeId: String, content: String)
+
+    suspend fun getRecipeComments(recipeId: String): List<RecipeComment>
+
+    suspend fun submitRecipeRating(recipeId: String, rating: Float)
+
+    suspend fun getRecipeRatingSummary(recipeId: String): RecipeRatingSummary
+
+    suspend fun getUserRecipeRating(recipeId: String): Float
 }

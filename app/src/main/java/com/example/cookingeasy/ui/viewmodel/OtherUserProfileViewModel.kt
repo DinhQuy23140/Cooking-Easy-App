@@ -43,8 +43,11 @@ class OtherUserProfileViewModel @Inject constructor(
         data class Success(
             val profile: OtherUserProfileUi,
             val isOwnProfile: Boolean,
+            val isFollowing: Boolean,
             val selectedTab: Int,
             val publishedRecipeCount: Int,
+            val followerCount: Int,
+            val followingCount: Int,
             val recipes: List<Recipe>
         ) : UiState()
 
@@ -57,6 +60,9 @@ class OtherUserProfileViewModel @Inject constructor(
     private var allUploads: List<RecipeUpload> = emptyList()
     private var profileUi: OtherUserProfileUi = OtherUserProfileUi()
     private var selectedTab = 0
+    private var isFollowing = false
+    private var followerCount = 0
+    private var followingCount = 0
 
     private val isOwnProfile: Boolean
         get() = uid.isNotEmpty() && uid == userRepository.getUid()
@@ -72,9 +78,17 @@ class OtherUserProfileViewModel @Inject constructor(
             supervisorScope {
                 val profileDeferred = async { userRepository.getUserProfile(uid) }
                 val recipesDeferred = async { recipeUploadRepository.getRecipesByUserUUID(uid) }
+                val followStatsDeferred = async { userRepository.getFollowStats(uid) }
+                val isFollowingDeferred = async {
+                    if (isOwnProfile) false else userRepository.isFollowing(uid)
+                }
 
                 val profileResult = profileDeferred.await()
                 allUploads = recipesDeferred.await().getOrElse { emptyList() }
+                val followStats = followStatsDeferred.await()
+                followerCount = followStats.first
+                followingCount = followStats.second
+                isFollowing = isFollowingDeferred.await()
                 selectedTab = 0
 
                 profileResult
@@ -101,6 +115,26 @@ class OtherUserProfileViewModel @Inject constructor(
         }
     }
 
+    fun toggleFollow() {
+        if (isOwnProfile || uid.isBlank()) return
+        viewModelScope.launch {
+            runCatching {
+                if (isFollowing) {
+                    userRepository.unfollowUser(uid)
+                    isFollowing = false
+                    followerCount = (followerCount - 1).coerceAtLeast(0)
+                } else {
+                    userRepository.followUser(uid)
+                    isFollowing = true
+                    followerCount += 1
+                }
+            }.onFailure {
+                _uiState.value = UiState.Error(it.message ?: "Failed to update follow")
+            }
+            emitSuccess()
+        }
+    }
+
     private fun emitSuccess() {
         val filteredUploads = when {
             !isOwnProfile -> allUploads.filter { it.status == "published" }
@@ -111,8 +145,11 @@ class OtherUserProfileViewModel @Inject constructor(
         _uiState.value = UiState.Success(
             profile = profileUi,
             isOwnProfile = isOwnProfile,
+            isFollowing = isFollowing,
             selectedTab = selectedTab,
             publishedRecipeCount = allUploads.count { it.status == "published" },
+            followerCount = followerCount,
+            followingCount = followingCount,
             recipes = filteredUploads.map { it.toRecipe() }
         )
     }

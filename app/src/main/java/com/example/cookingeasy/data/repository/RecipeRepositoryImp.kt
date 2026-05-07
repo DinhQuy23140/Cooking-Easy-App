@@ -12,6 +12,8 @@ import com.example.cookingeasy.data.remote.mapper.RecipeMapper
 import com.example.cookingeasy.domain.mapper.toRecipe
 import com.example.cookingeasy.domain.model.Area
 import com.example.cookingeasy.domain.model.Category
+import com.example.cookingeasy.domain.model.RecipeComment
+import com.example.cookingeasy.domain.model.RecipeRatingSummary
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.RecipeRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.tasks.await
 
 class RecipeRepositoryImp @Inject constructor(
     val remote: RecipeFirestoreDataSource,
@@ -165,5 +168,44 @@ class RecipeRepositoryImp @Inject constructor(
     override suspend fun getFavRecipeIds(): List<String> {
         val uid = auth.uid.toString()
         return remote.getFavoriteIds(uid)
+    }
+
+    override suspend fun addRecipeComment(recipeId: String, content: String) {
+        val uid = auth.currentUser?.uid ?: return
+        val userDoc = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(uid)
+            .get()
+            .await()
+        val userName = userDoc.getString("fullName").orEmpty()
+            .ifEmpty { userDoc.getString("nickname").orEmpty() }
+        val nickname = userDoc.getString("nickname").orEmpty()
+        val avatar = userDoc.getString("avatarUrl").orEmpty()
+        remote.addRecipeComment(
+            recipeId = recipeId,
+            userId = uid,
+            userName = userName,
+            userNickname = nickname,
+            userAvatarUrl = avatar,
+            content = content
+        )
+    }
+
+    override suspend fun getRecipeComments(recipeId: String): List<RecipeComment> {
+        return remote.getRecipeComments(recipeId)
+    }
+
+    override suspend fun submitRecipeRating(recipeId: String, rating: Float) {
+        val uid = auth.currentUser?.uid ?: return
+        remote.submitRecipeRating(recipeId, uid, rating)
+    }
+
+    override suspend fun getRecipeRatingSummary(recipeId: String): RecipeRatingSummary {
+        return remote.getRecipeRatingSummary(recipeId)
+    }
+
+    override suspend fun getUserRecipeRating(recipeId: String): Float {
+        val uid = auth.currentUser?.uid ?: return 0f
+        return remote.getUserRecipeRating(recipeId, uid)
     }
 }

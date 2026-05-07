@@ -129,6 +129,9 @@ class OtherUserProfileFragment : Fragment() {
             fragment.arguments = bundle
             parentFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
         }
+        binding.btnFollow.setOnClickListener {
+            viewModel.toggleFollow()
+        }
     }
 
     private fun observeUiState() {
@@ -198,8 +201,13 @@ class OtherUserProfileFragment : Fragment() {
         }
 
         binding.tvStatRecipes.text = state.publishedRecipeCount.toString()
-        binding.tvStatFollowers.text = "0"
-        binding.tvStatFollowing.text = "0"
+        binding.tvStatFollowers.text = state.followerCount.toString()
+        binding.tvStatFollowing.text = state.followingCount.toString()
+        binding.btnFollow.text = if (state.isFollowing) {
+            getString(R.string.other_user_following)
+        } else {
+            getString(R.string.other_user_follow)
+        }
         recipeAdapter.submitList(state.recipes)
         binding.layoutEmpty.isVisible = state.recipes.isEmpty()
         binding.rvRecipes.isVisible = state.recipes.isNotEmpty()

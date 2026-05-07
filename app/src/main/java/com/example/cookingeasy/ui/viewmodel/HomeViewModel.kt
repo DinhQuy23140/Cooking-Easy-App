@@ -11,6 +11,8 @@ import com.example.cookingeasy.data.repository.UserRepository
 import com.example.cookingeasy.data.repository.UserRepositoryImp
 import com.example.cookingeasy.domain.model.Area
 import com.example.cookingeasy.domain.model.Category
+import com.example.cookingeasy.domain.model.RecipeComment
+import com.example.cookingeasy.domain.model.RecipeRatingSummary
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.example.cookingeasy.domain.repository.RecipeRepository
@@ -40,12 +42,18 @@ class HomeViewModel @Inject constructor(
     private val _isFavoritesReady = MutableStateFlow(false)
     private val _userName = MutableStateFlow<String>("")
     private val _imgUrl = MutableStateFlow<String>("")
+    private val _recipeComments = MutableStateFlow<List<RecipeComment>>(emptyList())
+    private val _recipeRatingSummary = MutableStateFlow(RecipeRatingSummary())
+    private val _myRecipeRating = MutableStateFlow(0f)
 
     val lisCategory: StateFlow<List<Category>> = _listCategory
     val listArea: StateFlow<List<Area>> = _listArea
     val listRecipe: StateFlow<List<Recipe>> = _listRecipe
     val userName: StateFlow<String> = _userName
     val imgUrl: StateFlow<String> = _imgUrl
+    val recipeComments: StateFlow<List<RecipeComment>> = _recipeComments
+    val recipeRatingSummary: StateFlow<RecipeRatingSummary> = _recipeRatingSummary
+    val myRecipeRating: StateFlow<Float> = _myRecipeRating
 
 
     fun getListCategory() {
@@ -140,6 +148,46 @@ class HomeViewModel @Inject constructor(
                 .onFailure {
 
                 }
+        }
+    }
+
+    fun loadRecipeFeedback(recipeId: String) {
+        if (recipeId.isBlank()) return
+        viewModelScope.launch {
+            runCatching {
+                _recipeComments.value = _recipeRepository.getRecipeComments(recipeId)
+                _recipeRatingSummary.value = _recipeRepository.getRecipeRatingSummary(recipeId)
+                _myRecipeRating.value = _recipeRepository.getUserRecipeRating(recipeId)
+            }
+        }
+    }
+
+    fun submitRecipeComment(recipeId: String, content: String, onDone: (Boolean) -> Unit) {
+        if (recipeId.isBlank() || content.isBlank()) {
+            onDone(false)
+            return
+        }
+        viewModelScope.launch {
+            val result = runCatching {
+                _recipeRepository.addRecipeComment(recipeId, content.trim())
+                _recipeComments.value = _recipeRepository.getRecipeComments(recipeId)
+            }
+            onDone(result.isSuccess)
+        }
+    }
+
+    fun submitRecipeRating(recipeId: String, rating: Float, onDone: (Boolean) -> Unit) {
+        if (recipeId.isBlank() || rating <= 0f) {
+            onDone(false)
+            return
+        }
+        viewModelScope.launch {
+            val result = runCatching {
+                _recipeRepository.submitRecipeRating(recipeId, rating)
+                _recipeRatingSummary.value = _recipeRepository.getRecipeRatingSummary(recipeId)
+                _myRecipeRating.value = _recipeRepository.getUserRecipeRating(recipeId)
+            }
+            onDone(result.isSuccess)
         }
     }
 }
