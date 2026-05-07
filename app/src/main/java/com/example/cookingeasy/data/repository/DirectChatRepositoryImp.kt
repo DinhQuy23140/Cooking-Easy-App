@@ -9,15 +9,17 @@ import com.example.cookingeasy.domain.repository.DirectChatRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import jakarta.inject.Inject
 import java.time.Instant
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
-class DirectChatRepositoryImp : DirectChatRepository {
-    private val auth = FirebaseAuth.getInstance()
-    private val db = FirebaseFirestore.getInstance()
+class DirectChatRepositoryImp @Inject constructor(
+    private val auth: FirebaseAuth,
+    private val db: FirebaseFirestore
+) : DirectChatRepository {
 
     override fun observeMessages(otherUid: String): Flow<List<DirectMessage>> = callbackFlow {
         val me = auth.currentUser?.uid.orEmpty()

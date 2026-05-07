@@ -6,6 +6,8 @@ import com.example.cookingeasy.common.adapter.ActiveUserUi
 import com.example.cookingeasy.common.adapter.ChatConversation
 import com.example.cookingeasy.data.repository.DirectChatRepositoryImp
 import com.example.cookingeasy.domain.repository.DirectChatRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,8 +16,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ListChatViewModel(
-    private val repository: DirectChatRepository = DirectChatRepositoryImp()
+@HiltViewModel
+class ListChatViewModel @Inject constructor(
+    private val repository: DirectChatRepository
 ) : ViewModel() {
 
     private val _conversations = MutableStateFlow<List<ChatConversation>>(emptyList())

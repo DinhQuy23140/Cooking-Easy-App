@@ -4,11 +4,11 @@ import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import jakarta.inject.Inject
 import kotlinx.coroutines.tasks.await
 
-class RecipeFirestoreDataSource {
+class RecipeFirestoreDataSource @Inject constructor(private val db: FirebaseFirestore) {
 
-    private val db = FirebaseFirestore.getInstance()
     private val recipesCollection = db.collection("recipes")
 
     suspend fun saveRecipe(recipe: RecipeUpload): String {

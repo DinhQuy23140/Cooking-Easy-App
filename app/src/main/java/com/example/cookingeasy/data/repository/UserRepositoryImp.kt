@@ -6,15 +6,16 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import jakarta.inject.Inject
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class UserRepositoryImp() : UserRepository {
-
-    private val db = FirebaseFirestore.getInstance()
-    private val firebaseAuth = FirebaseAuth.getInstance()
+class UserRepositoryImp @Inject constructor(
+    private val db: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth
+) : UserRepository {
     private val usersCollection = db.collection("users")
 
 

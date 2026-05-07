@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.cookingeasy.common.locale.AppLocale
 import com.example.cookingeasy.databinding.FragmentLanguageBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LanguageFragment : Fragment() {
 
     private var _binding: FragmentLanguageBinding? = null

@@ -22,14 +22,14 @@ import com.example.cookingeasy.domain.model.RecipeUpload
 import com.example.cookingeasy.ui.viewmodel.MyRecipesViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ManageMyRecipeFragment : Fragment() {
 
     private lateinit var binding: FragmentManageMyRecipeBinding
-    private val viewModel: MyRecipesViewModel by activityViewModels {
-        MyRecipesViewModel.Factory(requireActivity().contentResolver)
-    }
+    private val viewModel: MyRecipesViewModel by activityViewModels()
     private val recipeShareViewmodel: RecipeShareViewmodel by activityViewModels()
     private lateinit var adapter: MyRecipeAdapter
     private var currentFilter = "all"

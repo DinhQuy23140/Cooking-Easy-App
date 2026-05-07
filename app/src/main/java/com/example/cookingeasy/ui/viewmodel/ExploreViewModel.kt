@@ -8,6 +8,9 @@ import com.example.cookingeasy.data.repository.RecipeRepositoryImp
 import com.example.cookingeasy.domain.model.Area
 import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.domain.repository.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -17,9 +20,8 @@ import java.util.stream.Collector
 import java.util.stream.Collectors
 import kotlin.ranges.contains
 
-class ExploreViewModel(): ViewModel() {
-    private val _recipeRepository = RecipeRepositoryImp()
-    private val authRepository: AuthRepositoryImp = AuthRepositoryImp()
+@HiltViewModel
+class ExploreViewModel @Inject constructor(private val _recipeRepository: RecipeRepository): ViewModel() {
     private val _randomRecipe: MutableStateFlow<Recipe?> = MutableStateFlow(null)
     private val _categories: MutableStateFlow<List<Category>> = MutableStateFlow(emptyList())
     private val _areas: MutableStateFlow<List<Area>> = MutableStateFlow(emptyList())

@@ -20,8 +20,10 @@ import com.example.cookingeasy.ui.main.activity.EnterNameActivity
 import com.example.cookingeasy.ui.main.activity.PickAvatarActivity
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding

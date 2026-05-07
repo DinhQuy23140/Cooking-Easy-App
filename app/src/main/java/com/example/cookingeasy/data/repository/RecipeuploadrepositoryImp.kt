@@ -7,17 +7,11 @@ import com.example.cookingeasy.data.remote.firebase.fireStore.RecipeFirestoreDat
 import com.example.cookingeasy.data.remote.supabase.SupabaseStorageDataSource
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.example.cookingeasy.domain.repository.IRecipeUploadRepository
+import jakarta.inject.Inject
 
-class RecipeUploadRepositoryImp(
-    contentResolver: ContentResolver
+class RecipeUploadRepositoryImp @Inject constructor(
+    private val firestoreDataSource: RecipeFirestoreDataSource
 ) : IRecipeUploadRepository {
-
-    private val firestoreDataSource = RecipeFirestoreDataSource()
-    private val storageDataSource = SupabaseStorageDataSource(contentResolver)
-
-    // ─────────────────────────────────────────────
-    // Save Draft
-    // ─────────────────────────────────────────────
 
     override suspend fun saveDraft(
         uid: String,

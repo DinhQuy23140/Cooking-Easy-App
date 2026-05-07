@@ -18,8 +18,10 @@ import com.example.cookingeasy.common.adapter.ChatAdapter
 import com.example.cookingeasy.databinding.FragmentAIChatBinding
 import com.example.cookingeasy.ui.viewmodel.AIChatViewModel
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AIChatFragment : Fragment() {
 
     private lateinit var binding: FragmentAIChatBinding

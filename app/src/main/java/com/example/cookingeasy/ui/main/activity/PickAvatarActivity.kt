@@ -19,9 +19,11 @@ import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityPickAvatarBinding
 import com.example.cookingeasy.ui.main.MainActivity
 import com.example.cookingeasy.ui.viewmodel.PickAvatarViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import kotlin.getValue
 
+@AndroidEntryPoint
 class PickAvatarActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPickAvatarBinding

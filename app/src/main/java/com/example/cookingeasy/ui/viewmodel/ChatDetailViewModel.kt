@@ -1,18 +1,20 @@
 package com.example.cookingeasy.ui.viewmodel
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import android.content.ContentResolver
 import android.net.Uri
 import com.example.cookingeasy.common.adapter.MessageContentType
 import com.example.cookingeasy.common.adapter.MessageSendStatus
 import com.example.cookingeasy.common.adapter.MessageUiModel
-import com.example.cookingeasy.data.repository.DirectChatRepositoryImp
 import com.example.cookingeasy.data.remote.supabase.SupabaseStorageDataSource
 import com.example.cookingeasy.domain.repository.DirectChatRepository
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,33 +24,17 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ChatDetailViewModel(
-    private val otherUid: String,
-    private val otherName: String,
-    private val otherAvatarUrl: String,
+@HiltViewModel
+class ChatDetailViewModel @Inject constructor(
     private val repository: DirectChatRepository,
     private val storageDataSource: SupabaseStorageDataSource,
-    private val contentResolver: ContentResolver
+    @ApplicationContext private val appContext: Context,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
-    class Factory(
-        private val otherUid: String,
-        private val otherName: String,
-        private val otherAvatarUrl: String,
-        private val contentResolver: ContentResolver
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ChatDetailViewModel(
-                otherUid = otherUid,
-                otherName = otherName,
-                otherAvatarUrl = otherAvatarUrl,
-                repository = DirectChatRepositoryImp(),
-                storageDataSource = SupabaseStorageDataSource(contentResolver),
-                contentResolver = contentResolver
-            ) as T
-        }
-    }
+    private val otherUid: String = savedStateHandle.get<String>(ARG_USER_UID).orEmpty()
+    private val otherName: String = savedStateHandle.get<String>(ARG_USER_NAME).orEmpty()
+    private val otherAvatarUrl: String = savedStateHandle.get<String>(ARG_USER_AVATAR).orEmpty()
+    private val contentResolver = appContext.contentResolver
 
     data class UiState(
         val loading: Boolean = false,
@@ -247,4 +233,9 @@ class ChatDetailViewModel(
     }
 
     companion object
+    {
+        private const val ARG_USER_UID = "userUid"
+        private const val ARG_USER_NAME = "userName"
+        private const val ARG_USER_AVATAR = "userAvatar"
+    }
 }

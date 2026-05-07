@@ -19,6 +19,7 @@ import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.FavoriteViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,6 +32,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [FavoriteFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class FavoriteFragment : Fragment() {
     // TODO: Rename and change types of parameters
 

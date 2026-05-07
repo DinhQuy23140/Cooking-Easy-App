@@ -1,20 +1,17 @@
 package com.example.cookingeasy.ui.viewmodel
 
-import android.content.ContentResolver
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.example.cookingeasy.data.repository.AuthRepositoryImp
-import com.example.cookingeasy.data.repository.RecipeRepositoryImp
-import com.example.cookingeasy.data.repository.RecipeUploadRepositoryImp
 import com.example.cookingeasy.data.repository.UserRepository
-import com.example.cookingeasy.data.repository.UserRepositoryImp
 import com.example.cookingeasy.domain.mapper.toRecipe
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.example.cookingeasy.domain.repository.IRecipeUploadRepository
 import com.example.cookingeasy.domain.repository.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,29 +27,15 @@ data class OtherUserProfileUi(
     val verified: Boolean = false
 )
 
-class OtherUserProfileViewModel(
-    private val uid: String,
+@HiltViewModel
+class OtherUserProfileViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
     private val recipeUploadRepository: IRecipeUploadRepository,
     private val authRepository: AuthRepository,
     private val recipeRepository: RecipeRepository
 ) : ViewModel() {
-
-    class Factory(
-        private val uid: String,
-        private val contentResolver: ContentResolver
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return OtherUserProfileViewModel(
-                uid = uid,
-                userRepository = UserRepositoryImp(),
-                recipeUploadRepository = RecipeUploadRepositoryImp(contentResolver),
-                authRepository = AuthRepositoryImp(),
-                recipeRepository = RecipeRepositoryImp()
-            ) as T
-        }
-    }
+    private val uid: String = savedStateHandle.get<String>(ARG_UID).orEmpty()
 
     sealed class UiState {
         data object Idle : UiState()
@@ -150,5 +133,9 @@ class OtherUserProfileViewModel(
             avatarUrl = (profile["avatarUrl"] as? String).orEmpty(),
             verified = profile["verified"] as? Boolean == true
         )
+    }
+
+    companion object {
+        private const val ARG_UID = "uid"
     }
 }

@@ -15,6 +15,8 @@ import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.example.cookingeasy.domain.repository.RecipeRepository
 import com.google.ai.client.generativeai.type.content
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -24,11 +26,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 
-class HomeViewModel : ViewModel() {
-
-    private val _authRepository: AuthRepository = AuthRepositoryImp()
-    private val _recipeRepository: RecipeRepository = RecipeRepositoryImp()
-    private val _userRepository: UserRepository = UserRepositoryImp()
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val _authRepository: AuthRepository,
+    private val _recipeRepository: RecipeRepository,
+    private val _userRepository: UserRepository
+    ) : ViewModel() {
     private val _listArea = MutableStateFlow<List<Area>>(emptyList())
     private val _listCategory = MutableStateFlow<List<Category>>(emptyList())
     private val _listRecipe = MutableStateFlow<List<Recipe>>(emptyList())

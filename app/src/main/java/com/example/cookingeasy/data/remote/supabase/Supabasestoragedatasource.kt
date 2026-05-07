@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.net.Uri
 import com.example.cookingeasy.BuildConfig
 import com.example.cookingeasy.data.remote.api.SupabaseClient
+import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -13,7 +14,7 @@ import java.util.UUID
 /**
  * Upload / xóa file trên Supabase Storage (bucket public → URL có segment `public`).
  */
-class SupabaseStorageDataSource(
+class SupabaseStorageDataSource @Inject constructor(
     private val contentResolver: ContentResolver
 ) {
 

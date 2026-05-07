@@ -7,16 +7,20 @@ import com.example.cookingeasy.data.repository.AuthRepositoryImp
 import com.example.cookingeasy.data.repository.RecipeRepositoryImp
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.AuthRepository
+import com.example.cookingeasy.domain.repository.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-class ResultByCategoryViewModel(): ViewModel() {
-
-    private val authRepository: AuthRepository = AuthRepositoryImp()
-    private val recipeRepository = RecipeRepositoryImp()
+@HiltViewModel
+class ResultByCategoryViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val recipeRepository: RecipeRepository
+): ViewModel() {
     private val _recipesByCategory: MutableStateFlow<List<Recipe>> = MutableStateFlow(emptyList())
     val recipesByCategory: StateFlow<List<Recipe>> = _recipesByCategory
 

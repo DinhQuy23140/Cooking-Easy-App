@@ -8,7 +8,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class CookingEasyApplication : Application(), Application.ActivityLifecycleCallbacks {
     private var startedCount = 0
     private var currentOnline: Boolean? = null

@@ -23,19 +23,16 @@ import com.example.cookingeasy.ui.viewmodel.OtherUserProfileViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class OtherUserProfileFragment : Fragment() {
 
     private var _binding: FragmentOtherUserProfileBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: OtherUserProfileViewModel by viewModels {
-        OtherUserProfileViewModel.Factory(
-            arguments?.getString(ARG_UID).orEmpty(),
-            requireContext().contentResolver
-        )
-    }
+    private val viewModel: OtherUserProfileViewModel by viewModels()
 
     private val recipeShare: RecipeShareViewmodel by activityViewModels()
     private lateinit var recipeAdapter: RecipeAdapter

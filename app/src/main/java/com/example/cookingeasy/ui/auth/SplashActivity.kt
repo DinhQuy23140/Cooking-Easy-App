@@ -17,15 +17,15 @@ import com.example.cookingeasy.ui.auth.SplashViewModel.SplashState
 import com.example.cookingeasy.ui.main.MainActivity
 import com.example.cookingeasy.ui.main.activity.EnterNameActivity
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
 
     private val viewModel: SplashViewModel by viewModels()
-
-    // ─── Lifecycle ───────────────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

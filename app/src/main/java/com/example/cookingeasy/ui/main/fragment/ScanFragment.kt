@@ -27,12 +27,14 @@ import com.example.cookingeasy.ui.viewmodel.ScanUiState
 import com.example.cookingeasy.ui.viewmodel.ScanViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+@AndroidEntryPoint
 class ScanFragment : Fragment() {
 
     private val viewModel: ScanViewModel by viewModels()

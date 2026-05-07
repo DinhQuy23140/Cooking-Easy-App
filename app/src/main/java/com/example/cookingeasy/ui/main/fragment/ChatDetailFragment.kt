@@ -37,6 +37,7 @@ import com.example.cookingeasy.common.adapter.MessageAdapter
 import com.example.cookingeasy.common.adapter.MessageUiModel
 import com.example.cookingeasy.databinding.FragmentChatDetailBinding
 import com.example.cookingeasy.ui.viewmodel.ChatDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -44,6 +45,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+@AndroidEntryPoint
 class ChatDetailFragment : Fragment() {
     private var _binding: FragmentChatDetailBinding? = null
     private val binding get() = _binding!!
@@ -113,14 +115,7 @@ class ChatDetailFragment : Fragment() {
             }
         }
 
-    private val viewModel: ChatDetailViewModel by viewModels {
-        ChatDetailViewModel.Factory(
-            arguments?.getString(ARG_USER_UID).orEmpty(),
-            arguments?.getString(ARG_USER_NAME).orEmpty(),
-            arguments?.getString(ARG_USER_AVATAR).orEmpty(),
-            requireContext().contentResolver
-        )
-    }
+    private val viewModel: ChatDetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

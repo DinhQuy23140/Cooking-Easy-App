@@ -21,8 +21,10 @@ import com.example.cookingeasy.common.adapter.ChatConversationAdapter
 import com.example.cookingeasy.databinding.FragmentListChatBinding
 import com.example.cookingeasy.ui.viewmodel.ListChatViewModel
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ListChatFragment : Fragment() {
 
     private var _binding: FragmentListChatBinding? = null

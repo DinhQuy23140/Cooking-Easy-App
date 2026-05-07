@@ -34,6 +34,7 @@ import com.example.cookingeasy.ui.viewmodel.ExploreViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.ranges.contains
@@ -48,6 +49,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ExploreFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class ExploreFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null

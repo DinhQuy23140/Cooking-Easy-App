@@ -13,8 +13,10 @@ import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityEnterNameBinding
 import com.example.cookingeasy.ui.auth.EnternameViewmodel
 import com.example.cookingeasy.ui.auth.EnternameViewmodel.EnterNameState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class EnterNameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEnterNameBinding

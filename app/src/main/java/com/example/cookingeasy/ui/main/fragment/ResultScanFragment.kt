@@ -25,6 +25,7 @@ import com.example.cookingeasy.ui.viewmodel.ResultScanViewModel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -40,6 +41,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ResultScanFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class ResultScanFragment : Fragment() {
 
     private lateinit var binding: FragmentResultScanBinding

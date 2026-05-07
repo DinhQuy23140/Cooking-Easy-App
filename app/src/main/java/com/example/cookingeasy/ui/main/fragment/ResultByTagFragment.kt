@@ -24,6 +24,7 @@ import com.example.cookingeasy.databinding.FragmentResultScanBinding
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.ResultByTagViewModel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
@@ -36,6 +37,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ResultByTagFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class ResultByTagFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null

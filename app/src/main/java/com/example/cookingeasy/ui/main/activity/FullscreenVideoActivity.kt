@@ -8,7 +8,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityFullscreenVideoBinding
 import com.example.cookingeasy.util.PlayerManager
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FullscreenVideoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFullscreenVideoBinding

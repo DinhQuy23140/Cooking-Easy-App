@@ -25,17 +25,17 @@ import com.example.cookingeasy.databinding.FragmentMyProfileBinding
 import com.example.cookingeasy.ui.auth.LoginActivity
 import com.example.cookingeasy.ui.main.viewmodel.MyProfileViewModel
 import com.example.cookingeasy.ui.viewmodel.MyRecipesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MyProfileFragment : Fragment() {
 
     private var _binding: FragmentMyProfileBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MyProfileViewModel by viewModels()
-    private val myRecipesViewModel: MyRecipesViewModel by activityViewModels {
-        MyRecipesViewModel.Factory(requireContext().contentResolver)
-    }
+    private val myRecipesViewModel: MyRecipesViewModel by activityViewModels()
 
     private var selectedImageUri: Uri? = null
 

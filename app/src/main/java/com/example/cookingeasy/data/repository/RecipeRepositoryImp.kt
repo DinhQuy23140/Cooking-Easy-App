@@ -1,7 +1,7 @@
 package com.example.cookingeasy.data.repository
 
 import android.util.Log
-import com.example.cookingeasy.data.remote.api.ApiServiceProvider
+import com.example.cookingeasy.data.remote.api.RecipeService
 import com.example.cookingeasy.data.remote.dto.AreaResponseDto
 import com.example.cookingeasy.data.remote.dto.CategoryResponseDto
 import com.example.cookingeasy.data.remote.dto.RecipeResponseDto
@@ -15,6 +15,7 @@ import com.example.cookingeasy.domain.model.Category
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.RecipeRepository
 import com.google.firebase.auth.FirebaseAuth
+import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -22,11 +23,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.supervisorScope
 
-class RecipeRepositoryImp : RecipeRepository{
+class RecipeRepositoryImp @Inject constructor(
+    val remote: RecipeFirestoreDataSource,
+    val auth: FirebaseAuth,
+    val recipeService: RecipeService
+) : RecipeRepository{
 
-    val recipeService = ApiServiceProvider.recipeService
-    val remote = RecipeFirestoreDataSource()
-    val auth = FirebaseAuth.getInstance()
     override suspend fun getCategories(): List<Category> {
         val response: CategoryResponseDto = recipeService.getCategories()
         return CategoryMapper.mapToCategoryList(response.categories)

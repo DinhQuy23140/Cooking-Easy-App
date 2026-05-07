@@ -10,6 +10,8 @@ import com.example.cookingeasy.data.repository.RecipeUploadRepositoryImp
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.example.cookingeasy.domain.repository.IRecipeUploadRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,20 +25,11 @@ data class MyRecipeStats(
     val draft: Int = 0,
     val savedFavorites: Int = 0
 )
-
-class MyRecipesViewModel(
+@HiltViewModel
+class MyRecipesViewModel @Inject constructor(
     private val recipeUploadRepository: IRecipeUploadRepository,
     private val authRepository: AuthRepository
 ) : ViewModel() {
-
-    class Factory(private val contentResolver: ContentResolver) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val repo: IRecipeUploadRepository = RecipeUploadRepositoryImp(contentResolver)
-            val auth: AuthRepository = AuthRepositoryImp()
-            return MyRecipesViewModel(repo, auth) as T
-        }
-    }
 
     private val _allRecipes = MutableStateFlow<List<RecipeUpload>>(emptyList())
     private val _filteredRecipes = MutableStateFlow<List<RecipeUpload>>(emptyList())

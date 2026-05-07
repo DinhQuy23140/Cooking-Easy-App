@@ -33,10 +33,12 @@ import com.example.cookingeasy.ui.viewmodel.HomeViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()

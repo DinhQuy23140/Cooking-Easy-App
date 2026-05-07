@@ -6,20 +6,19 @@ import com.example.cookingeasy.data.repository.AuthRepositoryImp
 import com.example.cookingeasy.data.repository.UserRepository
 import com.example.cookingeasy.data.repository.UserRepositoryImp
 import com.example.cookingeasy.domain.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SplashViewModel(
+@HiltViewModel
+class SplashViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
-
-    private val authRepository: AuthRepository = AuthRepositoryImp()
-    private val userRepository: UserRepository = UserRepositoryImp()
-
-    // ─── UI State ────────────────────────────────────────────────────
-
     sealed class SplashState {
         object Idle : SplashState()
         object Loading : SplashState()

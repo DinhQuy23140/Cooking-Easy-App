@@ -6,17 +6,18 @@ import com.example.cookingeasy.data.repository.AuthRepositoryImp
 import com.example.cookingeasy.data.repository.UserRepository
 import com.example.cookingeasy.data.repository.UserRepositoryImp
 import com.example.cookingeasy.domain.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class EnternameViewmodel(
+@HiltViewModel
+class EnternameViewmodel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
-    private val authRepository: AuthRepository = AuthRepositoryImp()
-    private val userRepository: UserRepository = UserRepositoryImp()
-
-    // ─── UI State ────────────────────────────────────────────────────
 
     sealed class EnterNameState {
         object Idle : EnterNameState()
@@ -27,8 +28,6 @@ class EnternameViewmodel(
 
     private val _state = MutableStateFlow<EnterNameState>(EnterNameState.Idle)
     val state: StateFlow<EnterNameState> = _state.asStateFlow()
-
-    // ─── Actions ─────────────────────────────────────────────────────
 
     fun saveName(fullName: String, nickname: String = "") {
         if (!validate(fullName)) return
@@ -63,8 +62,6 @@ class EnternameViewmodel(
     fun resetState() {
         _state.value = EnterNameState.Idle
     }
-
-    // ─── Validation ──────────────────────────────────────────────────
 
     private fun validate(fullName: String): Boolean {
         return when {

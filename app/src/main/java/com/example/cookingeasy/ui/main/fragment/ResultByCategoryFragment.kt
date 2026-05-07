@@ -32,6 +32,7 @@ import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.ui.viewmodel.ResultByCategoryViewModel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -45,6 +46,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ResultByCategoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class ResultByCategoryFragment : Fragment() {
 
     private lateinit var binding: FragmentResultByCategoryBinding
