@@ -139,16 +139,19 @@ class OtherUserProfileFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     when (state) {
-                        is OtherUserProfileViewModel.UiState.Idle -> Unit
+                        is OtherUserProfileViewModel.UiState.Idle -> {
+                            setLoadingVisible(false)
+                        }
                         is OtherUserProfileViewModel.UiState.Loading -> {
-                            binding.progressLoad.isVisible = true
+                            setLoadingVisible(true)
                         }
                         is OtherUserProfileViewModel.UiState.Success -> {
-                            binding.progressLoad.isVisible = false
-                            renderSuccess(state)
+                            renderSuccess(state) {
+                                setLoadingVisible(false)
+                            }
                         }
                         is OtherUserProfileViewModel.UiState.Error -> {
-                            binding.progressLoad.isVisible = false
+                            setLoadingVisible(false)
                             Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -157,7 +160,10 @@ class OtherUserProfileFragment : Fragment() {
         }
     }
 
-    private fun renderSuccess(state: OtherUserProfileViewModel.UiState.Success) {
+    private fun renderSuccess(
+        state: OtherUserProfileViewModel.UiState.Success,
+        onUiRendered: () -> Unit
+    ) {
         binding.layoutActions.isVisible = !state.isOwnProfile
         binding.tabProfile.isVisible = state.isOwnProfile
 
@@ -211,6 +217,38 @@ class OtherUserProfileFragment : Fragment() {
         recipeAdapter.submitList(state.recipes)
         binding.layoutEmpty.isVisible = state.recipes.isEmpty()
         binding.rvRecipes.isVisible = state.recipes.isNotEmpty()
+        // Ensure progress hides only after the final UI frame is applied.
+        binding.rvRecipes.post { onUiRendered() }
+    }
+
+    private fun setLoadingVisible(visible: Boolean) {
+        binding.progressLoad.isVisible = visible
+        if (visible) {
+            binding.cardStats.isVisible = false
+            binding.layoutActions.isVisible = false
+            binding.cardInterests.isVisible = false
+            binding.cardContent.isVisible = false
+            binding.tvName.isVisible = false
+            binding.tvUsername.isVisible = false
+            binding.tvBio.isVisible = false
+            binding.imgAvatar.isVisible = false
+            binding.imgVerifiedBadge.isVisible = false
+            binding.tabProfile.isVisible = false
+            binding.layoutEmpty.isVisible = false
+            binding.rvRecipes.isVisible = false
+        } else {
+            binding.cardStats.isVisible = true
+            binding.cardInterests.isVisible = true
+            binding.cardContent.isVisible = true
+            binding.tvName.isVisible = true
+            binding.tvUsername.isVisible = true
+            binding.imgAvatar.isVisible = true
+            // layoutActions, tvBio, imgVerifiedBadge, tabProfile, layoutEmpty, rvRecipes
+            // are restored in renderSuccess() based on actual state values.
+        }
+        binding.rvRecipes.isEnabled = !visible
+        binding.btnFollow.isEnabled = !visible
+        binding.btnMessage.isEnabled = !visible
     }
 
     private fun openRecipeDetail() {
