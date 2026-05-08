@@ -46,8 +46,6 @@ class EnterNameActivity : AppCompatActivity() {
         return false
     }
 
-    // ─── Setup ───────────────────────────────────────────────────────
-
     private fun setupClickListeners() {
         binding.btnContinue.setOnClickListener {
             viewModel.saveName(
@@ -81,13 +79,9 @@ class EnterNameActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Navigation ──────────────────────────────────────────────────
-
     private fun navigateToPickAvatar() {
         AuthNavigator.openPickAvatar(this, finishCurrent = true)
     }
-
-    // ─── UI Helpers ──────────────────────────────────────────────────
 
     private fun showLoading(isLoading: Boolean) {
         binding.btnContinue.isEnabled = !isLoading

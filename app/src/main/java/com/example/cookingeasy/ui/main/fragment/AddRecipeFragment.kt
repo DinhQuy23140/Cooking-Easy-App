@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.FragmentAddRecipeBinding
@@ -71,7 +72,7 @@ class AddRecipeFragment : Fragment() {
     private fun setupClickListeners() {
 
         binding.btnClose.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.layoutPickImage.setOnClickListener {
@@ -138,7 +139,7 @@ class AddRecipeFragment : Fragment() {
                     is AddRecipeState.Published  -> {
                         showLoading(false)
                         showMessage("Recipe published!")
-                        parentFragmentManager.popBackStack()
+                        findNavController().popBackStack()
                     }
                     is AddRecipeState.Error      -> {
                         showLoading(false)

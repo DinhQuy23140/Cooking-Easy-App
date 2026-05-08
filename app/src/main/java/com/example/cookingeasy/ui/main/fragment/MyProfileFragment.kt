@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.cookingeasy.data.preferences.ThemeModePreference
@@ -233,66 +234,29 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun navigateToEditProfile() {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
-                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
-            )
-            .replace(com.example.cookingeasy.R.id.container, UpdateProfileFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.updateProfileFragment)
     }
 
     private fun navigateToProfile() {
         val uid = viewModel.getUid()
         if (uid.isEmpty()) return
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.container, OtherUserProfileFragment.newInstance(uid))
-            .addToBackStack(null)
-            .commit()
+        val bundle = Bundle().apply { putString("uid", uid) }
+        findNavController().navigate(R.id.otherUserProfileFragment, bundle)
     }
 
     private fun navigateToFavoriteRecipes() {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
-                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
-            )
-            .replace(com.example.cookingeasy.R.id.container, FavoriteFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.favoriteFragment2)
     }
 
     private fun navigateToLanguageSettings() {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
-                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
-            )
-            .replace(com.example.cookingeasy.R.id.container, LanguageFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.languageFragment)
     }
 
     private fun navigateToMyRecipes() {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
-                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
-            )
-            .replace(com.example.cookingeasy.R.id.container, ManageMyRecipeFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.manageMyRecipeFragment)
     }
 
     private fun navigateToUpload() {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
-                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
-            )
-            .replace(com.example.cookingeasy.R.id.container, AddRecipeFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.addRecipeFragment)
     }
 }

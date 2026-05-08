@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
@@ -83,7 +84,7 @@ class ResultByTagFragment : Fragment() {
 
     private fun setUpListeners() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
@@ -224,14 +225,7 @@ class ResultByTagFragment : Fragment() {
             .setNegativeButton(R.string.action_cancel, null)
             .setPositiveButton(R.string.view_detail) { _, _ ->
                 recipeShareViewmodel.selectedRecipe(recipe)
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    .replace(R.id.container, RecipeDetailFragment())
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.recipeDetailFragment)
             }
             .show()
     }

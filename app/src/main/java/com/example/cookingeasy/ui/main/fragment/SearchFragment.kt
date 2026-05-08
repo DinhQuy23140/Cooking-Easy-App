@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
@@ -81,13 +82,8 @@ class SearchFragment : Fragment() {
                     ).show()
                     return
                 }
-                parentFragmentManager.beginTransaction()
-                    .addToBackStack(null)
-                    .replace(
-                        R.id.container,
-                        OtherUserProfileFragment.newInstance(recipe.userUid)
-                    )
-                    .commit()
+                val bundle = Bundle().apply { putString("uid", recipe.userUid) }
+                findNavController().navigate(R.id.otherUserProfileFragment, bundle)
             }
         })
 
@@ -183,23 +179,12 @@ class SearchFragment : Fragment() {
 
     private fun openRecipeDetail() {
         if (!isAdded) return
-        val fm = parentFragmentManager
-        if (fm.isStateSaved) return
-        fm.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_right,
-                R.anim.slide_out_left,
-                R.anim.slide_in_left,
-                R.anim.slide_out_right
-            )
-            .replace(R.id.container, RecipeDetailFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.recipeDetailFragment)
     }
 
     private fun setupEvents() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.btnClear.setOnClickListener {
@@ -208,16 +193,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.ivScan.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations( // ← set TRƯỚC replace
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-                .replace(R.id.container, ScanFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.scanFragment)
         }
 
         binding.edtSearchRecipe.addTextChangedListener(object : TextWatcher {

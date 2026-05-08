@@ -20,6 +20,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.FragmentScanBinding
 import com.example.cookingeasy.domain.model.ScanResult
@@ -139,13 +140,9 @@ class ScanFragment : Fragment() {
     private fun showResult(result: ScanResult) {
         binding.progressBar.isVisible = false
         val ingredients: String = Gson().toJson(result.ingredients)
-        val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-        val resultScanFragment = ResultScanFragment()
         val bundle = Bundle()
         bundle.putString("ingredients", ingredients)
-        resultScanFragment.arguments = bundle
-        fragmentTransaction.replace(R.id.container, resultScanFragment)
-        fragmentTransaction.commit()
+        findNavController().navigate(R.id.resultScanFragment, bundle)
     }
 
     private fun showError(message: String) {

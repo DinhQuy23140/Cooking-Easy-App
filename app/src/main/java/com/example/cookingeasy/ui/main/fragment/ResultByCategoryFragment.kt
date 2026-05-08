@@ -19,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -115,17 +116,7 @@ class ResultByCategoryFragment : Fragment() {
                         ).show()
                         return
                     }
-                    val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                    fragmentTransaction.setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    fragmentTransaction.replace(
-                        R.id.container,
-                        OtherUserProfileFragment.newInstance(recipe.userUid)
-                    )
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
+                    findNavController().navigate(R.id.otherUserProfileFragment)
                 }
             }
         )
@@ -192,7 +183,7 @@ class ResultByCategoryFragment : Fragment() {
 
     private fun setupClickListeners() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.btnExpand.setOnClickListener {
@@ -314,14 +305,7 @@ class ResultByCategoryFragment : Fragment() {
             .setNegativeButton(R.string.action_cancel, null)
             .setPositiveButton(R.string.view_detail) { _, _ ->
                 recipeShareViewmodel.selectedRecipe(recipe)
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    .replace(R.id.container, RecipeDetailFragment())
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.recipeDetailFragment)
             }
             .show()
     }

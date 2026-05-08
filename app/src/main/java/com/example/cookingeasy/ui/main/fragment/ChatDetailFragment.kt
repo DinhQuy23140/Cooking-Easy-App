@@ -27,6 +27,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LOGGER
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -136,15 +137,12 @@ class ChatDetailFragment : Fragment() {
 
     private fun setUpListener() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
         binding.txtName.setOnClickListener {
             val uid = arguments?.getString(ARG_USER_UID).orEmpty()
             if (uid.isEmpty()) return@setOnClickListener
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.container, OtherUserProfileFragment.newInstance(uid))
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.otherUserProfileFragment)
         }
         binding.btnCall.setOnClickListener {
             ensureCallPermissionsThenStart("audio")

@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.ActiveUserAdapter
@@ -52,21 +53,13 @@ class ListChatFragment : Fragment() {
                 putString("userName", conv.displayName)
                 putString("userAvatar", conv.avatarUrl.orEmpty())
             }
-            val fragment = ChatDetailFragment().apply { arguments = bundle }
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right, R.anim.slide_out_left,
-                    com.example.cookingeasy.R.anim.slide_in_left, R.anim.slide_out_right
-                )
-                .replace(com.example.cookingeasy.R.id.container, fragment)
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.chatDetailFragment, bundle)
         }
         activeUserAdapter = ActiveUserAdapter { active ->
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.container, OtherUserProfileFragment.newInstance(active.uid))
-                .addToBackStack(null)
-                .commit()
+            val bundle = Bundle().apply {
+                putString("uid", active.uid)
+            }
+            findNavController().navigate(R.id.otherUserProfileFragment, bundle)
         }
         binding.rvChats.layoutManager = LinearLayoutManager(requireContext())
         binding.rvChats.adapter = adapter

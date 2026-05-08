@@ -11,18 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.cookingeasy.R
 import com.example.cookingeasy.data.preferences.ShareprefConstants
 import com.example.cookingeasy.databinding.ActivityMainBinding
 import com.example.cookingeasy.ui.auth.LoginActivity
-import com.example.cookingeasy.ui.main.fragment.AIChatFragment
-import com.example.cookingeasy.ui.main.fragment.ChatDetailFragment
-import com.example.cookingeasy.ui.main.fragment.ExploreFragment
-import com.example.cookingeasy.ui.main.fragment.HomeFragment
-import com.example.cookingeasy.ui.main.fragment.ListChatFragment
-import com.example.cookingeasy.ui.main.fragment.MyProfileFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -33,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -54,26 +49,27 @@ class MainActivity : AppCompatActivity() {
         val selectedId = savedInstanceState?.getInt(ShareprefConstants.KEY_STATE) ?: R.id.bottom_home
         binding.bottomNavigation.selectedItemId = selectedId
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, HomeFragment())
-                .commit()
-        }
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
+        navController = navHostFragment.navController
+
         handleNotificationNavigation(intent)
         requestNotificationPermissionIfNeeded()
         setupFcmDebug()
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
-            val fragment = when(item.itemId) {
-                R.id.bottom_home -> HomeFragment()
-                R.id.bottom_explore -> ExploreFragment()
-                R.id.bottom_add_recipe -> ListChatFragment()
-                R.id.bottom_ai -> AIChatFragment()
-                R.id.bottom_person -> MyProfileFragment()
+            val destinationId = when (item.itemId) {
+                R.id.bottom_home -> R.id.homeFragment2
+                R.id.bottom_explore -> R.id.exploreFragment
+                R.id.bottom_add_recipe -> R.id.listChatFragment
+                R.id.bottom_ai -> R.id.AIChatFragment2
+                R.id.bottom_person -> R.id.myProfileFragment
                 else -> null
             }
-            fragment?.let {
-                replaceFragment(it)
+            destinationId?.let { id ->
+                if (navController.currentDestination?.id != id) {
+                    navController.navigate(id)
+                }
                 true
             } ?: false
         }
@@ -88,11 +84,6 @@ class MainActivity : AppCompatActivity() {
         )
         finish()
         return false
-    }
-
-    fun replaceFragment(fragment: Fragment) {
-        val fragmentTransacsion: FragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransacsion.replace(R.id.container, fragment).commit()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -111,11 +102,9 @@ class MainActivity : AppCompatActivity() {
             putString("userName", intent.getStringExtra(EXTRA_CHAT_NAME).orEmpty())
             putString("userAvatar", intent.getStringExtra(EXTRA_CHAT_AVATAR).orEmpty())
         }
-        val fragment = ChatDetailFragment().apply { arguments = bundle }
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .addToBackStack(null)
-            .commit()
+        if (::navController.isInitialized) {
+            navController.navigate(R.id.chatDetailFragment, bundle)
+        }
         intent.removeExtra(EXTRA_OPEN_CHAT)
     }
 

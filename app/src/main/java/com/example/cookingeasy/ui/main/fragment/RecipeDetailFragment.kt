@@ -31,6 +31,7 @@ import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.PlayerManager
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.ui.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -205,7 +206,7 @@ class RecipeDetailFragment : Fragment() {
         }
 
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.btnFavorite.setOnClickListener {
@@ -342,16 +343,7 @@ class RecipeDetailFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    parentFragmentManager.beginTransaction()
-                        .setCustomAnimations(
-                            R.anim.slide_in_right,
-                            R.anim.slide_out_left,
-                            R.anim.slide_in_left,
-                            R.anim.slide_out_right
-                        )
-                        .replace(R.id.container, OtherUserProfileFragment.newInstance(comment.userId))
-                        .addToBackStack(null)
-                        .commit()
+                    findNavController().navigate(R.id.otherUserProfileFragment)
                 }
             }
             imgAvatar.setOnClickListener { openProfile() }

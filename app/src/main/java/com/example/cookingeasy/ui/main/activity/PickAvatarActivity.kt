@@ -57,8 +57,6 @@ class PickAvatarActivity : AppCompatActivity() {
         return false
     }
 
-    // ─── Setup ───────────────────────────────────────────────────────
-
     private fun initListeners() {
         binding.btnUploadBadge.setOnClickListener {
             openGallery()

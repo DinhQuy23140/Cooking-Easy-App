@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
@@ -95,19 +96,8 @@ class OtherUserProfileFragment : Fragment() {
                     ).show()
                     return
                 }
-                if (!isAdded) return
-                val fm = parentFragmentManager
-                if (fm.isStateSaved) return
-                fm.beginTransaction()
-                    .setCustomAnimations(
-                        R.anim.slide_in_right,
-                        R.anim.slide_out_left,
-                        R.anim.slide_in_left,
-                        R.anim.slide_out_right
-                    )
-                    .replace(R.id.container, newInstance(recipe.userUid))
-                    .addToBackStack(null)
-                    .commit()
+                val bundle = Bundle().apply { putString(ARG_UID, recipe.userUid) }
+                findNavController().navigate(R.id.otherUserProfileFragment, bundle)
             }
         })
         binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -117,7 +107,7 @@ class OtherUserProfileFragment : Fragment() {
 
     private fun setupListener() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.btnMessage.setOnClickListener {
@@ -125,9 +115,7 @@ class OtherUserProfileFragment : Fragment() {
             bundle.putString("userUid", arguments?.getString(ARG_UID).orEmpty())
             bundle.putString("userName", chatTargetName)
             bundle.putString("userAvatar", chatTargetAvatar)
-            val fragment = ChatDetailFragment()
-            fragment.arguments = bundle
-            parentFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
+            findNavController().navigate(R.id.chatDetailFragment, bundle)
         }
         binding.btnFollow.setOnClickListener {
             viewModel.toggleFollow()
@@ -263,51 +251,16 @@ class OtherUserProfileFragment : Fragment() {
     }
 
     private fun openRecipeDetail() {
-        if (!isAdded) return
-        val fm = parentFragmentManager
-        if (fm.isStateSaved) return
-        fm.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_right,
-                R.anim.slide_out_left,
-                R.anim.slide_in_left,
-                R.anim.slide_out_right
-            )
-            .replace(R.id.container, RecipeDetailFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.recipeDetailFragment)
     }
 
     private fun openManageFollow(initialTab: String) {
-        if (!isAdded) return
-        val fm = parentFragmentManager
-        if (fm.isStateSaved) return
-        fm.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_right,
-                R.anim.slide_out_left,
-                R.anim.slide_in_left,
-                R.anim.slide_out_right
-            )
-            .replace(R.id.container, ManageFolloweFragment.newInstance(initialTab))
-            .addToBackStack(null)
-            .commit()
+        val bundle = Bundle().apply { putString("initialTab", initialTab) }
+        findNavController().navigate(R.id.manageFolloweFragment, bundle)
     }
 
     private fun openUpdateProfile() {
-        if (!isAdded) return
-        val fm = parentFragmentManager
-        if (fm.isStateSaved) return
-        fm.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_right,
-                R.anim.slide_out_left,
-                R.anim.slide_in_left,
-                R.anim.slide_out_right
-            )
-            .replace(R.id.container, UpdateProfileFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.updateProfileFragment)
     }
 
     companion object {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.FragmentManageFolloweBinding
 
@@ -47,7 +48,7 @@ class ManageFolloweFragment : Fragment() {
 
     private fun setupActions() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
         binding.btnTabFollowers.setOnClickListener {
             showingFollowers = true

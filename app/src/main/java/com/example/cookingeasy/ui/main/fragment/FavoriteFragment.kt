@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.RecipeAdapter
@@ -93,14 +94,7 @@ class FavoriteFragment : Fragment() {
             recipeAdapter = RecipeAdapter(mutableListOf(), object: RecipeListener {
                 override fun OnClickItem(recipe: Recipe) {
                     recipeShareViewmodel.selectedRecipe(recipe)
-                    parentFragmentManager.beginTransaction()
-                        .setCustomAnimations(
-                            R.anim.slide_in_right, R.anim.slide_out_left,
-                            R.anim.slide_in_left, R.anim.slide_out_right
-                        )
-                        .replace(R.id.container, RecipeDetailFragment())
-                        .addToBackStack(null)
-                        .commit()
+                    findNavController().navigate(R.id.recipeDetailFragment)
                 }
 
                 override fun OnFavoriteClick(recipe: Recipe) {
@@ -115,17 +109,7 @@ class FavoriteFragment : Fragment() {
                         ).show()
                         return
                     }
-                    val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                    fragmentTransaction.setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    fragmentTransaction.replace(
-                        R.id.container,
-                        OtherUserProfileFragment.newInstance(recipe.userUid)
-                    )
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
+                    findNavController().navigate(R.id.otherUserProfileFragment)
                 }
 
             })

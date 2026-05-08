@@ -10,12 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -173,17 +173,8 @@ class ExploreFragment : Fragment() {
                         ).show()
                         return
                     }
-                    val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                    fragmentTransaction.setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    fragmentTransaction.replace(
-                        R.id.container,
-                        OtherUserProfileFragment.newInstance(recipe.userUid)
-                    )
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
+                    val bundle = Bundle().apply { putString("uid", recipe.userUid) }
+                    findNavController().navigate(R.id.otherUserProfileFragment, bundle)
                 }
 
             })
@@ -194,24 +185,11 @@ class ExploreFragment : Fragment() {
 
     fun setupListeners() {
         binding.edtSearch.setOnClickListener {
-            val fragmentTransaction = parentFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.container, SearchFragment())
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            findNavController().navigate(R.id.searchFragment)
         }
 
         binding.btnAddRecipe.setOnClickListener {
-            if (!isAdded || parentFragmentManager.isStateSaved) return@setOnClickListener
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-                .replace(R.id.container, AddRecipeFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.addRecipeFragment)
         }
 
         binding.btnRefreshFeatured.setOnClickListener {
@@ -233,10 +211,7 @@ class ExploreFragment : Fragment() {
         binding.btnCookNow.setOnClickListener {
             recipe.let {
                 recipeShareViewModel.selectedRecipe(recipe)
-                val fragmentTransaction = parentFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.container, RecipeDetailFragment())
-                fragmentTransaction.addToBackStack(null)
-                fragmentTransaction.commit()
+                findNavController().navigate(R.id.recipeDetailFragment)
             }
         }
 
