@@ -1,6 +1,5 @@
 package com.example.cookingeasy.ui.auth
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -16,8 +15,6 @@ import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityRegisterBinding
-import com.example.cookingeasy.ui.main.activity.EnterNameActivity
-import com.example.cookingeasy.ui.main.activity.PickAvatarActivity
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,8 +27,6 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var credentialManager: CredentialManager
 
     private val viewModel: RegisterViewModel by viewModels()
-
-    // ─── Lifecycle ───────────────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +44,6 @@ class RegisterActivity : AppCompatActivity() {
         setupClickListeners()
         observeState()
     }
-
-    // ─── Setup ───────────────────────────────────────────────────────
 
     private fun setupClickListeners() {
         binding.registerBtnRegister.setOnClickListener {
@@ -90,8 +83,6 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Google Sign-In (Credential Manager) ─────────────────────────
-
     private fun startGoogleSignIn() {
         val googleIdOption = GetGoogleIdOption.Builder()
             .setServerClientId(getString(R.string.default_web_client_id))
@@ -128,19 +119,13 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Navigation ──────────────────────────────────────────────────
-
     private fun navigateToEnterName() {
-        startActivity(Intent(this, EnterNameActivity::class.java))
-        finish()
+        AuthNavigator.openEnterName(this, clearTask = true, finishCurrent = true)
     }
 
     private fun navigateToLogin() {
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
+        AuthNavigator.openLogin(this, finishCurrent = true)
     }
-
-    // ─── UI Helpers ──────────────────────────────────────────────────
 
     private fun showLoading(isLoading: Boolean) {
         binding.registerBtnRegister.isEnabled = !isLoading

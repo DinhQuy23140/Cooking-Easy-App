@@ -1,6 +1,5 @@
 package com.example.cookingeasy.ui.main.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -11,8 +10,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityEnterNameBinding
+import com.example.cookingeasy.ui.auth.AuthNavigator
 import com.example.cookingeasy.ui.auth.EnternameViewmodel
 import com.example.cookingeasy.ui.auth.EnternameViewmodel.EnterNameState
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -25,6 +26,7 @@ class EnterNameActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!ensureAuthenticated()) return
         enableEdgeToEdge()
         binding = ActivityEnterNameBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -36,6 +38,12 @@ class EnterNameActivity : AppCompatActivity() {
 
         setupClickListeners()
         observeState()
+    }
+
+    private fun ensureAuthenticated(): Boolean {
+        if (FirebaseAuth.getInstance().currentUser != null) return true
+        AuthNavigator.openLogin(this, clearTask = true, finishCurrent = true)
+        return false
     }
 
     // ─── Setup ───────────────────────────────────────────────────────
@@ -76,8 +84,7 @@ class EnterNameActivity : AppCompatActivity() {
     // ─── Navigation ──────────────────────────────────────────────────
 
     private fun navigateToPickAvatar() {
-        startActivity(Intent(this, PickAvatarActivity::class.java))
-        finish()
+        AuthNavigator.openPickAvatar(this, finishCurrent = true)
     }
 
     // ─── UI Helpers ──────────────────────────────────────────────────

@@ -1,7 +1,6 @@
 package com.example.cookingeasy.ui.main.activity
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -17,8 +16,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityPickAvatarBinding
-import com.example.cookingeasy.ui.main.MainActivity
+import com.example.cookingeasy.ui.auth.AuthNavigator
 import com.example.cookingeasy.ui.viewmodel.PickAvatarViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import kotlin.getValue
@@ -39,6 +39,7 @@ class PickAvatarActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!ensureAuthenticated()) return
         enableEdgeToEdge()
         binding = ActivityPickAvatarBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -48,6 +49,12 @@ class PickAvatarActivity : AppCompatActivity() {
             insets
         }
         initListeners()
+    }
+
+    private fun ensureAuthenticated(): Boolean {
+        if (FirebaseAuth.getInstance().currentUser != null) return true
+        AuthNavigator.openLogin(this, clearTask = true, finishCurrent = true)
+        return false
     }
 
     // ─── Setup ───────────────────────────────────────────────────────
@@ -94,10 +101,7 @@ class PickAvatarActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
+        AuthNavigator.openMain(this, clearTask = true, finishCurrent = true)
     }
 
     fun uriToBase64(context: Context, imageUri: Uri): String? {

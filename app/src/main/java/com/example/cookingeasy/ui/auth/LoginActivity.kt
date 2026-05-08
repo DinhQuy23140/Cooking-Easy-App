@@ -2,7 +2,6 @@ package com.example.cookingeasy.ui.auth
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -23,8 +22,6 @@ import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityLoginBinding
-import com.example.cookingeasy.ui.main.MainActivity
-import com.example.cookingeasy.ui.main.activity.EnterNameActivity
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
@@ -41,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
 
-    // ─── Lifecycle ───────────────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +56,6 @@ class LoginActivity : AppCompatActivity() {
         observeLoginState()
         observeResetPasswordState()
     }
-
-    // ─── Setup ───────────────────────────────────────────────────────
 
     private fun setupClickListeners() {
         binding.btnLogin.setOnClickListener {
@@ -214,13 +208,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        AuthNavigator.openMain(this, clearTask = true, finishCurrent = true)
     }
 
     private fun navigateToRegister() {
-        startActivity(Intent(this, RegisterActivity::class.java))
+        AuthNavigator.openRegister(this)
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -241,7 +233,6 @@ class LoginActivity : AppCompatActivity() {
     private fun navigateToEnterName() {
         binding.lnNav.isVisible = true
         binding.prbLoading.isVisible = false
-        startActivity(Intent(this, EnterNameActivity::class.java))
-        finish()
+        AuthNavigator.openEnterName(this, clearTask = true, finishCurrent = true)
     }
 }

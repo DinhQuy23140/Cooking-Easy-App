@@ -1,6 +1,5 @@
 package com.example.cookingeasy.ui.auth
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -10,12 +9,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.cookingeasy.R
-import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
-import com.example.cookingeasy.data.repository.UserRepository
 import com.example.cookingeasy.databinding.ActivitySplashBinding
 import com.example.cookingeasy.ui.auth.SplashViewModel.SplashState
-import com.example.cookingeasy.ui.main.MainActivity
-import com.example.cookingeasy.ui.main.activity.EnterNameActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -50,27 +45,17 @@ class SplashActivity : AppCompatActivity() {
                     is SplashState.Idle,
                     is SplashState.Loading         -> Unit
                     is SplashState.NavigateToLogin -> {
-                        navigateTo(LoginActivity::class.java)
+                        AuthNavigator.openLogin(this@SplashActivity, clearTask = true, finishCurrent = true)
                     }
                     is SplashState.NavigateToEnterName -> {
-                        navigateTo(EnterNameActivity::class.java)
+                        AuthNavigator.openEnterName(this@SplashActivity, clearTask = true, finishCurrent = true)
                     }
                     is SplashState.NavigateToMain  -> {
-                        navigateTo(MainActivity::class.java)
+                        AuthNavigator.openMain(this@SplashActivity, clearTask = true, finishCurrent = true)
                     }
                 }
             }
         }
-    }
-
-    // ─── Navigation ──────────────────────────────────────────────────
-
-    private fun navigateTo(destination: Class<*>) {
-        val intent = Intent(this, destination).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        startActivity(intent)
-        finish()
     }
 
     private fun setupFcmStartupDebug() {

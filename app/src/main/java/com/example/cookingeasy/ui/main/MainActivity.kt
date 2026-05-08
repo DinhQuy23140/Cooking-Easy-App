@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.cookingeasy.R
 import com.example.cookingeasy.data.preferences.ShareprefConstants
 import com.example.cookingeasy.databinding.ActivityMainBinding
+import com.example.cookingeasy.ui.auth.LoginActivity
 import com.example.cookingeasy.ui.main.fragment.AIChatFragment
 import com.example.cookingeasy.ui.main.fragment.ChatDetailFragment
 import com.example.cookingeasy.ui.main.fragment.ExploreFragment
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!ensureAuthenticated()) return
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -75,6 +77,17 @@ class MainActivity : AppCompatActivity() {
                 true
             } ?: false
         }
+    }
+
+    private fun ensureAuthenticated(): Boolean {
+        if (FirebaseAuth.getInstance().currentUser != null) return true
+        startActivity(
+            Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        )
+        finish()
+        return false
     }
 
     fun replaceFragment(fragment: Fragment) {
