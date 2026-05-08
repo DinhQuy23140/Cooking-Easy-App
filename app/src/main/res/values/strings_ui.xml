@@ -123,6 +123,12 @@
     <string name="profile_row_dark_mode">Dark Mode</string>
     <string name="profile_section_account">ACCOUNT</string>
     <string name="cd_edit_profile">Edit profile</string>
+    <string name="update_profile_title">UPDATE PROFILE</string>
+    <string name="update_profile_section_basic">BASIC INFORMATION</string>
+    <string name="update_profile_username_hint">Username (e.g. @chefquy)</string>
+    <string name="update_profile_hashtag_hint">Hashtag (e.g. #healthy #vegan)</string>
+    <string name="update_profile_avatar_url_hint">Avatar URL (optional)</string>
+    <string name="update_profile_save">Save changes</string>
 
     <!-- Recipe form (add / dialog) -->
     <string name="recipe_form_new_title">New Recipe</string>

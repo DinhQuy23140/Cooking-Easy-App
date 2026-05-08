@@ -132,6 +132,15 @@ class OtherUserProfileFragment : Fragment() {
         binding.btnFollow.setOnClickListener {
             viewModel.toggleFollow()
         }
+        binding.btnEditProfile.setOnClickListener {
+            openUpdateProfile()
+        }
+        binding.tvStatFollowers.setOnClickListener {
+            openManageFollow(ManageFolloweFragment.TAB_FOLLOWERS)
+        }
+        binding.tvStatFollowing.setOnClickListener {
+            openManageFollow(ManageFolloweFragment.TAB_FOLLOWING)
+        }
     }
 
     private fun observeUiState() {
@@ -164,6 +173,7 @@ class OtherUserProfileFragment : Fragment() {
         state: OtherUserProfileViewModel.UiState.Success,
         onUiRendered: () -> Unit
     ) {
+        binding.btnEditProfile.isVisible = state.isOwnProfile
         binding.layoutActions.isVisible = !state.isOwnProfile
         binding.tabProfile.isVisible = state.isOwnProfile
 
@@ -224,6 +234,7 @@ class OtherUserProfileFragment : Fragment() {
     private fun setLoadingVisible(visible: Boolean) {
         binding.progressLoad.isVisible = visible
         if (visible) {
+            binding.btnEditProfile.isVisible = false
             binding.cardStats.isVisible = false
             binding.layoutActions.isVisible = false
             binding.cardInterests.isVisible = false
@@ -263,6 +274,38 @@ class OtherUserProfileFragment : Fragment() {
                 R.anim.slide_out_right
             )
             .replace(R.id.container, RecipeDetailFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun openManageFollow(initialTab: String) {
+        if (!isAdded) return
+        val fm = parentFragmentManager
+        if (fm.isStateSaved) return
+        fm.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+            .replace(R.id.container, ManageFolloweFragment.newInstance(initialTab))
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun openUpdateProfile() {
+        if (!isAdded) return
+        val fm = parentFragmentManager
+        if (fm.isStateSaved) return
+        fm.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+            .replace(R.id.container, UpdateProfileFragment())
             .addToBackStack(null)
             .commit()
     }

@@ -233,7 +233,14 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun navigateToEditProfile() {
-
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
+                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
+            )
+            .replace(com.example.cookingeasy.R.id.container, UpdateProfileFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun navigateToProfile() {

@@ -67,6 +67,21 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <ImageButton
+                android:id="@+id/btnEditProfile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/shape_circle_glass"
+                android:contentDescription="@string/cd_edit_profile"
+                android:padding="10dp"
+                android:src="@drawable/ic_edit"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/white" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardAvatar"
                 android:layout_width="104dp"
