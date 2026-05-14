@@ -141,9 +141,11 @@ class HomeViewModel @Inject constructor(
         val uid = _authRepository.getCurrentUser()?.uid ?: return
         viewModelScope.launch {
             _userRepository.getUserProfile(uid)
-                .onSuccess {
-                    _userName.value = it.get("fullName") as String
-                    _imgUrl.value = it.get("avatarUrl") as String
+                .onSuccess { profile ->
+                    val fullName = (profile["fullName"] as? String).orEmpty()
+                        .ifBlank { (profile["nickname"] as? String).orEmpty() }
+                    _userName.value = fullName
+                    _imgUrl.value = (profile["avatarUrl"] as? String).orEmpty()
                 }
                 .onFailure {
 

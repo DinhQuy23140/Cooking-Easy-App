@@ -60,7 +60,6 @@
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/shape_icon_pill_green"
                 android:contentDescription="@string/nav_add_recipe"
-                android:padding="10dp"
                 android:src="@drawable/ic_add_white"/>
 
             <ImageButton

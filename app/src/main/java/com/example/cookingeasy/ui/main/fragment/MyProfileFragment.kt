@@ -1,18 +1,21 @@
 package com.example.cookingeasy.ui.main.fragment
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.example.cookingeasy.R
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,14 +23,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.example.cookingeasy.util.loadFirestoreAvatar
 import com.example.cookingeasy.data.preferences.ThemeModePreference
-import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
 import com.example.cookingeasy.databinding.FragmentMyProfileBinding
 import com.example.cookingeasy.ui.auth.LoginActivity
 import com.example.cookingeasy.ui.main.viewmodel.MyProfileViewModel
 import com.example.cookingeasy.ui.viewmodel.MyRecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 
 @AndroidEntryPoint
 class MyProfileFragment : Fragment() {
@@ -39,6 +45,7 @@ class MyProfileFragment : Fragment() {
     private val myRecipesViewModel: MyRecipesViewModel by activityViewModels()
 
     private var selectedImageUri: Uri? = null
+    private var avatarUploadDialog: AlertDialog? = null
 
     private val galleryLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -68,6 +75,7 @@ class MyProfileFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        dismissAvatarUploadDialog()
         super.onDestroyView()
         _binding = null
     }
@@ -175,17 +183,11 @@ class MyProfileFragment : Fragment() {
         binding.txtName.text = fullName.ifEmpty { getString(R.string.profile_name_placeholder) }
         binding.txtEmail.text = email.ifEmpty { getString(R.string.profile_email_placeholder) }
 
-        if (avatarUrl.isNotEmpty()) {
-            Glide.with(binding.imgAvatar)
-                .load(avatarUrl)
-                .placeholder(R.drawable.ic_person)
-                .error(R.drawable.ic_person)
-                .into(binding.imgAvatar)
-        } else {
-            Glide.with(binding.imgAvatar)
-                .load(R.drawable.ic_person)
-                .into(binding.imgAvatar)
-        }
+        binding.imgAvatar.loadFirestoreAvatar(
+            avatarUrl,
+            R.drawable.ic_person,
+            R.drawable.ic_person
+        )
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -231,6 +233,62 @@ class MyProfileFragment : Fragment() {
             .placeholder(com.example.cookingeasy.R.drawable.ic_person)
             .error(com.example.cookingeasy.R.drawable.ic_person)
             .into(binding.imgAvatar)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            showAvatarUploadDialog(true)
+            try {
+                val payload = withContext(Dispatchers.IO) { uriToBase64(requireContext(), uri) }
+                if (payload.isNullOrBlank()) {
+                    showError(getString(R.string.profile_avatar_prepare_failed))
+                    return@launch
+                }
+                val result = viewModel.updateProfileAvatar(payload)
+                result.onFailure { e ->
+                    showError(e.message ?: getString(R.string.profile_avatar_update_failed))
+                }
+            } finally {
+                dismissAvatarUploadDialog()
+            }
+        }
+    }
+
+    private fun showAvatarUploadDialog(show: Boolean) {
+        if (!show) {
+            dismissAvatarUploadDialog()
+            return
+        }
+        if (avatarUploadDialog?.isShowing == true) return
+        val progress = ProgressBar(requireContext()).apply { isIndeterminate = true }
+        avatarUploadDialog = AlertDialog.Builder(requireContext())
+            .setTitle(R.string.profile_avatar_updating)
+            .setView(progress)
+            .setCancelable(false)
+            .create()
+        avatarUploadDialog?.show()
+    }
+
+    private fun dismissAvatarUploadDialog() {
+        avatarUploadDialog?.dismiss()
+        avatarUploadDialog = null
+    }
+
+    private fun uriToBase64(context: Context, imageUri: Uri): String? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(imageUri) ?: return null
+            val bytes = inputStream.use { it.readBytes() }
+            val compressedBytes = compressImage(bytes)
+            Base64.encodeToString(compressedBytes, Base64.DEFAULT)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun compressImage(imageBytes: ByteArray, quality: Int = 70): ByteArray {
+        val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            ?: return imageBytes
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, quality, outputStream)
+        return outputStream.toByteArray()
     }
 
     private fun navigateToEditProfile() {

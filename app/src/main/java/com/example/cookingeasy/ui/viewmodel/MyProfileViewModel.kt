@@ -84,4 +84,20 @@ class MyProfileViewModel @Inject constructor(
     fun getUid(): String {
         return _userRepository.getUid()
     }
+
+    /**
+     * Writes [avatarPayload] to Firestore field `avatarUrl` (same shape as pick-avatar flow),
+     * then refreshes local profile state.
+     */
+    suspend fun updateProfileAvatar(avatarPayload: String): Result<Unit> {
+        val uid = _authRepository.getCurrentUser()?.uid
+            ?: return Result.failure(IllegalStateException("Not signed in"))
+        if (avatarPayload.isBlank()) {
+            return Result.failure(IllegalArgumentException("Empty avatar"))
+        }
+        _userRepository.updateAvatar(uid, avatarPayload).onFailure { return Result.failure(it) }
+        return _userRepository.getUserProfile(uid).map { profile ->
+            _profileState.value = ProfileState.UserLoaded(profile)
+        }
+    }
 }
