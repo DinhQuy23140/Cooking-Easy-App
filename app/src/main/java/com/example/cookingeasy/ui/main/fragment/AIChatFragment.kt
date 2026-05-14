@@ -12,14 +12,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.ChatAdapter
 import com.example.cookingeasy.databinding.FragmentAIChatBinding
 import com.example.cookingeasy.ui.viewmodel.AIChatViewModel
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AIChatFragment : Fragment() {
 
     private lateinit var binding: FragmentAIChatBinding
@@ -43,20 +46,7 @@ class AIChatFragment : Fragment() {
 
     private fun setupRecyclerView() {
         chatAdapter = ChatAdapter(mutableListOf()) { recipe ->
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-                .replace(R.id.container, RecipeDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putString("recipe", Gson().toJson(recipe))
-                    }
-                })
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.recipeDetailFragment)
         }
 
         binding.rvChat.apply {
@@ -70,7 +60,7 @@ class AIChatFragment : Fragment() {
 
     private fun setupEvents() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.btnClearChat.setOnClickListener {
@@ -89,16 +79,7 @@ class AIChatFragment : Fragment() {
         }
 
         binding.btnScan.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-                .replace(R.id.container, ScanFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.scanFragment)
         }
 
         // Suggestion chips

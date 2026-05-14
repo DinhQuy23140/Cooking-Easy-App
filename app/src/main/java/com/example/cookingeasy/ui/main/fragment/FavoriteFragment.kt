@@ -1,6 +1,7 @@
 package com.example.cookingeasy.ui.main.fragment
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.RecipeAdapter
@@ -18,6 +20,7 @@ import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.FavoriteViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
@@ -30,6 +33,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [FavoriteFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class FavoriteFragment : Fragment() {
     // TODO: Rename and change types of parameters
 
@@ -89,28 +94,22 @@ class FavoriteFragment : Fragment() {
             recipeAdapter = RecipeAdapter(mutableListOf(), object: RecipeListener {
                 override fun OnClickItem(recipe: Recipe) {
                     recipeShareViewmodel.selectedRecipe(recipe)
-                    parentFragmentManager.beginTransaction()
-                        .setCustomAnimations(
-                            R.anim.slide_in_right, R.anim.slide_out_left,
-                            R.anim.slide_in_left, R.anim.slide_out_right
-                        )
-                        .replace(R.id.container, RecipeDetailFragment())
-                        .addToBackStack(null)
-                        .commit()
+                    findNavController().navigate(R.id.recipeDetailFragment)
                 }
 
                 override fun OnFavoriteClick(recipe: Recipe) {
                 }
 
                 override fun onClickInf(recipe: Recipe) {
-                    val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                    fragmentTransaction.setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    fragmentTransaction.replace(R.id.container, OtherUserProfileFragment())
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
+                    if (recipe.userUid.isEmpty()) {
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.other_user_profile_unavailable,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
+                    findNavController().navigate(R.id.otherUserProfileFragment)
                 }
 
             })

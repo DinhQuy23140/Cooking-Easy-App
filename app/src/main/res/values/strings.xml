@@ -40,10 +40,31 @@
     <!-- Profile -->
     <string name="logout_confirm_title">Log out</string>
     <string name="logout_confirm_message">Are you sure you want to log out?</string>
+    <string name="profile_avatar_updating">Updating profile photo…</string>
+    <string name="profile_avatar_prepare_failed">Could not read the selected image.</string>
+    <string name="profile_avatar_update_failed">Could not save profile photo.</string>
 
     <!-- Browse / results -->
     <string name="area_label">Area: %1$s</string>
     <string name="recipes_found_count">%1$d recipes found</string>
+    <string name="label_category">Category</string>
+    <string name="label_area">Area</string>
+    <string name="view_detail">View detail</string>
+    <string name="data_not_found">Data not found</string>
+    <string name="dialog_recipe_preview_instruction">Quick description</string>
+    <string name="dialog_recipe_preview_meta">Category: %1$s  |  Area: %2$s</string>
+    <string name="other_user_following">Following</string>
+    <string name="recipe_feedback_title">Ratings &amp; comments</string>
+    <string name="recipe_instruction_subtitle">Follow each step for the best result</string>
+    <string name="recipe_rating_section_title">Rate this recipe</string>
+    <string name="recipe_comment_section_title">Comments</string>
+    <string name="recipe_submit_rating">Submit rating</string>
+    <string name="recipe_comment_hint">Share your experience with this recipe...</string>
+    <string name="recipe_submit_comment">Post comment</string>
+    <string name="recipe_rating_summary">%1$s/5 • %2$d ratings</string>
+    <string name="recipe_rating_saved">Rating saved</string>
+    <string name="recipe_comment_saved">Comment posted</string>
+    <string name="recipe_no_comments">No comments yet. Be the first!</string>
 
     <!-- Legacy / placeholder -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

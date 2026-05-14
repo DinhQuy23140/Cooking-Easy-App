@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.cookingeasy.common.locale.AppLocale
 import com.example.cookingeasy.databinding.FragmentLanguageBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LanguageFragment : Fragment() {
 
     private var _binding: FragmentLanguageBinding? = null
@@ -25,7 +28,7 @@ class LanguageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
         binding.rowLanguageSystem.setOnClickListener {
             selectLocale(AppLocale.TAG_SYSTEM)
@@ -49,11 +52,11 @@ class LanguageFragment : Fragment() {
 
     private fun selectLocale(tag: String) {
         if (tag == AppLocale.currentTag()) {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
             return
         }
         AppLocale.apply(tag)
-        parentFragmentManager.popBackStackImmediate()
+        findNavController().popBackStack()
         requireActivity().recreate()
     }
 

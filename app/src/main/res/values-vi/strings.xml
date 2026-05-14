@@ -36,6 +36,24 @@
 
     <string name="area_label">Khu vực: %1$s</string>
     <string name="recipes_found_count">%1$d công thức tìm được</string>
+    <string name="label_category">Danh mục</string>
+    <string name="label_area">Khu vực</string>
+    <string name="view_detail">Xem chi tiết</string>
+    <string name="data_not_found">Không tìm thấy dữ liệu</string>
+    <string name="dialog_recipe_preview_instruction">Mô tả nhanh</string>
+    <string name="dialog_recipe_preview_meta">Danh mục: %1$s  |  Khu vực: %2$s</string>
+    <string name="other_user_following">Đang theo dõi</string>
+    <string name="recipe_feedback_title">Đánh giá &amp; bình luận</string>
+    <string name="recipe_instruction_subtitle">Thực hiện từng bước để món ăn ngon hơn</string>
+    <string name="recipe_rating_section_title">Đánh giá món ăn</string>
+    <string name="recipe_comment_section_title">Bình luận</string>
+    <string name="recipe_submit_rating">Gửi đánh giá</string>
+    <string name="recipe_comment_hint">Chia sẻ trải nghiệm của bạn về công thức này...</string>
+    <string name="recipe_submit_comment">Đăng bình luận</string>
+    <string name="recipe_rating_summary">%1$s/5 • %2$d lượt đánh giá</string>
+    <string name="recipe_rating_saved">Đã lưu đánh giá</string>
+    <string name="recipe_comment_saved">Đã đăng bình luận</string>
+    <string name="recipe_no_comments">Chưa có bình luận nào. Hãy là người đầu tiên!</string>
 
     <string name="hello_blank_fragment">Xin chào</string>
 

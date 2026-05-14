@@ -8,24 +8,35 @@ import com.example.cookingeasy.data.repository.RecipeRepositoryImp
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.example.cookingeasy.domain.repository.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-class ResultByTagViewModel(): ViewModel() {
-
-    private val authRepository: AuthRepository = AuthRepositoryImp()
-    private val recipeRepository = RecipeRepositoryImp()
+@HiltViewModel
+class ResultByTagViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val recipeRepository: RecipeRepository
+): ViewModel() {
     private val _recipesByArea: MutableStateFlow<List<Recipe>> = MutableStateFlow(emptyList())
     val recipeByArea: StateFlow<List<Recipe>> = _recipesByArea
 
     fun getRecipesByArea(tag: String) {
+        val normalizedArea = tag.trim()
+        if (normalizedArea.isEmpty()) {
+            _recipesByArea.value = emptyList()
+            return
+        }
         viewModelScope.launch {
             try {
                 combine(
-                    flow { emit(recipeRepository.filterRecipesByArea(tag))},
+                    flow {
+                        Log.d("ResultByTagViewModel", "Request area='$normalizedArea'")
+                        emit(recipeRepository.filterRecipesByArea(normalizedArea))
+                    },
                     flow { emit(getFavRecipeIds()) }
                 ) { recipes, favorites ->
 
@@ -36,10 +47,11 @@ class ResultByTagViewModel(): ViewModel() {
                     }
 
                 }.collect { updatedList ->
+                    Log.d("ResultByTagViewModel", "Result size=${updatedList.size} for area='$normalizedArea'")
                     _recipesByArea.value = updatedList
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("ResultByTagViewModel", "getRecipesByArea failed: ${e.message}", e)
             }
         }
     }
@@ -52,6 +64,13 @@ class ResultByTagViewModel(): ViewModel() {
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Toggle favorite failed: ${e.message}")
             }
+        }
+    }
+
+    suspend fun getRecipeById(id: String): Result<Recipe> {
+        return runCatching {
+            recipeRepository.getRecipeById(id)
+                ?: throw IllegalStateException("Recipe not found")
         }
     }
 

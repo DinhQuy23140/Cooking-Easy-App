@@ -3,13 +3,13 @@ package com.example.cookingeasy.data.remote.firebase.fireAuth
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import jakarta.inject.Inject
 import kotlinx.coroutines.tasks.await
 
-class AuthDataSource {
+class AuthDataSource @Inject constructor() {
 
     private val auth = FirebaseAuth.getInstance()
 
-    // ─── Email / Password ───────────────────────────────────────────
 
     suspend fun login(email: String, password: String): FirebaseUser? {
         return auth.signInWithEmailAndPassword(email, password).await().user
@@ -22,8 +22,6 @@ class AuthDataSource {
     suspend fun resetPassword(email: String) {
         auth.sendPasswordResetEmail(email).await()
     }
-
-    // ─── Google Sign-In ─────────────────────────────────────────────
 
     suspend fun loginWithGoogle(idToken: String): FirebaseUser? {
         val credential = GoogleAuthProvider.getCredential(idToken, null)

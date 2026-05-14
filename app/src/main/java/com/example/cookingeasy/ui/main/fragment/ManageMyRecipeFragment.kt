@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.MyRecipeAdapter
@@ -22,14 +23,14 @@ import com.example.cookingeasy.domain.model.RecipeUpload
 import com.example.cookingeasy.ui.viewmodel.MyRecipesViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ManageMyRecipeFragment : Fragment() {
 
     private lateinit var binding: FragmentManageMyRecipeBinding
-    private val viewModel: MyRecipesViewModel by activityViewModels {
-        MyRecipesViewModel.Factory(requireActivity().contentResolver)
-    }
+    private val viewModel: MyRecipesViewModel by activityViewModels()
     private val recipeShareViewmodel: RecipeShareViewmodel by activityViewModels()
     private lateinit var adapter: MyRecipeAdapter
     private var currentFilter = "all"
@@ -54,14 +55,7 @@ class ManageMyRecipeFragment : Fragment() {
         adapter = MyRecipeAdapter(mutableListOf(), object : UploadRecipeListener {
             override fun onItemClick(recipe: RecipeUpload) {
                 recipeShareViewmodel.selectedRecipe(recipe.toRecipe())
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    .replace(R.id.container, RecipeDetailFragment())
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.recipeDetailFragment)
             }
 
             override fun onEdit(recipe: RecipeUpload) {
@@ -80,7 +74,7 @@ class ManageMyRecipeFragment : Fragment() {
 
     private fun setupEvents() {
         binding.btnAddRecipe.setOnClickListener {
-            navigateTo(AddRecipeFragment())
+            findNavController().navigate(R.id.addRecipeFragment)
         }
 
         binding.btnClear.setOnClickListener {
@@ -97,10 +91,7 @@ class ManageMyRecipeFragment : Fragment() {
         })
 
         binding.btnAddRecipe.setOnClickListener {
-            val fragmentTransaction = parentFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.container, AddRecipeFragment())
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            findNavController().navigate(R.id.addRecipeFragment)
         }
 
         setupFilterChips()
@@ -194,17 +185,6 @@ class ManageMyRecipeFragment : Fragment() {
             .setMessage(message)
             .setPositiveButton(getString(R.string.action_ok), null)
             .show()
-    }
-
-    private fun navigateTo(fragment: Fragment) {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_right, R.anim.slide_out_left,
-                R.anim.slide_in_left, R.anim.slide_out_right
-            )
-            .replace(R.id.container, fragment)
-            .addToBackStack(null)
-            .commit()
     }
 
     companion object {

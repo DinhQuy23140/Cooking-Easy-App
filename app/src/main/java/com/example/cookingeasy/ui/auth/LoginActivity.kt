@@ -1,9 +1,8 @@
 package com.example.cookingeasy.ui.auth
 
+import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,7 +11,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -20,17 +18,19 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityLoginBinding
-import com.example.cookingeasy.ui.main.MainActivity
-import com.example.cookingeasy.ui.main.activity.EnterNameActivity
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
@@ -38,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
 
-    // ─── Lifecycle ───────────────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +56,6 @@ class LoginActivity : AppCompatActivity() {
         observeLoginState()
         observeResetPasswordState()
     }
-
-    // ─── Setup ───────────────────────────────────────────────────────
 
     private fun setupClickListeners() {
         binding.btnLogin.setOnClickListener {
@@ -90,9 +87,9 @@ class LoginActivity : AppCompatActivity() {
                     is LoginState.Success -> {
                         showLoading(false)
                         if (state.isNewUser) {
-                            navigateToEnterName()   // → EnterName → PickAvatar → Main
+                            navigateToEnterName()
                         } else {
-                            navigateToMain()        // → Main trực tiếp
+                            navigateToMain()
                         }
                     }
                     is LoginState.ResetSuccess -> {
@@ -133,13 +130,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Google Sign-In (Credential Manager) ─────────────────────────
-
     private fun startGoogleSignIn() {
         lifecycleScope.launch {
-            // Thử authorized accounts trước (accounts đã dùng app)
             val success = tryGoogleSignIn(filterByAuthorizedAccounts = true)
-            // Nếu không có → fallback hiện tất cả accounts
             if (!success) {
                 tryGoogleSignIn(filterByAuthorizedAccounts = false)
             }
@@ -173,14 +166,22 @@ class LoginActivity : AppCompatActivity() {
                 showError("Unsupported credential type")
                 false
             }
+        } catch (_: NoCredentialException) {
+            if (filterByAuthorizedAccounts) {
+                Log.i("GoogleSignIn", "No authorized account, trying all accounts")
+            } else {
+                showError(getString(R.string.google_no_credentials_available))
+                Log.i("GoogleSignIn", "No Google credential available on device")
+            }
+            false
         } catch (e: GetCredentialException) {
             Log.e("GoogleSignIn", "filterByAuthorized=$filterByAuthorizedAccounts | ${e.message}")
+            showError(getString(R.string.google_signin_failed_try_again))
             false
         }
     }
 
-    // ─── Forgot Password Dialog ───────────────────────────────────────
-
+    @SuppressLint("InflateParams")
     private fun showForgotPasswordDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_forgot_password, null)
         val edtEmail = dialogView.findViewById<EditText>(R.id.edtEmail)
@@ -206,19 +207,13 @@ class LoginActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // ─── Navigation ──────────────────────────────────────────────────
-
     private fun navigateToMain() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        AuthNavigator.openMain(this, clearTask = true, finishCurrent = true)
     }
 
     private fun navigateToRegister() {
-        startActivity(Intent(this, RegisterActivity::class.java))
+        AuthNavigator.openRegister(this)
     }
-
-    // ─── UI Helpers ──────────────────────────────────────────────────
 
     private fun showLoading(isLoading: Boolean) {
         binding.btnLogin.isEnabled  = !isLoading
@@ -238,7 +233,6 @@ class LoginActivity : AppCompatActivity() {
     private fun navigateToEnterName() {
         binding.lnNav.isVisible = true
         binding.prbLoading.isVisible = false
-        startActivity(Intent(this, EnterNameActivity::class.java))
-        finish()
+        AuthNavigator.openEnterName(this, clearTask = true, finishCurrent = true)
     }
 }

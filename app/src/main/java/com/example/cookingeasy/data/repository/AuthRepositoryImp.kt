@@ -5,15 +5,15 @@ import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class AuthRepositoryImp(
-    private val dataSource: AuthDataSource = AuthDataSource()
+class AuthRepositoryImp @Inject constructor(
+    private val dataSource: AuthDataSource
 ): AuthRepository {
-
-    // ─── Email / Password ───────────────────────────────────────────
 
     override suspend fun login(email: String, password: String): Result<FirebaseUser> =
         withContext(Dispatchers.IO) {
@@ -67,8 +67,6 @@ class AuthRepositoryImp(
             }
         }
 
-    // ─── Google Sign-In ─────────────────────────────────────────────
-
     override suspend fun loginWithGoogle(idToken: String): Result<FirebaseUser> =
         withContext(Dispatchers.IO) {
             try {
@@ -77,7 +75,8 @@ class AuthRepositoryImp(
 
                 val userMap = hashMapOf(
                     "uid"       to user.uid,
-                    "fullName"  to "",
+                    "email"     to (user.email ?: ""),
+                    "fullName"  to (user.displayName ?: ""),
                     "avatarUrl" to "",
                     "createdAt" to System.currentTimeMillis()
                 )
@@ -85,7 +84,7 @@ class AuthRepositoryImp(
                 FirebaseFirestore.getInstance()
                     .collection("users")
                     .document(user.uid)
-                    .set(userMap)
+                    .set(userMap, SetOptions.merge())
                     .await()
                 Result.success(user)
             } catch (e: Exception) {
@@ -93,15 +92,11 @@ class AuthRepositoryImp(
             }
         }
 
-    // ─── Session ────────────────────────────────────────────────────
-
     override fun isLogin(): Boolean = dataSource.isLogin()
 
     override fun getCurrentUser(): FirebaseUser? = dataSource.getCurrentUser()
 
     override fun logout() = dataSource.logout()
-
-    // ─── Account management ─────────────────────────────────────────
 
     override suspend fun updateEmail(email: String): Result<Unit> =
         withContext(Dispatchers.IO) {

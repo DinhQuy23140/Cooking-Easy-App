@@ -1,73 +1,275 @@
 package com.example.cookingeasy.ui.main.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
+import com.example.cookingeasy.common.adapter.RecipeAdapter
+import com.example.cookingeasy.common.listener.RecipeListener
 import com.example.cookingeasy.databinding.FragmentOtherUserProfileBinding
+import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.ui.viewmodel.OtherUserProfileViewModel
+import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
+import com.example.cookingeasy.util.GridSpacingItemDecoration
+import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [OtherUserProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class OtherUserProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private lateinit var binding: FragmentOtherUserProfileBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentOtherUserProfileBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: OtherUserProfileViewModel by viewModels()
+
+    private val recipeShare: RecipeShareViewmodel by activityViewModels()
+    private lateinit var recipeAdapter: RecipeAdapter
+    private var tabsHooked = false
+    private var chatTargetName: String = ""
+    private var chatTargetAvatar: String = ""
+
+    private val tabListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab?) {
+            viewModel.onTabSelected(tab?.position ?: 0)
         }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {}
+        override fun onTabReselected(tab: TabLayout.Tab?) {}
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentOtherUserProfileBinding.inflate(layoutInflater)
+        _binding = FragmentOtherUserProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
         setupListener()
+        observeUiState()
+        viewModel.loadProfile()
     }
 
-    fun setupListener(){
+    override fun onDestroyView() {
+        if (tabsHooked) {
+            binding.tabProfile.removeOnTabSelectedListener(tabListener)
+            tabsHooked = false
+        }
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setupRecyclerView() {
+        recipeAdapter = RecipeAdapter(mutableListOf(), object : RecipeListener {
+            override fun OnClickItem(recipe: Recipe) {
+                recipeShare.selectedRecipe(recipe)
+                openRecipeDetail()
+            }
+
+            override fun OnFavoriteClick(recipe: Recipe) {
+                viewModel.toggleFavorite(recipe)
+            }
+
+            override fun onClickInf(recipe: Recipe) {
+                if (recipe.userUid.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.other_user_profile_unavailable,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+                val bundle = Bundle().apply { putString(ARG_UID, recipe.userUid) }
+                findNavController().navigate(R.id.otherUserProfileFragment, bundle)
+            }
+        })
+        binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvRecipes.addItemDecoration(GridSpacingItemDecoration(2, 5))
+        binding.rvRecipes.adapter = recipeAdapter
+    }
+
+    private fun setupListener() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
+        }
+
+        binding.btnMessage.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("userUid", arguments?.getString(ARG_UID).orEmpty())
+            bundle.putString("userName", chatTargetName)
+            bundle.putString("userAvatar", chatTargetAvatar)
+            findNavController().navigate(R.id.chatDetailFragment, bundle)
+        }
+        binding.btnFollow.setOnClickListener {
+            viewModel.toggleFollow()
+        }
+        binding.btnEditProfile.setOnClickListener {
+            openUpdateProfile()
+        }
+        binding.tvStatFollowers.setOnClickListener {
+            openManageFollow(ManageFolloweFragment.TAB_FOLLOWERS)
+        }
+        binding.tvStatFollowing.setOnClickListener {
+            openManageFollow(ManageFolloweFragment.TAB_FOLLOWING)
         }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment OtherUserProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            OtherUserProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun observeUiState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        is OtherUserProfileViewModel.UiState.Idle -> {
+                            setLoadingVisible(false)
+                        }
+                        is OtherUserProfileViewModel.UiState.Loading -> {
+                            setLoadingVisible(true)
+                        }
+                        is OtherUserProfileViewModel.UiState.Success -> {
+                            renderSuccess(state) {
+                                setLoadingVisible(false)
+                            }
+                        }
+                        is OtherUserProfileViewModel.UiState.Error -> {
+                            setLoadingVisible(false)
+                            Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    private fun renderSuccess(
+        state: OtherUserProfileViewModel.UiState.Success,
+        onUiRendered: () -> Unit
+    ) {
+        binding.btnEditProfile.isVisible = state.isOwnProfile
+        binding.layoutActions.isVisible = !state.isOwnProfile
+        binding.tabProfile.isVisible = state.isOwnProfile
+
+        if (state.isOwnProfile) {
+            binding.tabProfile.getTabAt(0)?.text = getString(R.string.manage_tab_published)
+            binding.tabProfile.getTabAt(1)?.text = getString(R.string.manage_tab_draft)
+            if (!tabsHooked) {
+                binding.tabProfile.addOnTabSelectedListener(tabListener)
+                tabsHooked = true
+            }
+            val current = binding.tabProfile.selectedTabPosition
+            if (current != state.selectedTab) {
+                binding.tabProfile.getTabAt(state.selectedTab)?.select()
+            }
+        } else if (tabsHooked) {
+            binding.tabProfile.removeOnTabSelectedListener(tabListener)
+            tabsHooked = false
+        }
+
+        binding.tvName.text = state.profile.fullName.ifEmpty {
+            getString(R.string.profile_name_placeholder)
+        }
+        chatTargetName = state.profile.fullName.ifEmpty {
+            getString(R.string.profile_name_placeholder)
+        }
+        chatTargetAvatar = state.profile.avatarUrl
+        binding.tvUsername.text = state.profile.usernameOrEmail
+        binding.tvBio.text = state.profile.bio
+        binding.tvBio.isVisible = state.profile.bio.isNotEmpty()
+        binding.imgVerifiedBadge.isVisible = state.profile.verified
+
+        if (state.profile.avatarUrl.isNotEmpty()) {
+            Glide.with(binding.imgAvatar)
+                .load(state.profile.avatarUrl)
+                .circleCrop()
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .into(binding.imgAvatar)
+        } else {
+            Glide.with(binding.imgAvatar).load(R.drawable.ic_person).into(binding.imgAvatar)
+        }
+
+        binding.tvStatRecipes.text = state.publishedRecipeCount.toString()
+        binding.tvStatFollowers.text = state.followerCount.toString()
+        binding.tvStatFollowing.text = state.followingCount.toString()
+        binding.btnFollow.text = if (state.isFollowing) {
+            getString(R.string.other_user_following)
+        } else {
+            getString(R.string.other_user_follow)
+        }
+        recipeAdapter.submitList(state.recipes)
+        binding.layoutEmpty.isVisible = state.recipes.isEmpty()
+        binding.rvRecipes.isVisible = state.recipes.isNotEmpty()
+        // Ensure progress hides only after the final UI frame is applied.
+        binding.rvRecipes.post { onUiRendered() }
+    }
+
+    private fun setLoadingVisible(visible: Boolean) {
+        binding.progressLoad.isVisible = visible
+        if (visible) {
+            binding.btnEditProfile.isVisible = false
+            binding.cardStats.isVisible = false
+            binding.layoutActions.isVisible = false
+            binding.cardInterests.isVisible = false
+            binding.cardContent.isVisible = false
+            binding.tvName.isVisible = false
+            binding.tvUsername.isVisible = false
+            binding.tvBio.isVisible = false
+            binding.imgAvatar.isVisible = false
+            binding.imgVerifiedBadge.isVisible = false
+            binding.tabProfile.isVisible = false
+            binding.layoutEmpty.isVisible = false
+            binding.rvRecipes.isVisible = false
+        } else {
+            binding.cardStats.isVisible = true
+            binding.cardInterests.isVisible = true
+            binding.cardContent.isVisible = true
+            binding.tvName.isVisible = true
+            binding.tvUsername.isVisible = true
+            binding.imgAvatar.isVisible = true
+            // layoutActions, tvBio, imgVerifiedBadge, tabProfile, layoutEmpty, rvRecipes
+            // are restored in renderSuccess() based on actual state values.
+        }
+        binding.rvRecipes.isEnabled = !visible
+        binding.btnFollow.isEnabled = !visible
+        binding.btnMessage.isEnabled = !visible
+    }
+
+    private fun openRecipeDetail() {
+        findNavController().navigate(R.id.recipeDetailFragment)
+    }
+
+    private fun openManageFollow(initialTab: String) {
+        val bundle = Bundle().apply { putString("initialTab", initialTab) }
+        findNavController().navigate(R.id.manageFolloweFragment, bundle)
+    }
+
+    private fun openUpdateProfile() {
+        findNavController().navigate(R.id.updateProfileFragment)
+    }
+
+    companion object {
+        private const val ARG_UID = "uid"
+
+        fun newInstance(uid: String) = OtherUserProfileFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_UID, uid)
+            }
+        }
     }
 }

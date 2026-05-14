@@ -6,14 +6,19 @@ import androidx.lifecycle.viewModelScope
 import com.example.cookingeasy.data.repository.ChatRepositoryImp
 import com.example.cookingeasy.domain.model.ChatMessage
 import com.example.cookingeasy.domain.model.ChatRole
+import com.example.cookingeasy.domain.repository.ChatRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-class AIChatViewModel : ViewModel() {
+@HiltViewModel
+class AIChatViewModel @Inject constructor(
+    private val chatRepository: ChatRepository
+) : ViewModel() {
 
-    private val chatRepository = ChatRepositoryImp()
 
     private val _messages = MutableStateFlow<List<ChatMessage>>(emptyList())
     val messages: StateFlow<List<ChatMessage>> = _messages

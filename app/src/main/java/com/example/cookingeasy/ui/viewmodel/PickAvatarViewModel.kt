@@ -4,13 +4,19 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cookingeasy.data.repository.AuthRepositoryImp
+import com.example.cookingeasy.data.repository.UserRepository
 import com.example.cookingeasy.data.repository.UserRepositoryImp
+import com.example.cookingeasy.domain.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class PickAvatarViewModel(): ViewModel() {
-    private val _userRepository = UserRepositoryImp()
-    private val _authRepository = AuthRepositoryImp()
+@HiltViewModel
+class PickAvatarViewModel @Inject constructor(
+    private val _userRepository: UserRepository,
+    private val _authRepository: AuthRepository
+): ViewModel() {
     private val _base64Img = MutableStateFlow("")
     val base64Img = _base64Img
 

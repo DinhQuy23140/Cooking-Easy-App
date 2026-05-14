@@ -17,13 +17,9 @@ import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import android.util.Base64
 import android.util.Log
+import jakarta.inject.Inject
 
-val apiKey = BuildConfig.OpenRouter_KEY
-// OpenrouterService.kt
-class OpenrouterService {
-    // Thay GeminiService bằng OpenRouter
-    private val client = OkHttpClient()
-
+class OpenrouterService @Inject constructor(private val client: OkHttpClient) {
     private val freeVisionModels = listOf(
         "google/gemma-3-4b-it:free",
         "meta-llama/llama-3.2-11b-vision-instruct:free",

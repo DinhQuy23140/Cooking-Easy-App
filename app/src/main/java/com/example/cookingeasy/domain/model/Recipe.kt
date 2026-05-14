@@ -56,6 +56,8 @@ data class Recipe(
     val dateModified: String = "",
     val userName: String = "Unknow",
     val userImg: String = "",
+    /** Firebase uid của tác giả (user upload); API MealDB để trống */
+    val userUid: String = "",
     var isFavorote: Boolean = false
 ) {
     fun getIngredient(index: Int): String? {

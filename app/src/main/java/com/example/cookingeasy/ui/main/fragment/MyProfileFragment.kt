@@ -1,42 +1,51 @@
 package com.example.cookingeasy.ui.main.fragment
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.example.cookingeasy.R
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
+import com.example.cookingeasy.util.loadFirestoreAvatar
+import com.example.cookingeasy.data.preferences.ThemeModePreference
 import com.example.cookingeasy.databinding.FragmentMyProfileBinding
 import com.example.cookingeasy.ui.auth.LoginActivity
 import com.example.cookingeasy.ui.main.viewmodel.MyProfileViewModel
 import com.example.cookingeasy.ui.viewmodel.MyRecipesViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 
+@AndroidEntryPoint
 class MyProfileFragment : Fragment() {
 
     private var _binding: FragmentMyProfileBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MyProfileViewModel by viewModels()
-    private val myRecipesViewModel: MyRecipesViewModel by activityViewModels {
-        MyRecipesViewModel.Factory(requireContext().contentResolver)
-    }
+    private val myRecipesViewModel: MyRecipesViewModel by activityViewModels()
 
     private var selectedImageUri: Uri? = null
+    private var avatarUploadDialog: AlertDialog? = null
 
     private val galleryLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -66,12 +75,14 @@ class MyProfileFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        dismissAvatarUploadDialog()
         super.onDestroyView()
         _binding = null
     }
 
 
     private fun setupClickListeners() {
+        binding.switchDarkMode.isChecked = ThemeModePreference.isDarkMode(requireContext())
         binding.imgAvatar.setOnClickListener {
             openGallery()
         }
@@ -164,18 +175,19 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun bindUserInfo(user: Map<String, Any>) {
-        binding.txtName.text = user.get("fullName") as String
-        binding.txtEmail.text = user.get("email") as String
-        var imgUrl = user.get("avatarUrl").toString()
-        if (!imgUrl.isEmpty()) {
-            Glide.with(binding.imgAvatar)
-                .load(user.get("avatarUrl").toString())
-                .into(binding.imgAvatar)
-        } else {
-            Glide.with(binding.imgAvatar)
-                .load(com.example.cookingeasy.R.drawable.ic_person)
-                .into(binding.imgAvatar)
-        }
+        val fullName = (user["fullName"] as? String).orEmpty()
+            .ifEmpty { (user["nickname"] as? String).orEmpty() }
+        val email = (user["email"] as? String).orEmpty()
+        val avatarUrl = (user["avatarUrl"] as? String).orEmpty()
+
+        binding.txtName.text = fullName.ifEmpty { getString(R.string.profile_name_placeholder) }
+        binding.txtEmail.text = email.ifEmpty { getString(R.string.profile_email_placeholder) }
+
+        binding.imgAvatar.loadFirestoreAvatar(
+            avatarUrl,
+            R.drawable.ic_person,
+            R.drawable.ic_person
+        )
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -194,12 +206,8 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun toggleDarkMode(isEnabled: Boolean) {
-        val mode = if (isEnabled) {
-            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-        } else {
-            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-        }
-        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(mode)
+        ThemeModePreference.setDarkMode(requireContext(), isEnabled)
+        ThemeModePreference.apply(requireContext())
     }
 
     private fun showError(message: String) {
@@ -225,57 +233,88 @@ class MyProfileFragment : Fragment() {
             .placeholder(com.example.cookingeasy.R.drawable.ic_person)
             .error(com.example.cookingeasy.R.drawable.ic_person)
             .into(binding.imgAvatar)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            showAvatarUploadDialog(true)
+            try {
+                val payload = withContext(Dispatchers.IO) { uriToBase64(requireContext(), uri) }
+                if (payload.isNullOrBlank()) {
+                    showError(getString(R.string.profile_avatar_prepare_failed))
+                    return@launch
+                }
+                val result = viewModel.updateProfileAvatar(payload)
+                result.onFailure { e ->
+                    showError(e.message ?: getString(R.string.profile_avatar_update_failed))
+                }
+            } finally {
+                dismissAvatarUploadDialog()
+            }
+        }
+    }
+
+    private fun showAvatarUploadDialog(show: Boolean) {
+        if (!show) {
+            dismissAvatarUploadDialog()
+            return
+        }
+        if (avatarUploadDialog?.isShowing == true) return
+        val progress = ProgressBar(requireContext()).apply { isIndeterminate = true }
+        avatarUploadDialog = AlertDialog.Builder(requireContext())
+            .setTitle(R.string.profile_avatar_updating)
+            .setView(progress)
+            .setCancelable(false)
+            .create()
+        avatarUploadDialog?.show()
+    }
+
+    private fun dismissAvatarUploadDialog() {
+        avatarUploadDialog?.dismiss()
+        avatarUploadDialog = null
+    }
+
+    private fun uriToBase64(context: Context, imageUri: Uri): String? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(imageUri) ?: return null
+            val bytes = inputStream.use { it.readBytes() }
+            val compressedBytes = compressImage(bytes)
+            Base64.encodeToString(compressedBytes, Base64.DEFAULT)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun compressImage(imageBytes: ByteArray, quality: Int = 70): ByteArray {
+        val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            ?: return imageBytes
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, quality, outputStream)
+        return outputStream.toByteArray()
     }
 
     private fun navigateToEditProfile() {
-
+        findNavController().navigate(R.id.updateProfileFragment)
     }
 
     private fun navigateToProfile() {
-        parentFragmentManager.beginTransaction().replace(R.id.container, OtherUserProfileFragment()).addToBackStack(null).commit()
+        val uid = viewModel.getUid()
+        if (uid.isEmpty()) return
+        val bundle = Bundle().apply { putString("uid", uid) }
+        findNavController().navigate(R.id.otherUserProfileFragment, bundle)
     }
 
     private fun navigateToFavoriteRecipes() {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
-                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
-            )
-            .replace(com.example.cookingeasy.R.id.container, FavoriteFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.favoriteFragment2)
     }
 
     private fun navigateToLanguageSettings() {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
-                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
-            )
-            .replace(com.example.cookingeasy.R.id.container, LanguageFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.languageFragment)
     }
 
     private fun navigateToMyRecipes() {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
-                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
-            )
-            .replace(com.example.cookingeasy.R.id.container, ManageMyRecipeFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.manageMyRecipeFragment)
     }
 
     private fun navigateToUpload() {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                com.example.cookingeasy.R.anim.slide_in_right, com.example.cookingeasy.R.anim.slide_out_left,
-                com.example.cookingeasy.R.anim.slide_in_left, com.example.cookingeasy.R.anim.slide_out_right
-            )
-            .replace(com.example.cookingeasy.R.id.container, AddRecipeFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.addRecipeFragment)
     }
 }

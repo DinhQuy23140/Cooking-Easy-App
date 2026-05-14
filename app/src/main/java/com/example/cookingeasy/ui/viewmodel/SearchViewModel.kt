@@ -12,6 +12,8 @@ import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.example.cookingeasy.domain.repository.RecipeRepository
 import com.google.firebase.Timestamp
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +23,12 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicLong
 
-class SearchViewModel(): ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val _authRepository: AuthRepository,
+    private val _recipeRepository: RecipeRepository,
+    private val _userRepository: UserRepository
+): ViewModel() {
     private val _searchResult: MutableStateFlow<List<Recipe>> = MutableStateFlow(emptyList())
     val searchResult: StateFlow<List<Recipe>> = _searchResult
     private val _historyList: MutableStateFlow<List<HistorySearch>> = MutableStateFlow(emptyList())
@@ -31,9 +38,6 @@ class SearchViewModel(): ViewModel() {
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
-    private val _authRepository: AuthRepository = AuthRepositoryImp()
-    private val _recipeRepository: RecipeRepository = RecipeRepositoryImp()
-    private val _userRepository: UserRepository = UserRepositoryImp()
     private val _favoriteError = MutableSharedFlow<Recipe>()
 
     /** Chỉ request mới nhất được cập nhật loading + kết quả (tránh race nhiều coroutine). */

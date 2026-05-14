@@ -5,27 +5,19 @@ import retrofit2.http.Url
 
 interface AuthRepository {
 
-    // ─── Email / Password ───────────────────────────────────────────
-
     suspend fun login(email: String, password: String): Result<FirebaseUser>
 
     suspend fun register(email: String, password: String): Result<FirebaseUser>
 
     suspend fun resetPassword(email: String): Result<Unit>
 
-    // ─── Google Sign-In ─────────────────────────────────────────────
-
     suspend fun loginWithGoogle(idToken: String): Result<FirebaseUser>
-
-    // ─── Session ────────────────────────────────────────────────────
 
     fun isLogin(): Boolean
 
     fun getCurrentUser(): FirebaseUser?
 
     fun logout()
-
-    // ─── Account management ─────────────────────────────────────────
 
     suspend fun updateEmail(email: String): Result<Unit>
 

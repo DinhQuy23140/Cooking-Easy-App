@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
@@ -25,6 +26,7 @@ import com.example.cookingeasy.ui.viewmodel.ResultScanViewModel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -40,6 +42,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ResultScanFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class ResultScanFragment : Fragment() {
 
     private lateinit var binding: FragmentResultScanBinding
@@ -128,7 +132,7 @@ class ResultScanFragment : Fragment() {
 
     private fun setupClickListeners() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
     }
 

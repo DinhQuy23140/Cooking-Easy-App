@@ -36,6 +36,24 @@
 
     <string name="area_label">地域：%1$s</string>
     <string name="recipes_found_count">%1$d件のレシピが見つかりました</string>
+    <string name="label_category">カテゴリ</string>
+    <string name="label_area">地域</string>
+    <string name="view_detail">詳細を見る</string>
+    <string name="data_not_found">データが見つかりません</string>
+    <string name="dialog_recipe_preview_instruction">クイック説明</string>
+    <string name="dialog_recipe_preview_meta">カテゴリ: %1$s  |  地域: %2$s</string>
+    <string name="other_user_following">フォロー中</string>
+    <string name="recipe_feedback_title">評価とコメント</string>
+    <string name="recipe_instruction_subtitle">手順を順番に進めると、よりおいしく作れます</string>
+    <string name="recipe_rating_section_title">このレシピを評価</string>
+    <string name="recipe_comment_section_title">コメント</string>
+    <string name="recipe_submit_rating">評価を送信</string>
+    <string name="recipe_comment_hint">このレシピの感想をシェアしてください...</string>
+    <string name="recipe_submit_comment">コメントを投稿</string>
+    <string name="recipe_rating_summary">%1$s/5 • %2$d件の評価</string>
+    <string name="recipe_rating_saved">評価を保存しました</string>
+    <string name="recipe_comment_saved">コメントを投稿しました</string>
+    <string name="recipe_no_comments">まだコメントはありません。最初のコメントを投稿しましょう！</string>
 
     <string name="hello_blank_fragment">こんにちは</string>
 

@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "2.0.21"
     alias(libs.plugins.google.gms.google.services)
 }
 
@@ -37,6 +38,11 @@ android {
             "String",
             "SUPABASE_ANON_KEY",
             "\"${localProps.getProperty("SUPABASE_ANON_KEY") ?: ""}\""
+        )
+        buildConfigField(
+            "String",
+            "LARAVEL_BASE_URL",
+            "\"${localProps.getProperty("LARAVEL_BASE_URL") ?: ""}\""
         )
 
         applicationId = "com.example.cookingeasy"
@@ -105,12 +111,14 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
     implementation(libs.firebase.storage)
+    implementation("com.google.firebase:firebase-messaging:24.1.0")
     implementation(libs.androidx.cardview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-process:2.8.7")
     implementation("androidx.fragment:fragment-ktx:1.8.5")
 
     implementation("com.google.dagger:hilt-android:2.57.1")
@@ -161,6 +169,25 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("io.github.webrtc-sdk:android:144.7559.01")
+
+    val nav_version = "2.9.8"
+
+    // Jetpack Compose integration
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // Views/Fragments integration
+    implementation("androidx.navigation:navigation-fragment:$nav_version")
+    implementation("androidx.navigation:navigation-ui:$nav_version")
+
+    // Feature module support for Fragments
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+
+    // Testing Navigation
+    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+
+    // JSON serialization library, works with the Kotlin serialization plugin
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 }
 
 tasks.register("replaceLayoutStringsFromTsv") {

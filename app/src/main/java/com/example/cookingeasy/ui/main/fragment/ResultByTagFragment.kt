@@ -4,38 +4,45 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.MealSimpleAdapter
 import com.example.cookingeasy.common.listener.RecipeListener
 import com.example.cookingeasy.databinding.FragmentResultByTagBinding
-import com.example.cookingeasy.databinding.FragmentResultScanBinding
 import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.ui.viewmodel.ResultByTagViewModel
-import com.example.cookingeasy.util.GridSpacingItemDecoration
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val ARG_AREA = "area"
 
 /**
  * A simple [Fragment] subclass.
  * Use the [ResultByTagFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class ResultByTagFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -45,6 +52,7 @@ class ResultByTagFragment : Fragment() {
     private lateinit var mealSimpleAdapter: MealSimpleAdapter
     private var area: String = ""
     private val resultByTagViewModel: ResultByTagViewModel by viewModels()
+    private val recipeShareViewmodel: RecipeShareViewmodel by activityViewModels()
     private var isLoadingMore = false
     private lateinit var listRecipe: List<Recipe>
 
@@ -76,7 +84,7 @@ class ResultByTagFragment : Fragment() {
 
     private fun setUpListeners() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
@@ -134,11 +142,16 @@ class ResultByTagFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             mealSimpleAdapter = MealSimpleAdapter(mutableListOf<Recipe>(), object : RecipeListener {
                 override fun OnClickItem(recipe: Recipe) {
-                    TODO("Not yet implemented")
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        resultByTagViewModel.getRecipeById(recipe.idMeal.toString())
+                            .onSuccess { fullRecipe ->
+                                showRecipePreviewDialog(fullRecipe)
+                            }
+                    }
                 }
 
                 override fun OnFavoriteClick(recipe: Recipe) {
-                    TODO("Not yet implemented")
+                    resultByTagViewModel.toggleFavorite(recipe)
                 }
 
                 override fun onClickInf(recipe: Recipe) = Unit
@@ -149,10 +162,21 @@ class ResultByTagFragment : Fragment() {
 
     fun getInstance() {
         val bundle = arguments
-        area = bundle?.getString("area") ?:  ""
+        area = bundle?.getString(ARG_AREA).orEmpty().trim()
+        if (area.isEmpty()) {
+            // Fallback for old argument style if any older path still uses param1.
+            area = bundle?.getString(ARG_PARAM1).orEmpty().trim()
+        }
+        Log.d("ResultByTagFragment", "Received area='$area'")
     }
 
     fun loadData() {
+        if (area.isEmpty()) {
+            binding.tvAreaName.text = getString(R.string.area_label, "-")
+            binding.layoutEmpty.isVisible = true
+            binding.rvRecipesByTag.isVisible = false
+            return
+        }
         binding.tvAreaName.text = getString(R.string.area_label, area)
         resultByTagViewModel.getRecipesByArea(area)
     }
@@ -165,9 +189,45 @@ class ResultByTagFragment : Fragment() {
                     mealSimpleAdapter.updateData(it)
                     listRecipe = it
                     binding.txtResultCount.text = getString(R.string.recipes_found_count, it.size)
+                    binding.layoutEmpty.isVisible = it.isEmpty()
+                    binding.rvRecipesByTag.isVisible = !it.isEmpty()
                 }
             }
         }
+    }
+
+    private fun showRecipePreviewDialog(recipe: Recipe) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_recipe_preview, null)
+        val imgPreview = dialogView.findViewById<ImageView>(R.id.imgRecipePreview)
+        val tvName = dialogView.findViewById<TextView>(R.id.tvRecipeNamePreview)
+        val tvMeta = dialogView.findViewById<TextView>(R.id.tvRecipeMetaPreview)
+        val tvInstruction = dialogView.findViewById<TextView>(R.id.tvInstructionPreview)
+
+        tvName.text = recipe.strMeal.ifEmpty { getString(R.string.data_not_found) }
+        tvMeta.text = getString(
+            R.string.dialog_recipe_preview_meta,
+            recipe.strCategory.ifEmpty { "-" },
+            recipe.strArea.ifEmpty { "-" }
+        )
+        tvInstruction.text = recipe.strInstructions
+            .trim()
+            .ifEmpty { getString(R.string.data_not_found) }
+            .let { if (it.length > 240) "${it.take(237)}..." else it }
+
+        Glide.with(this)
+            .load(recipe.strMealThumb)
+            .placeholder(R.drawable.ic_cooking)
+            .error(R.drawable.ic_cooking)
+            .into(imgPreview)
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .setNegativeButton(R.string.action_cancel, null)
+            .setPositiveButton(R.string.view_detail) { _, _ ->
+                recipeShareViewmodel.selectedRecipe(recipe)
+                findNavController().navigate(R.id.recipeDetailFragment)
+            }
+            .show()
     }
 
     companion object {

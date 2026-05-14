@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.net.Uri
 import com.example.cookingeasy.BuildConfig
 import com.example.cookingeasy.data.remote.api.SupabaseClient
+import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -13,7 +14,7 @@ import java.util.UUID
 /**
  * Upload / xóa file trên Supabase Storage (bucket public → URL có segment `public`).
  */
-class SupabaseStorageDataSource(
+class SupabaseStorageDataSource @Inject constructor(
     private val contentResolver: ContentResolver
 ) {
 
@@ -27,6 +28,54 @@ class SupabaseStorageDataSource(
         remoteFolder = remoteFolder,
         fileName = fileName,
         defaultMime = "image/jpeg"
+    )
+
+    suspend fun uploadChatImage(
+        uri: Uri,
+        remoteFolder: String = "chat-images",
+        fileName: String? = null
+    ): Result<String> = uploadToBucket(
+        uri = uri,
+        bucket = Buckets.DOCUMENT,
+        remoteFolder = remoteFolder,
+        fileName = fileName,
+        defaultMime = "image/jpeg"
+    )
+
+    suspend fun uploadChatAttachment(
+        uri: Uri,
+        remoteFolder: String = "chat-attachments",
+        fileName: String? = null
+    ): Result<String> = uploadToBucket(
+        uri = uri,
+        bucket = Buckets.DOCUMENT,
+        remoteFolder = remoteFolder,
+        fileName = fileName,
+        defaultMime = "application/octet-stream"
+    )
+
+    suspend fun uploadChatVideo(
+        uri: Uri,
+        remoteFolder: String = "chat-videos",
+        fileName: String? = null
+    ): Result<String> = uploadToBucket(
+        uri = uri,
+        bucket = Buckets.DOCUMENT,
+        remoteFolder = remoteFolder,
+        fileName = fileName,
+        defaultMime = "video/mp4"
+    )
+
+    suspend fun uploadChatVoice(
+        uri: Uri,
+        remoteFolder: String = "chat-voices",
+        fileName: String? = null
+    ): Result<String> = uploadToBucket(
+        uri = uri,
+        bucket = Buckets.DOCUMENT,
+        remoteFolder = remoteFolder,
+        fileName = fileName,
+        defaultMime = "audio/m4a"
     )
 
     suspend fun uploadRecipeVideo(
@@ -113,6 +162,7 @@ class SupabaseStorageDataSource(
     }
 
     object Buckets {
+        const val DOCUMENT = "document"
         const val RECIPE_IMAGES = "recipe-images"
         const val RECIPE_VIDEOS = "recipe-videos"
     }

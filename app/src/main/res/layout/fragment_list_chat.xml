@@ -43,7 +43,7 @@
                         android:fontFamily="sans-serif-medium"
                         android:letterSpacing="0.04"
                         android:text="@string/chat_list_title"
-                        android:textColor="@android:color/white"
+                        android:textColor="@color/chat_title_text"
                         android:textSize="26sp" />
 
                     <TextView
@@ -53,7 +53,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="sans-serif"
                         android:text="@string/chat_list_subtitle"
-                        android:textColor="#CCFFFFFF"
+                        android:textColor="@color/chat_subtitle_text"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -119,15 +119,15 @@
             android:id="@+id/tabChatsFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F8FCF5"
+            android:background="@color/chat_section_bg"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             app:tabIndicatorColor="#2E5E2E"
             app:tabIndicatorHeight="3dp"
             app:tabMode="scrollable"
             app:tabRippleColor="#332E5E2E"
-            app:tabSelectedTextColor="#2E5E2E"
-            app:tabTextColor="#666666">
+            app:tabSelectedTextColor="@color/chat_chip_text"
+            app:tabTextColor="@color/chat_chip_text_unselected">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -149,7 +149,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F8FCF5"
+            android:background="@color/chat_section_bg"
             android:orientation="vertical"
             android:paddingStart="16dp"
             android:paddingTop="8dp"
@@ -161,50 +161,26 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/chat_active_now"
-                android:textColor="#2E5E2E"
+                android:textColor="@color/chat_active_label_text"
                 android:textSize="12sp" />
 
-            <HorizontalScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvActiveUsers"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="72dp"
                 android:layout_marginTop="8dp"
                 android:clipToPadding="false"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:id="@+id/rowActiveNow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <!-- Placeholder rings; có thể gắn RecyclerView sau -->
-                    <include layout="@layout/include_chat_active_avatar" />
-
-                    <include
-                        layout="@layout/include_chat_active_avatar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp" />
-
-                    <include
-                        layout="@layout/include_chat_active_avatar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp" />
-
-                    <include
-                        layout="@layout/include_chat_active_avatar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp" />
-                </LinearLayout>
-            </HorizontalScrollView>
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingEnd="8dp"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_active_user" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#1A2E5E2E" />
+            android:background="@color/chat_divider" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshChats"
@@ -250,7 +226,7 @@
                         android:fontFamily="sans-serif-medium"
                         android:gravity="center"
                         android:text="@string/chat_empty_title"
-                        android:textColor="#2E5E2E"
+                        android:textColor="@color/chat_empty_title_text"
                         android:textSize="18sp" />
 
                     <TextView
@@ -261,7 +237,7 @@
                         android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:text="@string/chat_empty_subtitle"
-                        android:textColor="#666666"
+                        android:textColor="@color/chat_empty_subtitle_text"
                         android:textSize="14sp" />
                 </LinearLayout>
             </FrameLayout>

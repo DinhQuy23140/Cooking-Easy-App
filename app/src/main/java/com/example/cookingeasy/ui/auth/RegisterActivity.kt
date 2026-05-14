@@ -1,6 +1,5 @@
 package com.example.cookingeasy.ui.auth
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -12,23 +11,22 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.example.cookingeasy.R
 import com.example.cookingeasy.databinding.ActivityRegisterBinding
-import com.example.cookingeasy.ui.main.activity.EnterNameActivity
-import com.example.cookingeasy.ui.main.activity.PickAvatarActivity
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var credentialManager: CredentialManager
 
     private val viewModel: RegisterViewModel by viewModels()
-
-    // ─── Lifecycle ───────────────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +44,6 @@ class RegisterActivity : AppCompatActivity() {
         setupClickListeners()
         observeState()
     }
-
-    // ─── Setup ───────────────────────────────────────────────────────
 
     private fun setupClickListeners() {
         binding.registerBtnRegister.setOnClickListener {
@@ -87,8 +83,6 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Google Sign-In (Credential Manager) ─────────────────────────
-
     private fun startGoogleSignIn() {
         val googleIdOption = GetGoogleIdOption.Builder()
             .setServerClientId(getString(R.string.default_web_client_id))
@@ -117,25 +111,21 @@ class RegisterActivity : AppCompatActivity() {
                     showError("Unsupported credential type")
                 }
 
+            } catch (e: NoCredentialException) {
+                showError(getString(R.string.google_no_credentials_available))
             } catch (e: GetCredentialException) {
-                showError("Google sign-up failed: ${e.message}")
+                showError(getString(R.string.google_signin_failed_try_again))
             }
         }
     }
 
-    // ─── Navigation ──────────────────────────────────────────────────
-
     private fun navigateToEnterName() {
-        startActivity(Intent(this, EnterNameActivity::class.java))
-        finish()
+        AuthNavigator.openEnterName(this, clearTask = true, finishCurrent = true)
     }
 
     private fun navigateToLogin() {
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
+        AuthNavigator.openLogin(this, finishCurrent = true)
     }
-
-    // ─── UI Helpers ──────────────────────────────────────────────────
 
     private fun showLoading(isLoading: Boolean) {
         binding.registerBtnRegister.isEnabled = !isLoading

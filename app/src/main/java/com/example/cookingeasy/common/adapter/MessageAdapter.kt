@@ -25,6 +25,7 @@ enum class MessageSendStatus {
 data class MessageUiModel(
     val id: String,
     val isMine: Boolean,
+    val avatarUrl: String = "",
     val contentType: MessageContentType,
     val text: String = "",
     val imageUrl: String = "",
@@ -80,6 +81,7 @@ class MessageAdapter(
         private val txtAttachmentSize: TextView = itemView.findViewById(R.id.txtAttachmentSize)
         private val txtTime: TextView = itemView.findViewById(R.id.txtTime)
         private val txtStatus: TextView? = itemView.findViewById(R.id.txtStatus)
+        private val imgAvatarMessage: ImageView? = itemView.findViewById(R.id.imgAvatarMessage)
 
         fun bind(
             item: MessageUiModel,
@@ -127,6 +129,20 @@ class MessageAdapter(
                     MessageSendStatus.SENDING -> itemView.context.getString(R.string.message_status_sending)
                     MessageSendStatus.SENT -> itemView.context.getString(R.string.message_status_sent)
                     MessageSendStatus.SEEN -> itemView.context.getString(R.string.message_status_seen)
+                }
+            }
+
+            imgAvatarMessage?.let { avatar ->
+                if (item.avatarUrl.isNotBlank()) {
+                    Glide.with(avatar)
+                        .load(item.avatarUrl)
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_person)
+                        .error(R.drawable.ic_person)
+                        .into(avatar)
+                } else {
+                    Glide.with(avatar).clear(avatar)
+                    avatar.setImageResource(R.drawable.ic_person)
                 }
             }
         }

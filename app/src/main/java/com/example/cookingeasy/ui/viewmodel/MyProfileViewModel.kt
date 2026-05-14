@@ -6,15 +6,18 @@ import com.example.cookingeasy.data.repository.AuthRepositoryImp
 import com.example.cookingeasy.data.repository.UserRepository
 import com.example.cookingeasy.data.repository.UserRepositoryImp
 import com.example.cookingeasy.domain.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MyProfileViewModel(
+@HiltViewModel
+class MyProfileViewModel @Inject constructor(
+    private val _authRepository: AuthRepository,
+    private val _userRepository: UserRepository
 ) : ViewModel() {
-    private val _authRepository: AuthRepository = AuthRepositoryImp()
-    private val _userRepository: UserRepository = UserRepositoryImp()
     private val _userName = MutableStateFlow<String>("")
     private val _imgUrl = MutableStateFlow<String>("")
     val userName: StateFlow<String> = _userName
@@ -76,5 +79,25 @@ class MyProfileViewModel(
 
     fun resetState() {
         _profileState.value = ProfileState.Idle
+    }
+
+    fun getUid(): String {
+        return _userRepository.getUid()
+    }
+
+    /**
+     * Writes [avatarPayload] to Firestore field `avatarUrl` (same shape as pick-avatar flow),
+     * then refreshes local profile state.
+     */
+    suspend fun updateProfileAvatar(avatarPayload: String): Result<Unit> {
+        val uid = _authRepository.getCurrentUser()?.uid
+            ?: return Result.failure(IllegalStateException("Not signed in"))
+        if (avatarPayload.isBlank()) {
+            return Result.failure(IllegalArgumentException("Empty avatar"))
+        }
+        _userRepository.updateAvatar(uid, avatarPayload).onFailure { return Result.failure(it) }
+        return _userRepository.getUserProfile(uid).map { profile ->
+            _profileState.value = ProfileState.UserLoaded(profile)
+        }
     }
 }

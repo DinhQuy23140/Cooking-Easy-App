@@ -155,6 +155,17 @@ class RecipeAdapter(
 
     override fun getItemCount(): Int = displayList.size
 
+    /** Thay toàn bộ danh sách (không phân trang), dùng cho màn hồ sơ / danh sách cố định. */
+    fun submitList(newList: List<Recipe>) {
+        val diffResult = DiffUtil.calculateDiff(RecipeDiffCallback(displayList, newList))
+        listRecipe.clear()
+        listRecipe.addAll(newList)
+        displayList.clear()
+        displayList.addAll(newList)
+        currentPage = 1
+        diffResult.dispatchUpdatesTo(this)
+    }
+
     fun updateData(newList: List<Recipe>) {
         listRecipe.clear()
         listRecipe.addAll(newList)

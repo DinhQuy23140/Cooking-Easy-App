@@ -14,47 +14,37 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
-import com.example.cookingeasy.data.remote.firebase.fireAuth.AuthDataSource
-import com.example.cookingeasy.data.repository.AuthRepositoryImp
-import com.example.cookingeasy.data.repository.RecipeUploadRepositoryImp
 import com.example.cookingeasy.databinding.FragmentAddRecipeBinding
 import com.example.cookingeasy.databinding.ItemIngredientInputBinding
 import com.example.cookingeasy.databinding.ItemInstructionInputBinding
 import com.example.cookingeasy.ui.main.viewmodel.AddRecipeViewModel
 import com.example.cookingeasy.ui.main.viewmodel.AddRecipeViewModel.AddRecipeState
-import com.example.cookingeasy.ui.viewmodelFactory.AddRecipeViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AddRecipeFragment : Fragment() {
 
     private var _binding: FragmentAddRecipeBinding? = null
     private val binding get() = _binding!!
     private var mealImg: String = ""
 
-    private val viewModel: AddRecipeViewModel by viewModels {
-        AddRecipeViewModelFactory(
-            AuthRepositoryImp(),
-            RecipeUploadRepositoryImp(requireContext().contentResolver)
-        )
-    }
+    private val viewModel: AddRecipeViewModel by viewModels()
 
-    // ─── Image picker ────────────────────────────────────────────────
     private val imageLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let { setMealImage(it) }
     }
 
-    // ─── Video picker ────────────────────────────────────────────────
     private val videoLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let { setVideoPreview(it) }
     }
-
-    // ─── Lifecycle ───────────────────────────────────────────────────
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,7 +72,7 @@ class AddRecipeFragment : Fragment() {
     private fun setupClickListeners() {
 
         binding.btnClose.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.layoutPickImage.setOnClickListener {
@@ -149,7 +139,7 @@ class AddRecipeFragment : Fragment() {
                     is AddRecipeState.Published  -> {
                         showLoading(false)
                         showMessage("Recipe published!")
-                        parentFragmentManager.popBackStack()
+                        findNavController().popBackStack()
                     }
                     is AddRecipeState.Error      -> {
                         showLoading(false)

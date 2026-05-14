@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_nav_graph"
+    app:startDestination="@id/loginActivityDestination">
+
+    <activity
+        android:id="@+id/splashActivityDestination"
+        android:name="com.example.cookingeasy.ui.auth.SplashActivity"
+        android:label="Splash" />
+
+    <activity
+        android:id="@+id/loginActivityDestination"
+        android:name="com.example.cookingeasy.ui.auth.LoginActivity"
+        android:label="Login" />
+
+    <activity
+        android:id="@+id/registerActivityDestination"
+        android:name="com.example.cookingeasy.ui.auth.RegisterActivity"
+        android:label="Register" />
+
+    <activity
+        android:id="@+id/enterNameActivityDestination"
+        android:name="com.example.cookingeasy.ui.main.activity.EnterNameActivity"
+        android:label="Enter Name" />
+
+    <activity
+        android:id="@+id/pickAvatarActivityDestination"
+        android:name="com.example.cookingeasy.ui.main.activity.PickAvatarActivity"
+        android:label="Pick Avatar" />
+
+</navigation>

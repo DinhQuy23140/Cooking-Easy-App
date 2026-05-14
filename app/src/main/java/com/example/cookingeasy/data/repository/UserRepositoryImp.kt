@@ -1,18 +1,21 @@
 package com.example.cookingeasy.data.repository
 
 import com.example.cookingeasy.domain.model.HistorySearch
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import jakarta.inject.Inject
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class UserRepositoryImp() : UserRepository {
-
-    private val db = FirebaseFirestore.getInstance()
+class UserRepositoryImp @Inject constructor(
+    private val db: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth
+) : UserRepository {
     private val usersCollection = db.collection("users")
 
 
@@ -181,6 +184,58 @@ class UserRepositoryImp() : UserRepository {
         for (doc in snapshot.documents) {
             doc.reference.delete().await()
         }
+    }
+
+    override suspend fun followUser(targetUid: String) {
+        val currentUid = firebaseAuth.currentUser?.uid ?: return
+        if (currentUid == targetUid || targetUid.isBlank()) return
+        val now = System.currentTimeMillis()
+        usersCollection.document(currentUid)
+            .collection("following")
+            .document(targetUid)
+            .set(mapOf("uid" to targetUid, "createdAt" to now))
+            .await()
+        usersCollection.document(targetUid)
+            .collection("followers")
+            .document(currentUid)
+            .set(mapOf("uid" to currentUid, "createdAt" to now))
+            .await()
+    }
+
+    override suspend fun unfollowUser(targetUid: String) {
+        val currentUid = firebaseAuth.currentUser?.uid ?: return
+        if (currentUid == targetUid || targetUid.isBlank()) return
+        usersCollection.document(currentUid)
+            .collection("following")
+            .document(targetUid)
+            .delete()
+            .await()
+        usersCollection.document(targetUid)
+            .collection("followers")
+            .document(currentUid)
+            .delete()
+            .await()
+    }
+
+    override suspend fun isFollowing(targetUid: String): Boolean {
+        val currentUid = firebaseAuth.currentUser?.uid ?: return false
+        if (currentUid == targetUid || targetUid.isBlank()) return false
+        val snapshot = usersCollection.document(currentUid)
+            .collection("following")
+            .document(targetUid)
+            .get()
+            .await()
+        return snapshot.exists()
+    }
+
+    override suspend fun getFollowStats(uid: String): Pair<Int, Int> {
+        val followers = usersCollection.document(uid).collection("followers").get().await().size()
+        val following = usersCollection.document(uid).collection("following").get().await().size()
+        return followers to following
+    }
+
+    override fun getUid(): String {
+        return firebaseAuth.currentUser?.uid ?: ""
     }
 
     private fun DocumentSnapshot.toHistorySearch(userId: String): HistorySearch {

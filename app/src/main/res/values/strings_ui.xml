@@ -123,6 +123,12 @@
     <string name="profile_row_dark_mode">Dark Mode</string>
     <string name="profile_section_account">ACCOUNT</string>
     <string name="cd_edit_profile">Edit profile</string>
+    <string name="update_profile_title">UPDATE PROFILE</string>
+    <string name="update_profile_section_basic">BASIC INFORMATION</string>
+    <string name="update_profile_username_hint">Username (e.g. @chefquy)</string>
+    <string name="update_profile_hashtag_hint">Hashtag (e.g. #healthy #vegan)</string>
+    <string name="update_profile_avatar_url_hint">Avatar URL (optional)</string>
+    <string name="update_profile_save">Save changes</string>
 
     <!-- Recipe form (add / dialog) -->
     <string name="recipe_form_new_title">New Recipe</string>
@@ -278,6 +284,9 @@
     <string name="other_user_tab_recipes">Recipes</string>
     <string name="other_user_tab_saved">Saved</string>
     <string name="other_user_no_recipes">No recipes yet</string>
+    <string name="other_user_profile_unavailable">No cook profile is linked to this recipe.</string>
+    <string name="google_no_credentials_available">No Google account credential found. Please add a Google account on this device and try again.</string>
+    <string name="google_signin_failed_try_again">Google sign-in failed. Please try again.</string>
 
     <!-- List item placeholders (design time; adapters usually overwrite) -->
     <string name="sample_meal_name">Chicken Curry</string>
@@ -340,6 +349,25 @@
     <string name="chat_open_attachment">Open attachment</string>
     <string name="chat_file_unavailable">Cannot open this file.</string>
     <string name="chat_image_unavailable">Image is unavailable.</string>
+    <string name="chat_user_not_available">Chat user is unavailable.</string>
+    <string name="chat_load_failed">Failed to load chat messages.</string>
+    <string name="chat_send_failed">Failed to send message.</string>
+    <string name="chat_status_active_now">Active now</string>
+    <string name="chat_status_inactive">Inactive</string>
+    <string name="chat_status_last_seen_min">Last seen %1$d min ago</string>
+    <string name="chat_status_last_seen_hour">Last seen %1$d h ago</string>
+    <string name="chat_status_last_seen_date">Last seen %1$s</string>
+    <string name="chat_camera_permission_denied">Camera permission is required to take photos.</string>
+    <string name="chat_audio_permission_denied">Microphone permission is required to record voice.</string>
+    <string name="chat_attach_video">Attach video</string>
+    <string name="chat_record_voice">Record voice</string>
+    <string name="chat_voice_recording_started">Recording voice... Tap again to send.</string>
+    <string name="chat_voice_recording_sent">Voice message sent.</string>
+    <string name="chat_voice_recording_failed">Cannot start voice recording.</string>
+    <string name="chat_notification_channel_name">Chat messages</string>
+    <string name="chat_notification_channel_desc">Notifications for incoming chat messages</string>
+    <string name="chat_notification_title_default">New message</string>
+    <string name="chat_notification_body_default">You have a new chat message.</string>
     <string name="message_status_sending">Sending...</string>
     <string name="message_status_sent">Sent</string>
     <string name="message_status_seen">Seen</string>

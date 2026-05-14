@@ -2,21 +2,20 @@ package com.example.cookingeasy.ui.main.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.Glide
 import com.example.cookingeasy.R
 import com.example.cookingeasy.common.adapter.AreaAdapter
 import com.example.cookingeasy.common.adapter.CategoryAdapter
@@ -31,11 +30,14 @@ import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.HomeViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
+import com.example.cookingeasy.util.loadFirestoreAvatar
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
@@ -72,49 +74,24 @@ class HomeFragment : Fragment() {
     private fun setup() {
         categoryAdapter = CategoryAdapter(mutableListOf(), object : CategoryListener {
             override fun onClickItem(category: Category) {
-                val fragment = ResultByCategoryFragment()
                 val bundle = Bundle()
                 bundle.putString("category", Gson().toJson(category))
-                fragment.arguments = bundle
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    .replace(R.id.container, fragment)
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.resultByCategoryFragment, bundle)
             }
         })
 
         areaAdapter = AreaAdapter(mutableListOf(), object : AreaListener {
             override fun OnClickItem(area: Area) {
-                val fragment = ResultByTagFragment()
                 val bundle = Bundle()
                 bundle.putString("area", area.name)
-                fragment.arguments = bundle
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    .replace(R.id.container, fragment)
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.resultByTagFragment, bundle)
             }
         })
 
         recipeAdapter = RecipeAdapter(mutableListOf(), object : RecipeListener {
             override fun OnClickItem(recipe: Recipe) {
                 recipeShareViewmodel.selectedRecipe(recipe)
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    .replace(R.id.container, RecipeDetailFragment())
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate(R.id.recipeDetailFragment)
             }
 
             override fun OnFavoriteClick(recipe: Recipe) {
@@ -122,14 +99,16 @@ class HomeFragment : Fragment() {
             }
 
             override fun onClickInf(recipe: Recipe) {
-                val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                fragmentTransaction.setCustomAnimations(
-                    R.anim.slide_in_right, R.anim.slide_out_left,
-                    R.anim.slide_in_left, R.anim.slide_out_right
-                )
-                fragmentTransaction.replace(R.id.container, OtherUserProfileFragment())
-                fragmentTransaction.addToBackStack(null)
-                fragmentTransaction.commit()
+                if (recipe.userUid.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.other_user_profile_unavailable,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+                val bundle = Bundle().apply { putString("uid", recipe.userUid) }
+                findNavController().navigate(R.id.otherUserProfileFragment, bundle)
             }
         })
 
@@ -161,14 +140,7 @@ class HomeFragment : Fragment() {
     @SuppressLint("SuspiciousIndentation")
     private fun event() {
         binding.edtSearch.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right, R.anim.slide_out_left,
-                    R.anim.slide_in_left, R.anim.slide_out_right
-                )
-                .replace(R.id.container, SearchFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.searchFragment)
         }
 
         binding.content.setOnScrollChangeListener(
@@ -187,14 +159,7 @@ class HomeFragment : Fragment() {
         )
 
         binding.btnFavorite.setOnClickListener {
-            val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                fragmentTransaction.setCustomAnimations(
-                    R.anim.slide_in_right, R.anim.slide_out_left,
-                    R.anim.slide_in_left, R.anim.slide_out_right
-                )
-            fragmentTransaction.replace(R.id.container, FavoriteFragment())
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            findNavController().navigate(R.id.favoriteFragment2)
         }
 
         binding.tvSeeAllCategories.setOnClickListener {
@@ -281,10 +246,14 @@ class HomeFragment : Fragment() {
                 }
                 launch {
                     homeViewModel.userName.collect { binding.txtUserName.text = it }
-                    homeViewModel.imgUrl.collect {
-                        Glide.with(binding.imgAvatar)
-                            .load(it)
-                            .into(binding.imgAvatar)
+                }
+                launch {
+                    homeViewModel.imgUrl.collect { url ->
+                        binding.imgAvatar.loadFirestoreAvatar(
+                            url,
+                            R.drawable.ic_person,
+                            R.drawable.ic_person
+                        )
                     }
                 }
             }

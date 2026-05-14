@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -31,7 +34,9 @@ import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.ui.viewmodel.ResultByCategoryViewModel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -45,6 +50,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ResultByCategoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class ResultByCategoryFragment : Fragment() {
 
     private lateinit var binding: FragmentResultByCategoryBinding
@@ -81,15 +88,19 @@ class ResultByCategoryFragment : Fragment() {
             listMeal = mutableListOf(),
             object : RecipeListener{
                 override fun OnClickItem(recipe: Recipe) {
-                    recipeShareViewmodel.selectedRecipe(recipe)
-                    parentFragmentManager.beginTransaction()
-                        .setCustomAnimations(
-                            R.anim.slide_in_right, R.anim.slide_out_left,
-                            R.anim.slide_in_left, R.anim.slide_out_right
-                        )
-                        .replace(R.id.container, RecipeDetailFragment())
-                        .addToBackStack(null)
-                        .commit()
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        viewModel.getRecipeById(recipe.idMeal.toString())
+                            .onSuccess { fullRecipe ->
+                                showRecipePreviewDialog(fullRecipe)
+                            }
+                            .onFailure {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.data_not_found),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    }
                 }
 
                 override fun OnFavoriteClick(recipe: Recipe) {
@@ -97,14 +108,15 @@ class ResultByCategoryFragment : Fragment() {
                 }
 
                 override fun onClickInf(recipe: Recipe) {
-                    val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                    fragmentTransaction.setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    fragmentTransaction.replace(R.id.container, OtherUserProfileFragment())
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
+                    if (recipe.userUid.isEmpty()) {
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.other_user_profile_unavailable,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
+                    findNavController().navigate(R.id.otherUserProfileFragment)
                 }
             }
         )
@@ -145,16 +157,18 @@ class ResultByCategoryFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.recipesByCategory.collect { recipes ->
-                        mealSimpleAdapter.updateData(recipes)
-                        binding.tvRecipeCount.text = resources.getQuantityString(
-                            R.plurals.recipe_count,
-                            recipes.size,
-                            recipes.size
-                        )
-                        binding.layoutEmpty.isVisible = recipes.isEmpty()
-                        binding.rvRecipes.isVisible = recipes.isNotEmpty()
-                        listRecipeService = recipes
-                        Log.d("ResultByCategoryFragment", "recipes: ${recipes.size}")
+                        if (!recipes.isEmpty()){
+                            mealSimpleAdapter.updateData(recipes)
+                            binding.tvRecipeCount.text = resources.getQuantityString(
+                                R.plurals.recipe_count,
+                                recipes.size,
+                                recipes.size
+                            )
+                            binding.layoutEmpty.isVisible = recipes.isEmpty()
+                            binding.rvRecipes.isVisible = recipes.isNotEmpty()
+                            listRecipeService = recipes
+                            Log.d("ResultByCategoryFragment", "recipes: ${recipes.size}")
+                        }
                     }
                 }
 
@@ -169,7 +183,7 @@ class ResultByCategoryFragment : Fragment() {
 
     private fun setupClickListeners() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.btnExpand.setOnClickListener {
@@ -260,6 +274,40 @@ class ResultByCategoryFragment : Fragment() {
         )
         binding.layoutEmpty.isVisible = count == 0
         binding.rvRecipes.isVisible = count > 0
+    }
+
+    private fun showRecipePreviewDialog(recipe: Recipe) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_recipe_preview, null)
+        val imgPreview = dialogView.findViewById<ImageView>(R.id.imgRecipePreview)
+        val tvName = dialogView.findViewById<TextView>(R.id.tvRecipeNamePreview)
+        val tvMeta = dialogView.findViewById<TextView>(R.id.tvRecipeMetaPreview)
+        val tvInstruction = dialogView.findViewById<TextView>(R.id.tvInstructionPreview)
+
+        tvName.text = recipe.strMeal.ifEmpty { getString(R.string.data_not_found) }
+        tvMeta.text = getString(
+            R.string.dialog_recipe_preview_meta,
+            recipe.strCategory.ifEmpty { "-" },
+            recipe.strArea.ifEmpty { "-" }
+        )
+        tvInstruction.text = recipe.strInstructions
+            .trim()
+            .ifEmpty { getString(R.string.data_not_found) }
+            .let { if (it.length > 240) "${it.take(237)}..." else it }
+
+        Glide.with(this)
+            .load(recipe.strMealThumb)
+            .placeholder(R.drawable.ic_cooking)
+            .error(R.drawable.ic_cooking)
+            .into(imgPreview)
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .setNegativeButton(R.string.action_cancel, null)
+            .setPositiveButton(R.string.view_detail) { _, _ ->
+                recipeShareViewmodel.selectedRecipe(recipe)
+                findNavController().navigate(R.id.recipeDetailFragment)
+            }
+            .show()
     }
 
     companion object {

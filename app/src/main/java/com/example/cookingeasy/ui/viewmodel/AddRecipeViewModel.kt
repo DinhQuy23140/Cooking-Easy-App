@@ -3,22 +3,25 @@ package com.example.cookingeasy.ui.main.viewmodel
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cookingeasy.data.repository.UserRepository
 import com.example.cookingeasy.data.repository.UserRepositoryImp
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.example.cookingeasy.domain.repository.AuthRepository
 import com.example.cookingeasy.domain.repository.IRecipeUploadRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewModelScoped
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class AddRecipeViewModel(
+@HiltViewModel
+class AddRecipeViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val recipeUploadRepository: IRecipeUploadRepository
+    private val recipeUploadRepository: IRecipeUploadRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
-
-    private val userRepository = UserRepositoryImp()
-
     sealed class AddRecipeState {
         object Idle : AddRecipeState()
         object Loading : AddRecipeState()

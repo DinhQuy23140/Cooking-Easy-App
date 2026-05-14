@@ -6,14 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.cookingeasy.data.repository.RecipeRepositoryImp
 import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.domain.repository.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class ResultScanViewModel : ViewModel() {
-
-    private val recipeRepository: RecipeRepository = RecipeRepositoryImp()
-
+@HiltViewModel
+class ResultScanViewModel @Inject constructor(
+    private val recipeRepository: RecipeRepository
+) : ViewModel() {
     private val _recipeByIngredients = MutableStateFlow<List<Recipe>>(emptyList())
     val recipeByIngredients: StateFlow<List<Recipe>> = _recipeByIngredients
 

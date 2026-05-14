@@ -4,17 +4,18 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -33,6 +34,7 @@ import com.example.cookingeasy.ui.viewmodel.ExploreViewModel
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.ranges.contains
@@ -47,6 +49,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ExploreFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class ExploreFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -161,14 +165,16 @@ class ExploreFragment : Fragment() {
                 }
 
                 override fun onClickInf(recipe: Recipe) {
-                    val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                    fragmentTransaction.setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
-                    )
-                    fragmentTransaction.replace(R.id.container, OtherUserProfileFragment())
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
+                    if (recipe.userUid.isEmpty()) {
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.other_user_profile_unavailable,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
+                    val bundle = Bundle().apply { putString("uid", recipe.userUid) }
+                    findNavController().navigate(R.id.otherUserProfileFragment, bundle)
                 }
 
             })
@@ -179,24 +185,11 @@ class ExploreFragment : Fragment() {
 
     fun setupListeners() {
         binding.edtSearch.setOnClickListener {
-            val fragmentTransaction = parentFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.container, SearchFragment())
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            findNavController().navigate(R.id.searchFragment)
         }
 
         binding.btnAddRecipe.setOnClickListener {
-            if (!isAdded || parentFragmentManager.isStateSaved) return@setOnClickListener
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-                .replace(R.id.container, AddRecipeFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.addRecipeFragment)
         }
 
         binding.btnRefreshFeatured.setOnClickListener {
@@ -218,10 +211,7 @@ class ExploreFragment : Fragment() {
         binding.btnCookNow.setOnClickListener {
             recipe.let {
                 recipeShareViewModel.selectedRecipe(recipe)
-                val fragmentTransaction = parentFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.container, RecipeDetailFragment())
-                fragmentTransaction.addToBackStack(null)
-                fragmentTransaction.commit()
+                findNavController().navigate(R.id.recipeDetailFragment)
             }
         }
 

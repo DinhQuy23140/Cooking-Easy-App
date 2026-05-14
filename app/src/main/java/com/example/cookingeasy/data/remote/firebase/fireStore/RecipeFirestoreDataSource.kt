@@ -1,15 +1,18 @@
 package com.example.cookingeasy.data.remote.firebase.fireStore
 
 import com.example.cookingeasy.domain.model.Recipe
+import com.example.cookingeasy.domain.model.RecipeComment
+import com.example.cookingeasy.domain.model.RecipeRatingSummary
 import com.example.cookingeasy.domain.model.RecipeUpload
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import jakarta.inject.Inject
 import kotlinx.coroutines.tasks.await
 
-class RecipeFirestoreDataSource {
+class RecipeFirestoreDataSource @Inject constructor(private val db: FirebaseFirestore) {
 
-    private val db = FirebaseFirestore.getInstance()
     private val recipesCollection = db.collection("recipes")
+    private val feedbackCollection = db.collection("recipe_feedback")
 
     suspend fun saveRecipe(recipe: RecipeUpload): String {
         val docRef = recipesCollection.document()
@@ -135,5 +138,77 @@ class RecipeFirestoreDataSource {
     suspend fun isFavorite(uid: String, recipeId: String): Boolean {
         val doc = getFavoritesCollection(uid).document(recipeId).get().await()
         return doc.exists()
+    }
+
+    private fun commentsCollection(recipeId: String) =
+        feedbackCollection.document(recipeId).collection("comments")
+
+    private fun ratingsCollection(recipeId: String) =
+        feedbackCollection.document(recipeId).collection("ratings")
+
+    suspend fun addRecipeComment(
+        recipeId: String,
+        userId: String,
+        userName: String,
+        userNickname: String,
+        userAvatarUrl: String,
+        content: String
+    ) {
+        val doc = commentsCollection(recipeId).document()
+        doc.set(
+            mapOf(
+                "id" to doc.id,
+                "recipeId" to recipeId,
+                "userId" to userId,
+                "userName" to userName,
+                "userNickname" to userNickname,
+                "userAvatarUrl" to userAvatarUrl,
+                "content" to content,
+                "createdAt" to System.currentTimeMillis()
+            )
+        ).await()
+    }
+
+    suspend fun getRecipeComments(recipeId: String): List<RecipeComment> {
+        val snapshot = commentsCollection(recipeId).get().await()
+        return snapshot.documents.mapNotNull { doc ->
+            RecipeComment(
+                id = doc.getString("id").orEmpty().ifEmpty { doc.id },
+                recipeId = doc.getString("recipeId").orEmpty(),
+                userId = doc.getString("userId").orEmpty(),
+                userName = doc.getString("userName").orEmpty(),
+                userNickname = doc.getString("userNickname").orEmpty(),
+                userAvatarUrl = doc.getString("userAvatarUrl").orEmpty(),
+                content = doc.getString("content").orEmpty(),
+                createdAt = doc.getLong("createdAt") ?: 0L
+            )
+        }.sortedByDescending { it.createdAt }
+    }
+
+    suspend fun submitRecipeRating(recipeId: String, userId: String, rating: Float) {
+        ratingsCollection(recipeId).document(userId)
+            .set(
+                mapOf(
+                    "userId" to userId,
+                    "rating" to rating,
+                    "updatedAt" to System.currentTimeMillis()
+                )
+            ).await()
+    }
+
+    suspend fun getRecipeRatingSummary(recipeId: String): RecipeRatingSummary {
+        val snapshot = ratingsCollection(recipeId).get().await()
+        if (snapshot.isEmpty) return RecipeRatingSummary()
+        val ratings = snapshot.documents.mapNotNull { it.getDouble("rating")?.toFloat() }
+        if (ratings.isEmpty()) return RecipeRatingSummary()
+        return RecipeRatingSummary(
+            average = ratings.average().toFloat(),
+            total = ratings.size
+        )
+    }
+
+    suspend fun getUserRecipeRating(recipeId: String, userId: String): Float {
+        val doc = ratingsCollection(recipeId).document(userId).get().await()
+        return doc.getDouble("rating")?.toFloat() ?: 0f
     }
 }

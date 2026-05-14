@@ -2,6 +2,7 @@ package com.example.cookingeasy.ui.main.fragment
 
 import android.os.Bundle
 import android.text.Editable
+import android.widget.Toast
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookingeasy.R
@@ -27,12 +29,14 @@ import com.example.cookingeasy.domain.model.Recipe
 import com.example.cookingeasy.ui.viewmodel.RecipeShareViewmodel
 import com.example.cookingeasy.ui.viewmodel.SearchViewModel
 import com.example.cookingeasy.util.GridSpacingItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
@@ -70,10 +74,16 @@ class SearchFragment : Fragment() {
             }
 
             override fun onClickInf(recipe: Recipe) {
-                parentFragmentManager.beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.container, OtherUserProfileFragment())
-                    .commit()
+                if (recipe.userUid.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.other_user_profile_unavailable,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+                val bundle = Bundle().apply { putString("uid", recipe.userUid) }
+                findNavController().navigate(R.id.otherUserProfileFragment, bundle)
             }
         })
 
@@ -169,23 +179,12 @@ class SearchFragment : Fragment() {
 
     private fun openRecipeDetail() {
         if (!isAdded) return
-        val fm = parentFragmentManager
-        if (fm.isStateSaved) return
-        fm.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_right,
-                R.anim.slide_out_left,
-                R.anim.slide_in_left,
-                R.anim.slide_out_right
-            )
-            .replace(R.id.container, RecipeDetailFragment())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.recipeDetailFragment)
     }
 
     private fun setupEvents() {
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
 
         binding.btnClear.setOnClickListener {
@@ -194,16 +193,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.ivScan.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations( // ← set TRƯỚC replace
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-                .replace(R.id.container, ScanFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.scanFragment)
         }
 
         binding.edtSearchRecipe.addTextChangedListener(object : TextWatcher {

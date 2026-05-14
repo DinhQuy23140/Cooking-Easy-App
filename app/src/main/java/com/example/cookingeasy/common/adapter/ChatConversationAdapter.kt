@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ImageView.ScaleType
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,6 +12,7 @@ import com.example.cookingeasy.R
 
 data class ChatConversation(
     val id: String,
+    val peerUid: String = "",
     val displayName: String,
     val snippet: String,
     val timeLabel: String,
@@ -67,12 +69,14 @@ class ChatConversationAdapter(
 
             val url = item.avatarUrl
             if (!url.isNullOrBlank()) {
+                imgAvatar.scaleType = ScaleType.CENTER_CROP
                 Glide.with(imgAvatar)
                     .load(url)
                     .centerCrop()
                     .placeholder(R.drawable.ic_person)
                     .into(imgAvatar)
             } else {
+                imgAvatar.scaleType = ScaleType.CENTER_INSIDE
                 Glide.with(imgAvatar).clear(imgAvatar)
                 imgAvatar.setImageResource(R.drawable.ic_person)
             }

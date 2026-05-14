@@ -37,6 +37,7 @@
                 android:layout_height="90dp"
                 android:layout_marginBottom="14dp">
 
+                <!-- Camera edit badge -->
                 <ImageView
                     android:id="@+id/imgAvatarPreview"
                     android:layout_width="match_parent"
@@ -46,7 +47,6 @@
                     android:scaleType="center"
                     android:src="@drawable/ic_person" />
 
-                <!-- Camera edit badge -->
                 <LinearLayout
                     android:id="@+id/btnUploadBadge"
                     android:layout_width="26dp"
@@ -88,9 +88,6 @@
 
         </LinearLayout>
 
-        <!-- ═══════════════════════════════
-             CARD BOTTOM
-             ═══════════════════════════════ -->
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"

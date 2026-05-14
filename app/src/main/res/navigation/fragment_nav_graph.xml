@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_nav_graph"
+    app:startDestination="@id/homeFragment2">
+    <fragment
+        android:id="@+id/favoriteFragment2"
+        android:name="com.example.cookingeasy.ui.main.fragment.FavoriteFragment"
+        android:label="FavoriteFragment" />
+    <fragment
+        android:id="@+id/AIChatFragment2"
+        android:name="com.example.cookingeasy.ui.main.fragment.AIChatFragment"
+        android:label="fragment_a_i_chat"
+        tools:layout="@layout/fragment_a_i_chat" />
+    <fragment
+        android:id="@+id/addRecipeFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.AddRecipeFragment"
+        android:label="fragment_add_recipe"
+        tools:layout="@layout/fragment_add_recipe" />
+    <fragment
+        android:id="@+id/chatDetailFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.ChatDetailFragment"
+        android:label="fragment_chat_detail"
+        tools:layout="@layout/fragment_chat_detail" />
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.ExploreFragment"
+        android:label="fragment_explore"
+        tools:layout="@layout/fragment_explore" />
+    <fragment
+        android:id="@+id/homeFragment2"
+        android:name="com.example.cookingeasy.ui.main.fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment2_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_resultByCategoryFragment"
+            app:destination="@id/resultByCategoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_resultByTagFragment"
+            app:destination="@id/resultByTagFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.LanguageFragment"
+        android:label="fragment_language"
+        tools:layout="@layout/fragment_language" />
+    <fragment
+        android:id="@+id/listChatFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.ListChatFragment"
+        android:label="fragment_list_chat"
+        tools:layout="@layout/fragment_list_chat" >
+        <action
+            android:id="@+id/action_listChatFragment_to_chatDetailFragment"
+            app:destination="@id/chatDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.MyProfileFragment"
+        android:label="fragment_my_profile"
+        tools:layout="@layout/fragment_my_profile" />
+    <fragment
+        android:id="@+id/manageFolloweFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.ManageFolloweFragment"
+        android:label="fragment_manage_followe"
+        tools:layout="@layout/fragment_manage_followe" />
+    <fragment
+        android:id="@+id/manageMyRecipeFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.ManageMyRecipeFragment"
+        android:label="fragment_manage_my_recipe"
+        tools:layout="@layout/fragment_manage_my_recipe" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/otherUserProfileFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.OtherUserProfileFragment"
+        android:label="fragment_other_user_profile"
+        tools:layout="@layout/fragment_other_user_profile">
+        <argument
+            android:name="uid"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/recipeDetailFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.RecipeDetailFragment"
+        android:label="fragment_recipe_detail"
+        tools:layout="@layout/fragment_recipe_detail" />
+    <fragment
+        android:id="@+id/resultByCategoryFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.ResultByCategoryFragment"
+        android:label="fragment_result_by_category"
+        tools:layout="@layout/fragment_result_by_category" />
+    <fragment
+        android:id="@+id/resultByTagFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.ResultByTagFragment"
+        android:label="fragment_result_by_tag"
+        tools:layout="@layout/fragment_result_by_tag" />
+    <fragment
+        android:id="@+id/resultScanFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.ResultScanFragment"
+        android:label="fragment_result_scan"
+        tools:layout="@layout/fragment_result_scan" />
+    <fragment
+        android:id="@+id/scanFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.ScanFragment"
+        android:label="fragment_scan"
+        tools:layout="@layout/fragment_scan" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/updateProfileFragment"
+        android:name="com.example.cookingeasy.ui.main.fragment.UpdateProfileFragment"
+        android:label="fragment_update_profile"
+        tools:layout="@layout/fragment_update_profile" />
+</navigation>

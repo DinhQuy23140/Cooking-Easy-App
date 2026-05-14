@@ -67,6 +67,21 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <ImageButton
+                android:id="@+id/btnEditProfile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/shape_circle_glass"
+                android:contentDescription="@string/cd_edit_profile"
+                android:padding="10dp"
+                android:src="@drawable/ic_edit"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/white" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardAvatar"
                 android:layout_width="104dp"
@@ -193,6 +208,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvStatRecipes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/other_user_sample_recipes_count"
@@ -222,6 +238,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvStatFollowers"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/other_user_sample_followers_count"
@@ -251,6 +268,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvStatFollowing"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/other_user_sample_following_count"
@@ -450,6 +468,16 @@
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <ProgressBar
+                android:id="@+id/progressLoad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>
