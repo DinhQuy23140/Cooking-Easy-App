@@ -298,6 +298,8 @@
                 android:clipToPadding="false"
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
+                tools:listitem="@layout/item_category"
+                tools:itemCount="2"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
             <!-- ─── CUISINE / AREA ─── -->
